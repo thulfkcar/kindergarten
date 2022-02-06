@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/presentation/ui/ChildActivity/ChildActionGroups.dart';
-import 'package:kid_garden_app/presentation/ui/ChildActivity/ChildActions.dart';
+
+import 'ChildActions.dart';
+
+
 
 class ChildActivity extends StatelessWidget {
   const ChildActivity({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class ChildActivity extends StatelessWidget {
       appBar: AppBar(
         title: Text("gosdjfg"),
       ),
-      body: ChildActionsGroups(),
+      body: ChildActions(childId: '43fdgg4t',),
     );
   }
 }

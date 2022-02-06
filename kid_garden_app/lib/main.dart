@@ -1,11 +1,8 @@
-
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/domain/Child.dart';
-import 'package:kid_garden_app/domain/ChildAction.dart';
-import 'package:kid_garden_app/presentation/ui/ChildActivity/ChildActions.dart';
-import 'package:kid_garden_app/presentation/ui/ChildActivity/ChildActivity.dart';
-import 'package:kid_garden_app/presentation/ui/Childs.dart';
+import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
+import 'presentation/ui/Child/ChildActions.dart';
+import 'presentation/ui/Child/ChildActivity.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +11,7 @@ void main() {
 const HomeScreenRoute = '/';
 const ChildrenExplorerRoute = '/ChildrenExplorer';
 const ChildActionsGroupsRoute = '/ChildActionsGroups';
-const ChildActivityRoute = '/ChildActivity';
+const ChildActivityRoute = '/Child';
 const ChildActionsRoute = '/ChildActions';
 
 class MyApp extends StatelessWidget {
