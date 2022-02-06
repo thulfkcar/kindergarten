@@ -10,9 +10,10 @@ class ChildActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-   appBar: AppBar(title: Text("gosdjfg"),),
-
-
-      body: ChildActionsGroups(),    );
+      appBar: AppBar(
+        title: Text("gosdjfg"),
+      ),
+      body: ChildActionsGroups(),
+    );
   }
 }
