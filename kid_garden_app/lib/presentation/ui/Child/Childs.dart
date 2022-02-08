@@ -90,6 +90,7 @@ class _childsExplorerState extends State<ChildrenExplorer> {
             return ChildRow(context: context, index: index, childImage: children[index].image);
 
 
+
           }),
     );
   }

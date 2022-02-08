@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/domain/ChildAction.dart';
 
-ChildActionRow({required BuildContext context, required int index}) {
+  ChildActionRow({required ChildAction childAction}) {
   return Container(
       margin: EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4),
       decoration: BoxDecoration(
@@ -29,19 +30,19 @@ ChildActionRow({required BuildContext context, required int index}) {
                         child: Container(
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFFEEEEEE),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.person,
                             color: Color(0xFF4B39EF),
                             size: 24,
                           ),
                         ),
                       ),
-                      Text(
-                        'UserName',
+                       Text(
+                        childAction.actionGroup.name,
                         style: TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF090F13),
@@ -56,7 +57,7 @@ ChildActionRow({required BuildContext context, required int index}) {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Overall',
+                        childAction.audience.toString(),
                         style: TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF090F13),
@@ -93,14 +94,14 @@ ChildActionRow({required BuildContext context, required int index}) {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 8),
+              padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 12, 8),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
-                children: const [
+                children:  [
                   Expanded(
                     child: Text(
-                      'Nice outdoor courts, solid concrete and good hoops for the neighborhood.',
-                      style: TextStyle(
+                      childAction.value!,
+                      style: const TextStyle(
                         fontFamily: 'Lexend Deca',
                         color: Color(0xFF57636C),
                         fontSize: 14,

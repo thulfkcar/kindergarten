@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/domain/Action.dart';
-
-import '../../../them/DentalThem.dart';
-
 class ChildActionsGroups extends StatefulWidget {
   const ChildActionsGroups({Key? key}) : super(key: key);
 
@@ -14,7 +11,7 @@ class _ChildActionsGroupsState extends State<ChildActionsGroups> {
   @override
   Widget build(BuildContext context) {
 
-    var actionGroup=ActionGroup(id: "id", date: DateTime.now(), name: "ActionGroupNmae");
+    var actionGroup=ActionGroup(id: "id", date: DateTime.now(), name: "ActionGroupNmae",image: "");
     List<ActionGroup> actionsGroups=[
       actionGroup,
       actionGroup,actionGroup,actionGroup,actionGroup,actionGroup,actionGroup,actionGroup
@@ -52,18 +49,18 @@ class _ChildActionsGroupsState extends State<ChildActionsGroups> {
                           child: Container(
                             width: 40,
                             height: 40,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Color(0xFFEEEEEE),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.person,
                               color: Color(0xFF4B39EF),
                               size: 24,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'UserName',
                           style:  TextStyle(
                             fontFamily: 'Lexend Deca',
@@ -78,7 +75,7 @@ class _ChildActionsGroupsState extends State<ChildActionsGroups> {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
+                        const Text(
                           'Overall',
                           style: TextStyle(
                             fontFamily: 'Lexend Deca',

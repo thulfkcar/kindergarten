@@ -7,8 +7,8 @@ class ChildAction {
   String id;
   DateTime? date;
 
-  ActionGroup action;
-
+  String actionGroupId;
+  ActionGroup actionGroup;
   String? value;
 
   User? user;
@@ -17,8 +17,10 @@ class ChildAction {
 
   Audience? audience;
 
-  ChildAction({required this.id, this.date, required this.action, this.value, this.user,
-      this.medias, this.audience});
+  ChildAction({required this.id, this.date,
+    required this.actionGroupId,
+      this.value, this.user,
+      this.medias, this.audience,required this.actionGroup});
 }
 
 enum Audience { All, Parents, Staff, OnlyMe }
