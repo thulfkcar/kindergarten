@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../domain/Action.dart';
+import '../../../domain/ActionGroup.dart';
 
 class ActionGroups extends StatefulWidget {
   ActionGroups(
-      {Key? key, required this.actionGroups, required this.selectedIndex})
+      {Key? key, required this.actionGroups, required this.selectedItem})
       : super(key: key);
 
   List<ActionGroup> actionGroups;
-  Function(ActionGroup) selectedIndex;
+  Function(ActionGroup) selectedItem;
 
   @override
   State<ActionGroups> createState() => _ActionGroupsState();
@@ -44,7 +44,7 @@ class _ActionGroupsState extends State<ActionGroups> {
               setState(
                 () {
                   selectedIndex = index;
-                  widget.selectedIndex(widget.actionGroups[index]);
+                  widget.selectedItem(widget.actionGroups[index]);
                 },
               );
             },

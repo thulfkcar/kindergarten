@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:kid_garden_app/domain/Action.dart';
+import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/network/OnCompleteListner.dart';
+import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
+import 'package:provider/provider.dart';
 
 import '../../../domain/ChildAction.dart';
+import '../../../network/ApiResponse.dart';
 import '../genral_components/ActionGroup.dart';
 import '../genral_components/ChildActionRow.dart';
+import '../genral_components/Error.dart';
 import '../genral_components/MultiSelectChip.dart';
+import '../genral_components/loading.dart';
 
 class ChildActions extends StatefulWidget {
   String childId;
@@ -19,8 +24,7 @@ class ChildActions extends StatefulWidget {
   _ChildActionsState createState() => _ChildActionsState();
 }
 
-class _ChildActionsState extends State<ChildActions>
-    implements OnCompleteListener {
+class _ChildActionsState extends State<ChildActions> {
   ChildRepository childRepo = ChildRepository();
   var isAddingAction = false;
   List<ChildAction>? childActions = [];
@@ -28,11 +32,13 @@ class _ChildActionsState extends State<ChildActions>
   List<ActionGroup> actionGroups = [];
   ActionGroup? selectedActionGroup = null;
 
-  var textFieldController=TextEditingController();
+  var textFieldController = TextEditingController();
+  ChildActionViewModel viewModel = ChildActionViewModel();
 
   @override
   void initState() {
-    childRepo.getActionsGroups(onCompleteListener: this);
+    viewModel.fetchChildActions();
+    viewModel.fetchActionGroups();
     super.initState();
   }
 
@@ -47,6 +53,41 @@ class _ChildActionsState extends State<ChildActions>
     String description = "";
 
     List<Audience> selectedAudienceList = [];
+    return Scaffold(
+        appBar: AppBar(),
+        body: ChangeNotifierProvider<ChildActionViewModel>(
+          create: (BuildContext context) => viewModel,
+          child: Consumer<ChildActionViewModel>(
+            builder: (context, viewModel, _) {
+              switch (viewModel.childActionResponse.status) {
+                case Status.LOADING:
+                  print("thug :: LOADING");
+                  return LoadingWidget();
+                case Status.ERROR:
+                  print("thug :: ERROR");
+                  return MyErrorWidget(
+                      viewModel.childActionResponse.message ?? "NA");
+                case Status.COMPLETED:
+                  print("thug :: COMPLETED");
+                  return childActionListView(
+                      childActions: viewModel.childActionResponse.data!,
+                      audienceList: audienceList,
+                      selectedAudienceList: selectedAudienceList,
+                      description: description);
+                default:
+              }
+
+              return Container();
+            },
+          ),
+        ));
+  }
+
+  Widget childActionListView(
+      {required List<ChildAction> childActions,
+      required List<Audience> audienceList,
+      required List<Audience> selectedAudienceList,
+      required String description}) {
     return Stack(
       children: [
         Column(
@@ -54,21 +95,49 @@ class _ChildActionsState extends State<ChildActions>
             Padding(
               padding: EdgeInsetsDirectional.only(top: 60),
               child: SizedBox(
-                height: 65,
-                width: double.maxFinite,
-                child: ActionGroups(
-                  actionGroups: actionGroups,
-                  selectedIndex: (index) {
-                    print(index.name);
-                  },
-                ),
-              ),
+                  height: 65,
+                  width: double.maxFinite,
+                  child: ChangeNotifierProvider<ChildActionViewModel>(
+                    create: (BuildContext context) => viewModel,
+                    child: Consumer<ChildActionViewModel>(
+                      builder: (context, viewModel, _) {
+                        switch (viewModel.actionGroupResponse.status) {
+                          case Status.LOADING:
+                            print("thug :: LOADING");
+                            return LoadingWidget();
+                          case Status.ERROR:
+                            print("thug :: ERROR");
+                            return MyErrorWidget(
+                                viewModel.actionGroupResponse.message ?? "NA");
+                          case Status.COMPLETED:
+                            print("thug :: COMPLETED");
+                            return ActionGroups(
+                              actionGroups: viewModel.actionGroupResponse.data!,
+                              selectedItem: (item) {
+                                viewModel.setSelectedActionGroupId(item.id);
+                              },
+                            );
+                          default:
+                        }
+
+                        return Container();
+                      },
+                    ),
+                  )
+
+                  // ActionGroups(
+                  // actionGroups: actionGroups,
+                  // selectedIndex: (index) {
+                  // print(index.name);
+                  // },
+                  // ),
+                  ),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: childActions?.length,
+                itemCount: childActions.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ChildActionRow(childAction: childActions![index]);
+                  return ChildActionRow(childAction: childActions[index]);
                 },
               ),
             )
@@ -87,7 +156,6 @@ class _ChildActionsState extends State<ChildActions>
         if (isAddingAction)
           addChildActionDialog(
               audienceList: audienceList,
-              actionGroups: actionGroups,
               selectedAudienceList: selectedAudienceList,
               description: description)
       ],
@@ -102,8 +170,7 @@ class _ChildActionsState extends State<ChildActions>
   }
 
   Widget addChildActionDialog(
-      {required List<ActionGroup> actionGroups,
-      required List<Audience> audienceList,
+      {required List<Audience> audienceList,
       required List<Audience> selectedAudienceList,
       required String description}) {
     return Padding(
@@ -117,21 +184,10 @@ class _ChildActionsState extends State<ChildActions>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 65,
-                    width: double.maxFinite,
-                    child: ActionGroups(
-                      actionGroups: actionGroups,
-                      selectedIndex: (group) {
-                        selectedActionGroup = group;
-                      },
-                    ),
-                  ),
                   Container(
                     padding: const EdgeInsets.only(top: 8),
                     child: TextField(
                       controller: textFieldController,
-
                       decoration: InputDecoration(
                         contentPadding:
                             const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -199,22 +255,23 @@ class _ChildActionsState extends State<ChildActions>
               child: Text("Cancel"),
             ),
             TextButton(
+              //validate selections
+
               onPressed: () {
+                if(viewModel.selectedActionGroupId!=null){
                 var childAction = ChildAction(
                     id: "",
-                    actionGroupId: selectedActionGroup!.id,
+                    actionGroupId: viewModel.selectedActionGroupId!,
                     audience: selectedAudience,
-                    value: textFieldController.text, actionGroup: selectedActionGroup!);
-                childRepo.addChildAction(
-                    childAction: childAction, onCompleteListener: this);
+                    value: textFieldController.text);
+                viewModel.addChildAction(childAction: childAction);
                 isAddingAction = false;
-              },
+              }},
               child: const Text("Save"),
             )
           ],
         ));
   }
-
 
   @override
   void onError(String error) {
@@ -230,5 +287,3 @@ class _ChildActionsState extends State<ChildActions>
     }
   }
 }
-
-

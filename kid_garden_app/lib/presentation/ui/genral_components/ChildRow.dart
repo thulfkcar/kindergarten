@@ -10,7 +10,7 @@ ChildRow ({required BuildContext context, required int index,required String chi
           borderRadius: BorderRadius.circular(30)),
       width: double.infinity,
       height: 100,
-      child:InkWell (onTap: (){Navigator.pushNamed(context, "/Child");},child: Padding(
+      child:InkWell (onTap: (){Navigator.pushNamed(context, "/ChildActions");},child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
         child: Row(
           mainAxisSize: MainAxisSize.max,

@@ -42,7 +42,7 @@ import 'package:kid_garden_app/domain/ChildAction.dart';
                         ),
                       ),
                        Text(
-                        childAction.actionGroup.name,
+                        childAction.actionGroup!.name,
                         style: TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF090F13),
@@ -100,7 +100,7 @@ import 'package:kid_garden_app/domain/ChildAction.dart';
                 children:  [
                   Expanded(
                     child: Text(
-                      childAction.value!,
+                      childAction.value,
                       style: const TextStyle(
                         fontFamily: 'Lexend Deca',
                         color: Color(0xFF57636C),

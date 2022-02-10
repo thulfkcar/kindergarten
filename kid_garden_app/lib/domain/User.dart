@@ -1,8 +1,10 @@
-import 'package:kid_garden_app/domain/Action.dart';
-import 'package:kid_garden_app/domain/Media.dart';
+import 'package:kid_garden_app/domain/ActionGroup.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'Child.dart';
+part 'User.g.dart';
 
+@JsonSerializable()
 class User {
   String id;
   DateTime date;
@@ -10,14 +12,18 @@ class User {
 
   String email;
 
-  Media media;
 
   String role;
 
-  List<ActionGroup> actions;
+  List<ActionGroup> actionGroups;
 
   List<Child> children;
 
-  User(this.id, this.date, this.name, this.email, this.media, this.role,
-      this.actions, this.children);
+  User(this.id, this.date, this.name, this.email, this.role,
+      this.actionGroups, this.children);
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  /// Connect the generated [_$PersonToJson] function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

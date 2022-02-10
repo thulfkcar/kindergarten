@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/domain/Action.dart';
+import 'package:kid_garden_app/domain/ActionGroup.dart';
 class ChildActionsGroups extends StatefulWidget {
   const ChildActionsGroups({Key? key}) : super(key: key);
 
