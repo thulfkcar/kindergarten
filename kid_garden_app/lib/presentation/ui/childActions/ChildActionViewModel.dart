@@ -8,11 +8,16 @@ class ChildActionViewModel extends ChangeNotifier {
   var childActionRepo = ChildRepository();
   String? selectedActionGroupId;
 
+  ChildActionViewModel():super(){
+    fetchActionGroups();
+    fetchChildActions();
+  }
+
   setSelectedActionGroupId(String id) {
     selectedActionGroupId = id;
   }
 
-  ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
+    ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
   ApiResponse<List<ActionGroup>> actionGroupResponse = ApiResponse.loading();
   ApiResponse<ChildAction> childActionPostResponse = ApiResponse.loading();
 
@@ -25,9 +30,9 @@ class ChildActionViewModel extends ChangeNotifier {
   void setChildActionPostResponse(ApiResponse<ChildAction> response) {
     print("thug :: child actions $response");
     childActionPostResponse = response;
-    if (response.status == Status.COMPLETED) {
-      childActionResponse.data!.add(response.data!);
-    }
+    // if (response.status == Status.COMPLETED) {
+    //   childActionResponse.data!.add(response.data!);
+    // }
     notifyListeners();
   }
 

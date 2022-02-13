@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/network/OnCompleteListner.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
-import 'package:provider/provider.dart';
 
 import '../../../domain/ChildAction.dart';
 import '../../../network/ApiResponse.dart';
+import '../../../providers/Providers.dart';
 import '../genral_components/ActionGroup.dart';
 import '../genral_components/ChildActionRow.dart';
 import '../genral_components/Error.dart';
@@ -36,13 +37,6 @@ class _ChildActionsState extends State<ChildActions> {
   ChildActionViewModel viewModel = ChildActionViewModel();
 
   @override
-  void initState() {
-    viewModel.fetchChildActions();
-    viewModel.fetchActionGroups();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     List<Audience> audienceList = [
       Audience.All,
@@ -54,33 +48,32 @@ class _ChildActionsState extends State<ChildActions> {
 
     List<Audience> selectedAudienceList = [];
     return Scaffold(
-        appBar: AppBar(),
-        body: ChangeNotifierProvider<ChildActionViewModel>(
-          create: (BuildContext context) => viewModel,
-          child: Consumer<ChildActionViewModel>(
-            builder: (context, viewModel, _) {
-              switch (viewModel.childActionResponse.status) {
-                case Status.LOADING:
-                  print("thug :: LOADING");
-                  return LoadingWidget();
-                case Status.ERROR:
-                  print("thug :: ERROR");
-                  return MyErrorWidget(
-                      viewModel.childActionResponse.message ?? "NA");
-                case Status.COMPLETED:
-                  print("thug :: COMPLETED");
-                  return childActionListView(
-                      childActions: viewModel.childActionResponse.data!,
-                      audienceList: audienceList,
-                      selectedAudienceList: selectedAudienceList,
-                      description: description);
-                default:
-              }
+      appBar: AppBar(),
+      body: Consumer(
+        builder: (context, ref, child) {
+          final childActions = ref.watch(ChildActionViewModelProvider);
+          switch (childActions.childActionResponse.status) {
+            case Status.LOADING:
+              print("thug :: LOADING");
+              return LoadingWidget();
+            case Status.ERROR:
+              print("thug :: ERROR");
+              return MyErrorWidget(
+                  viewModel.childActionResponse.message ?? "NA");
+            case Status.COMPLETED:
+              print("thug :: COMPLETED");
+              return childActionListView(
+                  childActions: viewModel.childActionResponse.data!,
+                  audienceList: audienceList,
+                  selectedAudienceList: selectedAudienceList,
+                  description: description);
+            default:
+          }
 
-              return Container();
-            },
-          ),
-        ));
+          return Container();
+        },
+      ),
+    );
   }
 
   Widget childActionListView(
@@ -97,32 +90,30 @@ class _ChildActionsState extends State<ChildActions> {
               child: SizedBox(
                   height: 65,
                   width: double.maxFinite,
-                  child: ChangeNotifierProvider<ChildActionViewModel>(
-                    create: (BuildContext context) => viewModel,
-                    child: Consumer<ChildActionViewModel>(
-                      builder: (context, viewModel, _) {
-                        switch (viewModel.actionGroupResponse.status) {
-                          case Status.LOADING:
-                            print("thug :: LOADING");
-                            return LoadingWidget();
-                          case Status.ERROR:
-                            print("thug :: ERROR");
-                            return MyErrorWidget(
-                                viewModel.actionGroupResponse.message ?? "NA");
-                          case Status.COMPLETED:
-                            print("thug :: COMPLETED");
-                            return ActionGroups(
-                              actionGroups: viewModel.actionGroupResponse.data!,
-                              selectedItem: (item) {
-                                viewModel.setSelectedActionGroupId(item.id);
-                              },
-                            );
-                          default:
-                        }
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      final viewModel = ref.watch(ChildActionViewModelProvider);
 
-                        return Container();
-                      },
-                    ),
+                      switch (viewModel.actionGroupResponse.status) {
+                        case Status.LOADING:
+                          print("thug :: LOADING");
+                          return LoadingWidget();
+                        case Status.ERROR:
+                          print("thug :: ERROR");
+                          return MyErrorWidget(
+                              viewModel.actionGroupResponse.message ?? "NA");
+                        case Status.COMPLETED:
+                          print("thug :: COMPLETED");
+                          return ActionGroups(
+                            actionGroups: viewModel.actionGroupResponse.data!,
+                            selectedItem: (item) {
+                              viewModel.setSelectedActionGroupId(item.id);
+                            },
+                          );
+                        default:
+                      }
+                      return Container();
+                    },
                   )
 
                   // ActionGroups(
@@ -258,15 +249,16 @@ class _ChildActionsState extends State<ChildActions> {
               //validate selections
 
               onPressed: () {
-                if(viewModel.selectedActionGroupId!=null){
-                var childAction = ChildAction(
-                    id: "",
-                    actionGroupId: viewModel.selectedActionGroupId!,
-                    audience: selectedAudience,
-                    value: textFieldController.text);
-                viewModel.addChildAction(childAction: childAction);
-                isAddingAction = false;
-              }},
+                if (viewModel.selectedActionGroupId != null) {
+                  var childAction = ChildAction(
+                      id: "",
+                      actionGroupId: viewModel.selectedActionGroupId!,
+                      audience: selectedAudience,
+                      value: textFieldController.text);
+                  viewModel.addChildAction(childAction: childAction);
+                  isAddingAction = false;
+                }
+              },
               child: const Text("Save"),
             )
           ],

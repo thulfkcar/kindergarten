@@ -6,6 +6,10 @@ import 'package:kid_garden_app/repos/ChildRepository.dart';
 class ChildViewModel extends ChangeNotifier {
   final _repository = ChildRepository();
 
+  ChildViewModel() : super() {
+    fetchChilds();
+  }
+
   ApiResponse<List<Child>> childListResponse = ApiResponse.loading();
 
   void setChildListResponse(ApiResponse<List<Child>> response) {
@@ -19,7 +23,6 @@ class ChildViewModel extends ChangeNotifier {
     _repository
         .getMyChildList(userId: "sfdf")
         .then((value) => setChildListResponse(ApiResponse.completed(value)))
-
         .onError((error, stackTrace) =>
             setChildListResponse(ApiResponse.error(error.toString())));
   }

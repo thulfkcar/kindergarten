@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
+import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
+import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'ui/childActions/ChildActions.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child:  MyApp()));
 }
 
 const HomeScreenRoute = '/';
@@ -19,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       onGenerateRoute: _routes(),
       title: 'Flutter Demo',
       theme: KidThem.lightTheme,
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         case HomeScreenRoute:
           screen = MyHomePage(title: "KinderGarten");
           break;
-          case ChildActionsRoute:
+        case ChildActionsRoute:
           screen = ChildActions(childId: '');
           break;
         default:
@@ -71,12 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
+    Home(),
+    StaffUI(),
     ChildrenExplorer(),
-    ChildrenExplorer(),
-    const Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
   ];
 
   void _onItemTapped(int index) {
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Business',
+            label: 'Staff',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),

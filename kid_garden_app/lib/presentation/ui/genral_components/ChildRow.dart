@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-ChildRow ({required BuildContext context, required int index,required String childImage}) {
+import '../../../domain/Child.dart';
+
+ChildRow ({required BuildContext context,required Child child, double roundBy=30,bool boarder=true}) {
   return Container(
-      margin: EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4),
+      margin: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12, width: 0.5),
+
+          border:boarder? Border.all(color: Colors.black12, width: 0.5): null,
           color: Colors.white70,
-          borderRadius: BorderRadius.circular(30)),
+          borderRadius: BorderRadius.circular(roundBy)),
       width: double.infinity,
       height: 100,
       child:InkWell (onTap: (){Navigator.pushNamed(context, "/ChildActions");},child: Padding(
@@ -21,7 +24,7 @@ ChildRow ({required BuildContext context, required int index,required String chi
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(30), // Image radius
                 // child: Image.network('https://192.168.1.108:5126/StaticFiles/images/img.png',
-                child: Image.network(childImage,
+                child: Image.network(child.image,
                     fit: BoxFit.cover),
               ),
             ),
