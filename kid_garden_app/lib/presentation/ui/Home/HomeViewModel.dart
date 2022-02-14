@@ -30,29 +30,25 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchNextChildrenWithInfo() async {
+    print("call next ...");
+    childActivitiesApiResponse.status = Status.LOADING_NEXT_PAGE;
+    notifyListeners();
+      childRepo.getChildrenWithInfo().then((value) {
+        print(value);
+        setChildActivitiesApiResponse(appendNewItems(value));
+      }).onError((error, stackTrace) {
+        setChildActivitiesApiResponse(ApiResponse.error(error.toString()));
+      });
+    notifyListeners();
 
-    // setChildActivitiesApiResponse(ApiResponse.loadingNextPage());
-
-    childActivitiesApiResponse.status=Status.LOADING_NEXT_PAGE;
-    await Future.delayed(const Duration(milliseconds: 500), () {
-      childRepo
-          .getChildrenWithInfo()
-          .then((value) => {
-                setChildActivitiesApiResponse(appendNewItems(value))
-              })
-          .onError((error, stackTrace) => {
-                setChildActivitiesApiResponse(
-                    ApiResponse.error(error.toString()))
-              });
-    });
   }
 
   ApiResponse<List<Child>> appendNewItems(List<Child> value) {
-    var data=childActivitiesApiResponse.data;
+    var data = childActivitiesApiResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);
-
   }
+
 
 
 }

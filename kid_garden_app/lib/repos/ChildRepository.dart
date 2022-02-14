@@ -9,6 +9,8 @@ import '../network/BaseApiService.dart';
 import '../network/NetworkApiService.dart';
 
 class ChildRepository {
+
+   ChildRepository();
   final BaseApiService _apiService = NetworkApiService();
 
   Future<List<ActionGroup>> getActionsGroups() async {
@@ -82,8 +84,7 @@ class ChildRepository {
     }
   }
 
-  Future<ChildAction> postChildAction(
-      {required ChildAction childAction}) async {
+  Future<ChildAction> postChildAction({required ChildAction childAction}) async {
     try {
       childAction.actionGroup = ActionGroup(
           image:
@@ -249,9 +250,10 @@ class ChildRepository {
                         'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
           ]));
+
       return children;
     } catch (e) {
-      throw (e);
+      rethrow;
     }
   }
 }
