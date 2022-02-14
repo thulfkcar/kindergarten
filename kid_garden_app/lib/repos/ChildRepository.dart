@@ -61,7 +61,7 @@ class ChildRepository {
 
   Future<List<ChildAction>> getChildActions({required String childId}) async {
     try {
-      List<ChildAction> childActions =  List.empty();
+      List<ChildAction> childActions =  [];
 
       for (int i = 0; i < 5; i++) {
          childActions.add(ChildAction(
@@ -76,7 +76,7 @@ class ChildRepository {
             value: 'shaving'));
       }
       print(childActions);
-      return await childActions;
+      return  childActions;
     } catch (e) {
       throw e;
     }

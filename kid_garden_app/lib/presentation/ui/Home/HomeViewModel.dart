@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:kid_garden_app/network/ApiResponse.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 
@@ -15,6 +16,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchChildrenWithInfo() async {
+    setChildActivitiesApiResponse(ApiResponse.loading());
     childRepo
         .getChildrenWithInfo()
         .then((value) =>
@@ -26,4 +28,31 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel() : super() {
     fetchChildrenWithInfo();
   }
+
+  Future<void> fetchNextChildrenWithInfo() async {
+
+    // setChildActivitiesApiResponse(ApiResponse.loadingNextPage());
+
+    childActivitiesApiResponse.status=Status.LOADING_NEXT_PAGE;
+    await Future.delayed(const Duration(milliseconds: 500), () {
+      childRepo
+          .getChildrenWithInfo()
+          .then((value) => {
+                setChildActivitiesApiResponse(appendNewItems(value))
+              })
+          .onError((error, stackTrace) => {
+                setChildActivitiesApiResponse(
+                    ApiResponse.error(error.toString()))
+              });
+    });
+  }
+
+  ApiResponse<List<Child>> appendNewItems(List<Child> value) {
+    var data=childActivitiesApiResponse.data;
+    data?.addAll(value);
+    return ApiResponse.completed(data);
+
+  }
+
+
 }
