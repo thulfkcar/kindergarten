@@ -7,7 +7,7 @@ import 'package:kid_garden_app/them/DentalThem.dart';
 import 'ui/childActions/ChildActions.dart';
 
 void main() {
-  runApp(const ProviderScope(child:  MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 const HomeScreenRoute = '/';
@@ -135,11 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(color: KidThem.textTitleColor),
           ),
         ),
-        extendBody: true,
-        body: Center(
-            // Center is a layout widget. It takes a single child and positions it
-            // in the middle of the parent.
-            child: _widgetOptions.elementAt(_selectedIndex)),
+
+        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: bottomNavigationBar);
   }
 }

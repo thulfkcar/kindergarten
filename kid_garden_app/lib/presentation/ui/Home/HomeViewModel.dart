@@ -14,7 +14,6 @@ class HomeViewModel extends ChangeNotifier {
     childActivitiesApiResponse = response;
     notifyListeners();
   }
-
   Future<void> fetchChildrenWithInfo() async {
     setChildActivitiesApiResponse(ApiResponse.loading());
     childRepo
@@ -30,17 +29,17 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchNextChildrenWithInfo() async {
-    print("call next ...");
     childActivitiesApiResponse.status = Status.LOADING_NEXT_PAGE;
     notifyListeners();
-      childRepo.getChildrenWithInfo().then((value) {
-        print(value);
-        setChildActivitiesApiResponse(appendNewItems(value));
-      }).onError((error, stackTrace) {
-        setChildActivitiesApiResponse(ApiResponse.error(error.toString()));
-      });
-    notifyListeners();
 
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      childRepo.getChildrenWithInfo().then((value) {
+      setChildActivitiesApiResponse(appendNewItems(value));
+    }).onError((error, stackTrace) {
+      setChildActivitiesApiResponse(ApiResponse.error(error.toString()));
+    });
+      notifyListeners();
+    });
   }
 
   ApiResponse<List<Child>> appendNewItems(List<Child> value) {
@@ -48,7 +47,4 @@ class HomeViewModel extends ChangeNotifier {
     data?.addAll(value);
     return ApiResponse.completed(data);
   }
-
-
-
 }
