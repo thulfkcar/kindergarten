@@ -3,17 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginPage.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'ui/childActions/ChildActions.dart';
-
+const HomeScreenRoute = '/Home';
+const ChildrenExplorerRoute = '/ChildrenExplorer';
+const ChildActionsGroupsRoute = '/ChildActionsGroups';
+const ChildActionsRoute = '/ChildActions';
+const Login_Page='/';
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-const HomeScreenRoute = '/';
-const ChildrenExplorerRoute = '/ChildrenExplorer';
-const ChildActionsGroupsRoute = '/ChildActionsGroups';
-const ChildActionsRoute = '/ChildActions';
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -40,6 +42,9 @@ class MyApp extends StatelessWidget {
           break;
         case ChildActionsRoute:
           screen = ChildActions(childId: '');
+          break;
+        case Login_Page :
+          screen = LoginPage();
           break;
         default:
           return null;

@@ -8,7 +8,7 @@ class ChildActionViewModel extends ChangeNotifier {
   var childActionRepo = ChildRepository();
   String? selectedActionGroupId;
 
-  ChildActionViewModel():super(){
+  ChildActionViewModel() : super() {
     fetchActionGroups();
     fetchChildActions();
   }
@@ -17,7 +17,7 @@ class ChildActionViewModel extends ChangeNotifier {
     selectedActionGroupId = id;
   }
 
-    ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
+  ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
   ApiResponse<List<ActionGroup>> actionGroupResponse = ApiResponse.loading();
   ApiResponse<ChildAction> childActionPostResponse = ApiResponse.loading();
 

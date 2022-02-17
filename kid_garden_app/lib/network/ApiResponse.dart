@@ -7,6 +7,8 @@ class ApiResponse<T> {
 
   ApiResponse.loading() : status = Status.LOADING;
 
+  ApiResponse.non() : status = Status.NON;
+
   ApiResponse.completed(this.data) : status = Status.COMPLETED;
 
   ApiResponse.loadingNextPage() : status = Status.LOADING_NEXT_PAGE;
@@ -19,4 +21,4 @@ class ApiResponse<T> {
   }
 }
 
-enum Status { LOADING, COMPLETED, ERROR, LOADING_NEXT_PAGE }
+enum Status { LOADING, COMPLETED, ERROR, LOADING_NEXT_PAGE ,NON}

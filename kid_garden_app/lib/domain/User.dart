@@ -11,10 +11,9 @@ class User {
   String name;
   String email;
   String role;
-  List<ActionGroup> actionGroups;
-  List<Child> children;
-  User(this.id, this.date, this.name, this.email, this.role,
-      this.actionGroups, this.children);
+  List<ActionGroup>? actionGroups;
+  List<Child>? children;
+  User(this.id, this.date, this.name, this.email, this.role);
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$UserToJson(this);

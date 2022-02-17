@@ -42,9 +42,13 @@ class _HomeXXState extends ConsumerState<Home> {
     switch (viewModel.childActivitiesApiResponse.status) {
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(
-            scrollController: _scrollController,
-            items: viewModel.childActivitiesApiResponse.data!,
-            loadNext: true, itemBuilder: (BuildContext contet, Child item) { return ChildInfoRow(child:item); },);
+          scrollController: _scrollController,
+          items: viewModel.childActivitiesApiResponse.data!,
+          loadNext: true,
+          itemBuilder: (BuildContext contet, Child item) {
+            return ChildInfoRow(child: item);
+          },
+        );
       case Status.LOADING:
         return LoadingWidget();
       case Status.ERROR:
@@ -52,9 +56,13 @@ class _HomeXXState extends ConsumerState<Home> {
             viewModel.childActivitiesApiResponse.message ?? "NA");
       case Status.COMPLETED:
         return CustomListView(
-            scrollController: _scrollController,
-            items: viewModel.childActivitiesApiResponse.data!,
-            loadNext: false, itemBuilder: (BuildContext contet, Child item) { return ChildInfoRow(child:item); },);
+          scrollController: _scrollController,
+          items: viewModel.childActivitiesApiResponse.data!,
+          loadNext: false,
+          itemBuilder: (BuildContext contet, Child item) {
+            return ChildInfoRow(child: item);
+          },
+        );
       default:
     }
 

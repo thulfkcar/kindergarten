@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
+import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/network/OnCompleteListner.dart';
 
 import '../network/BaseApiService.dart';
 import '../network/NetworkApiService.dart';
 
 class ChildRepository {
-
   ChildRepository();
 
   final BaseApiService _apiService = NetworkApiService();
@@ -52,7 +52,7 @@ class ChildRepository {
             name: "gfgih",
             id: "nuihuihopkop",
             image:
-            "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
+                "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
             date: DateTime.now(),
             gender: Gender.Female));
       }
@@ -75,7 +75,7 @@ class ChildRepository {
                 name: 'sdfdf',
                 id: 'sdfdf',
                 image:
-                'https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png'),
+                    'https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png'),
             value: 'shaving'));
       }
       print(childActions);
@@ -90,7 +90,7 @@ class ChildRepository {
     try {
       childAction.actionGroup = ActionGroup(
           image:
-          "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
+              "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
           id: "id",
           date: DateTime.now(),
           name: "name");
@@ -101,7 +101,6 @@ class ChildRepository {
   }
 
   Future<List<Child>> getChildrenWithInfo() async {
-
     try {
       List<Child> children = [];
 
@@ -109,7 +108,7 @@ class ChildRepository {
           name: "name",
           id: "asdfaf",
           image:
-          "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
+              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
           childActions: [
             ChildAction(
                 id: "id",
@@ -119,7 +118,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -129,7 +128,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -139,14 +138,14 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
           ]));
       children.add(Child(
           name: "name",
           id: "asdfaf",
           image:
-          "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
+              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
           childActions: [
             ChildAction(
                 id: "id",
@@ -156,7 +155,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -166,7 +165,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -176,14 +175,14 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
           ]));
       children.add(Child(
           name: "name",
           id: "asdfaf",
           image:
-          "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
+              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
           childActions: [
             ChildAction(
                 id: "id",
@@ -193,7 +192,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -203,7 +202,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -213,14 +212,14 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
           ]));
       children.add(Child(
           name: "name",
           id: "asdfaf",
           image:
-          "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
+              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
           childActions: [
             ChildAction(
                 id: "id",
@@ -230,7 +229,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -240,7 +239,7 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
             ChildAction(
                 id: "id",
@@ -250,15 +249,22 @@ class ChildRepository {
                     id: '',
                     date: DateTime.now(),
                     image:
-                    'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
+                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
                     name: 'gsdfgsfg')),
           ]));
 
-        return children;
-
-          } catch (e)
-      {
-        rethrow;
-      }
+      return children;
+    } catch (e) {
+      rethrow;
     }
+  }
+
+  Future<User> auth({required String userName, required String password}) async {
+    try {
+
+      return  User("id", DateTime.now(), "thug", "thug45@gail.com", "staff");
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
