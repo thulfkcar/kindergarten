@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
-import '../../../network/ApiResponse.dart';
+import '../../../data/network/ApiResponse.dart';
+
 
 class ChildActionViewModel extends ChangeNotifier {
   var childActionRepo = ChildRepository();

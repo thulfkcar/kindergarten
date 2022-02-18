@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/domain/Child.dart';
-import 'package:kid_garden_app/network/ApiResponse.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
+
+import '../../../data/network/ApiResponse.dart';
 
 class ChildViewModel extends ChangeNotifier {
   final _repository = ChildRepository();

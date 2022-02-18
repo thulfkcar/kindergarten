@@ -4,10 +4,10 @@ import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
 import 'package:kid_garden_app/domain/User.dart';
-import 'package:kid_garden_app/network/OnCompleteListner.dart';
 
-import '../network/BaseApiService.dart';
-import '../network/NetworkApiService.dart';
+import '../data/network/BaseApiService.dart';
+import '../data/network/NetworkApiService.dart';
+
 
 class ChildRepository {
   ChildRepository();
@@ -262,7 +262,7 @@ class ChildRepository {
   Future<User> auth({required String userName, required String password}) async {
     try {
 
-      return  User("id", DateTime.now(), "thug", "thug45@gail.com", "staff");
+      return  User('id', DateTime.now(), 'thug', 'thug45', 'staff');
     } catch (e) {
       rethrow;
     }

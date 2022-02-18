@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/User.dart';
-import 'package:kid_garden_app/network/ApiResponse.dart';
-import 'package:kid_garden_app/network/models/LoginRequestData.dart';
+
 import 'package:kid_garden_app/repos/ChildRepository.dart';
+
+import '../../../data/network/ApiResponse.dart';
+import '../../../data/network/models/LoginRequestData.dart';
+import '../../../providers/Providers.dart';
 
 class LoginPageViewModel extends ChangeNotifier {
   var _childRepo = ChildRepository();
@@ -22,8 +25,12 @@ class LoginPageViewModel extends ChangeNotifier {
           .auth(
               userName: loginRequestData.email,
               password: loginRequestData.password)
-          .then((value) => setUserApiResponse(ApiResponse.completed(value)))
-          .onError((error, stackTrace) => ApiResponse.error(error.toString()));
+          .then((value) async {
+        await setUser(value);
+        setUserApiResponse(ApiResponse.completed(value));
+      }).onError((error, stackTrace) {
+        ApiResponse.error(error.toString());
+      });
     });
   }
 }

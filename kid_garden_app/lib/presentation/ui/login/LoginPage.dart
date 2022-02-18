@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/providers/Providers.dart';
-import '../../../network/ApiResponse.dart';
-import '../../../network/models/LoginRequestData.dart';
+import '../../../app/Application.dart';
+import '../../../data/network/ApiResponse.dart';
+import '../../../data/network/models/LoginRequestData.dart';
+import '../../../providers/Providers.dart';
 import '../../FormValidator.dart';
-import '../../main.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   static String tag = 'login-page';
 
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _LoginPageState();
-  }
+  ConsumerState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
+  late LoginPageViewModel viewModel;
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
   final LoginRequestData _loginData = LoginRequestData();
   bool _obscureText = true;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    viewModel = ref.watch(LoginPageViewModelProvider);
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -98,27 +106,7 @@ class _LoginPageState extends State<LoginPage> {
             }),
         const SizedBox(height: 15.0),
         Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final viewModel = ref.watch(LoginPageViewModelProvider);
-                var loginButton = LoginButton(viewModel);
-                switch (viewModel.userApiResponse.status) {
-                  case Status.LOADING:
-                    return const CircularProgressIndicator();
-                  case Status.COMPLETED:
-                    Navigator.of(context).pushReplacementNamed(HomeScreenRoute);
-                    break;
-                  case Status.ERROR:
-                    return loginButton;
-                  case Status.NON:
-                    return loginButton;
-                  default:
-                }
-
-                return const CircularProgressIndicator();
-              },
-            )),
+            padding: const EdgeInsets.symmetric(vertical: 16.0), child: body()),
         TextButton(
           child: const Text(
             'Forgot password?',
@@ -135,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget LoginButton(LoginPageViewModel viewModel) {
+  Widget LoginButton() {
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
@@ -143,8 +131,8 @@ class _LoginPageState extends State<LoginPage> {
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24.0),
                   side: const BorderSide(color: Colors.lightBlueAccent)))),
-      onPressed: () {
-        _sendToServer(viewModel);
+      onPressed: () async {
+      await  _sendToServer();
       },
       child: const Text('Log In', style: TextStyle(color: Colors.white)),
     );
@@ -154,9 +142,9 @@ class _LoginPageState extends State<LoginPage> {
     ///Go to register page
   }
 
-  _sendToServer(LoginPageViewModel viewModel) {
+ Future _sendToServer() async {
     if (_key.currentState!.validate()) {
-      viewModel.auth(loginRequestData: LoginRequestData());
+     await viewModel.auth(loginRequestData: LoginRequestData());
 
       /// No any error in validation
       _key.currentState!.save();
@@ -196,5 +184,27 @@ class _LoginPageState extends State<LoginPage> {
             ],
           );
         });
+  }
+
+  Widget body() {
+    var loginButton = LoginButton();
+    switch (viewModel.userApiResponse.status) {
+      case Status.LOADING:
+        return const CircularProgressIndicator();
+      case Status.COMPLETED:
+
+        Future.delayed(Duration.zero, () async {
+          RestartWidget.restartApp(context);
+        });
+
+        break;
+      case Status.ERROR:
+        return loginButton;
+      case Status.NON:
+        return loginButton;
+      default:
+    }
+
+    return const CircularProgressIndicator();
   }
 }
