@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import '../../../app/Application.dart';
+
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/models/LoginRequestData.dart';
+import '../../../domain/User.dart';
 import '../../../providers/Providers.dart';
 import '../../FormValidator.dart';
 
@@ -33,8 +33,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
+
+    viewModel.getUserChanges();
+    var user = viewModel.currentUser;
+    if (user != null) {
+      Future.delayed(Duration.zero, () async {
+        Navigator.pushReplacementNamed(context, HomeScreenRoute);
+      });
+    }
 
     return Scaffold(
       body: Center(
@@ -132,7 +145,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   borderRadius: BorderRadius.circular(24.0),
                   side: const BorderSide(color: Colors.lightBlueAccent)))),
       onPressed: () async {
-      await  _sendToServer();
+        await _sendToServer();
       },
       child: const Text('Log In', style: TextStyle(color: Colors.white)),
     );
@@ -142,9 +155,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ///Go to register page
   }
 
- Future _sendToServer() async {
+  Future _sendToServer() async {
     if (_key.currentState!.validate()) {
-     await viewModel.auth(loginRequestData: LoginRequestData());
+      await viewModel.auth(loginRequestData: LoginRequestData());
 
       /// No any error in validation
       _key.currentState!.save();
@@ -192,9 +205,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       case Status.LOADING:
         return const CircularProgressIndicator();
       case Status.COMPLETED:
-
         Future.delayed(Duration.zero, () async {
-          RestartWidget.restartApp(context);
+          Navigator.pushReplacementNamed(context, HomeScreenRoute);
         });
 
         break;

@@ -5,13 +5,12 @@ import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPage.dart';
+import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/providers/Providers.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../app/Application.dart';
 import 'ui/childActions/ChildActions.dart';
 
-const HomeScreenRoute = '/';
+const HomeScreenRoute = '/Home';
 const ChildrenExplorerRoute = '/ChildrenExplorer';
 const ChildActionsGroupsRoute = '/ChildActionsGroups';
 const ChildActionsRoute = '/ChildActions';
@@ -24,7 +23,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
  // ProviderScope(child: RestartWidget(child: MaterialApp(home: await getUser() == null ? await const LoginPage() : await MyApp())));
-  runApp( ProviderScope(child: RestartWidget(child: MaterialApp(home: await getUser() == null ? await const LoginPage() : await MyApp())))
+  runApp( ProviderScope(child: MyApp())
   );
 }
 
@@ -82,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Home(),
     StaffUI(),
     ChildrenExplorer(),
+     ProfileUI()
   ];
 
   void _onItemTapped(int index) {
@@ -110,9 +110,14 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.school),
             label: 'School',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ), //,
     );

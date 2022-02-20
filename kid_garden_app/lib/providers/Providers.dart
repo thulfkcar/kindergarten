@@ -16,25 +16,15 @@ final ChildActionViewModelProvider =
 final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
 final LoginPageViewModelProvider =
-    ChangeNotifierProvider<LoginPageViewModel>((ref) => LoginPageViewModel());
+    ChangeNotifierProvider<LoginPageViewModel>((ref) {
+  return LoginPageViewModel();
+});
 
-Future<User?> getUser() async {
+
+
+setUser(User? user) async {
   final prefs = await SharedPreferences.getInstance();
-  var userJson = prefs.getString("User");
-  if (userJson != null) {
-    Map<String, dynamic> userMap = jsonDecode(userJson);
-
-    return User.fromJson(userMap);
-  }
-
-  // return User("id", DateTime.now(), "name", "email", "admin");
-
-  return null;
-}
-setUser(User user) async{
-  final prefs = await SharedPreferences.getInstance();
+  if (user == null) prefs.setString("User", 'null');
   prefs.setString("User", user.toString());
-
 }
 
-final isLoggedInFutureProvider=FutureProvider<User?>((ref) =>  getUser());
