@@ -21,7 +21,8 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  late LoginPageViewModel viewModel;
+  User? user;
+  LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
   final LoginRequestData _loginData = LoginRequestData();
@@ -40,12 +41,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
-
-    viewModel.getUserChanges();
-    var user = viewModel.currentUser;
+    user = viewModel.currentUser;
     if (user != null) {
-      Future.delayed(Duration.zero, () async {
+      // condition here
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, HomeScreenRoute);
+        viewModel.dispose();
       });
     }
 

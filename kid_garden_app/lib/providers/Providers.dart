@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
@@ -16,8 +17,10 @@ final ChildActionViewModelProvider =
 final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
 final LoginPageViewModelProvider =
-    ChangeNotifierProvider<LoginPageViewModel>((ref) {
-  return LoginPageViewModel();
+    ChangeNotifierProvider.autoDispose<LoginPageViewModel>((ref) {
+      var  provider=LoginPageViewModel();
+      provider.getUserChanges();
+  return provider;
 });
 
 
