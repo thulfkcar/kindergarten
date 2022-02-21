@@ -49,4 +49,10 @@ class LoginPageViewModel extends ChangeNotifier {
       });
     });
   }
+
+  void logOut() {
+    setUser(null);
+    currentUser=null;
+    notifyListeners();
+  }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/genral_components/ProfileControl.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 
 import '../../../providers/Providers.dart';
@@ -20,7 +21,7 @@ class _ProfileUIState extends State<ProfileUI> {
     return Consumer(
       builder: (context, ref, child) {
         var viewModel = ref.watch(LoginPageViewModelProvider);
-         viewModel.getUserChanges();
+        viewModel.getUserChanges();
         var user = viewModel.currentUser;
         if (user != null) {
           return Scaffold(
@@ -70,23 +71,21 @@ class _ProfileUIState extends State<ProfileUI> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Container(
-                                    width: 44,
-                                    height: 44,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        width: 2,
+                                      width: 44,
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          width: 2,
+                                        ),
                                       ),
-                                    ),
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.edit_outlined,
-                                        color: Colors.grey,
-                                        size: 24,
-                                      ),
-                                      onPressed: () async {},
-                                    ),
-                                  ),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.edit_outlined,
+                                          size: 24,
+                                        ),
+                                        onPressed: () async {},
+                                      )),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         12, 0, 0, 0),
@@ -99,16 +98,19 @@ class _ProfileUIState extends State<ProfileUI> {
                                           width: 2,
                                         ),
                                       ),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.login_rounded,
-                                          color: KidThem.lightTheme.cardColor,
-                                          size: 24,
-                                        ),
-                                        onPressed: () async {
-                                          setUser(null);
-                                          Navigator.pushReplacementNamed(
-                                              context, Login_Page);
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          return IconButton(
+                                            icon: Icon(
+                                              Icons.login_rounded,
+                                              size: 24,
+                                            ),
+                                            onPressed: () async {
+                                              ref.read(LoginPageViewModelProvider).logOut();
+                                              Navigator.pushReplacementNamed(
+                                                  context, Login_Page);
+                                            },
+                                          );
                                         },
                                       ),
                                     ),
@@ -166,40 +168,16 @@ class _ProfileUIState extends State<ProfileUI> {
                     children: [
                       ProfileControl(
                           icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
+                          title: "Staff:Admin",
+                          onPressed: () {
+                            setState(() {
+                              Navigator.pushNamed(context, StaffUI_Route);
+                            });
+                          }),
                       ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
+                          icon: Icons.baby_changing_station,
+                          title: "MyChildren:Staff,Parents,Admin",
                           onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {}),
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff",
-                          onPressed: () {})
                     ],
                   ),
                 ),

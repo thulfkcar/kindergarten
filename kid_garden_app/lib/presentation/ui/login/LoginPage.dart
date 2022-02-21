@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-
+import 'package:kid_garden_app/presentation/ui/splash/Splash.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/models/LoginRequestData.dart';
 import '../../../domain/User.dart';
@@ -21,6 +21,7 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  bool isCompleted = false;
   User? user;
   LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();
@@ -49,23 +50,40 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         viewModel.dispose();
       });
     }
+    if (!isCompleted) {
 
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Form(
-                key: _key,
-                autovalidateMode: _validate,
-                child: _getFormUI(),
+      return SplashScreen(
+        completed: () {
+          setState(() {
+            isCompleted = true;
+          });
+        },
+      );
+
+    } else {
+
+      if(user==null) {
+        return Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(20.0),
+              child: Center(
+                child: Form(
+                  key: _key,
+                  autovalidateMode: _validate,
+                  child: _getFormUI(),
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+      }
+
+    }
+
+    return Container();
   }
 
   Widget _getFormUI() {

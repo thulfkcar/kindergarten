@@ -1,12 +1,13 @@
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPage.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
-import 'package:kid_garden_app/providers/Providers.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'ui/childActions/ChildActions.dart';
 
@@ -15,6 +16,7 @@ const ChildrenExplorerRoute = '/ChildrenExplorer';
 const ChildActionsGroupsRoute = '/ChildActionsGroups';
 const ChildActionsRoute = '/ChildActions';
 const Login_Page = '/';
+const StaffUI_Route='/Staff';
 
 // void main() {
 //   runApp(ProviderScope(child: MyApp()));
@@ -22,7 +24,6 @@ const Login_Page = '/';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
- // ProviderScope(child: RestartWidget(child: MaterialApp(home: await getUser() == null ? await const LoginPage() : await MyApp())));
   runApp( ProviderScope(child: MyApp())
   );
 }
@@ -37,8 +38,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
       return MaterialApp(
+
+        locale: Locale("en"), // switch between en and ru to see effect
+        localizationsDelegates: const [DemoLocalizationsDelegate()],
+        supportedLocales: const [Locale('en', ''), Locale('ar', '')],
         onGenerateRoute: _routes(),
-        title: 'Flutter Demo',
+        title: StringResources.of(context)?.getText("text2") ?? "Error",
         theme: KidThem.lightTheme,
         darkTheme: KidThem.darkTheme,
       );
@@ -58,6 +63,9 @@ class MyApp extends StatelessWidget {
           break;
         case Login_Page:
           screen = LoginPage();
+          break;
+          case StaffUI_Route:
+          screen = StaffUI();
           break;
         default:
           return null;
@@ -79,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     Home(),
-    StaffUI(),
     ChildrenExplorer(),
      ProfileUI()
   ];
@@ -103,12 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Staff',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'School',
+            label: 'Children',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
