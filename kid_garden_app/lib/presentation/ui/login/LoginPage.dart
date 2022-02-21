@@ -7,7 +7,8 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/models/LoginRequestData.dart';
 import '../../../domain/User.dart';
 import '../../../providers/Providers.dart';
-import '../../FormValidator.dart';
+import '../../utile/FormValidator.dart';
+import '../../utile/LangUtiles.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   static String tag = 'login-page';
@@ -99,12 +100,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           keyboardType: TextInputType.emailAddress,
           autofocus: false,
           decoration: InputDecoration(
-            hintText: 'Email',
+            hintText: StringResources.of(context)?.getText("email") ?? "Error",
             contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
           ),
-          validator: FormValidator().validateEmail,
+          validator: FormValidator(context).validateEmail,
           onSaved: (String? value) {
             _loginData.email = value!;
           },
@@ -115,7 +116,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             obscureText: _obscureText,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-              hintText: 'Password',
+              hintText: StringResources.of(context)?.getText("password") ?? "Error",
               contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
@@ -132,30 +133,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               ),
             ),
-            validator: FormValidator().validatePassword,
+            validator: FormValidator(context).validatePassword,
             onSaved: (String? value) {
               _loginData.password = value!;
             }),
         const SizedBox(height: 15.0),
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0), child: body()),
-        TextButton(
-          child: const Text(
-            'Forgot password?',
-            style: TextStyle(color: Colors.black54),
-          ),
-          onPressed: _showForgotPasswordDialog,
-        ),
-        TextButton(
-          onPressed: _sendToRegisterPage,
-          child: const Text('Not a member? Sign up now',
-              style: TextStyle(color: Colors.black54)),
-        ),
       ],
     );
   }
 
-  Widget LoginButton() {
+  Widget loginButton() {
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
@@ -166,13 +155,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       onPressed: () async {
         await _sendToServer();
       },
-      child: const Text('Log In', style: TextStyle(color: Colors.white)),
+      child:  Text(StringResources.of(context)?.getText("login") ?? "Error", style: TextStyle(color: Colors.white)),
     );
   }
 
-  _sendToRegisterPage() {
-    ///Go to register page
-  }
 
   Future _sendToServer() async {
     if (_key.currentState!.validate()) {
@@ -188,38 +174,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Future<void> _showForgotPasswordDialog() async {
-    await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Please enter your eEmail'),
-            contentPadding: const EdgeInsets.all(5.0),
-            content: TextField(
-              decoration: const InputDecoration(hintText: "Email"),
-              onChanged: (String value) {
-                _loginData.email = value;
-              },
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text("Ok"),
-                onPressed: () async {
-                  _loginData.email = "";
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                child: const Text("Cancel"),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
-  }
 
   Widget body() {
-    var loginButton = LoginButton();
+    var login = loginButton();
     switch (viewModel.userApiResponse.status) {
       case Status.LOADING:
         return const CircularProgressIndicator();
@@ -230,9 +187,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
         break;
       case Status.ERROR:
-        return loginButton;
+        return login;
       case Status.NON:
-        return loginButton;
+        return login;
       default:
     }
 

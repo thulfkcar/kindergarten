@@ -1,3 +1,11 @@
 {
-  "app_name": "KenderGarten"
+  "app_name": "KenderGarten",
+  "email": "Email",
+  "email_required": "Password is Required",
+  "email_form": "Email Invalid",
+  "password": "Password",
+  "password_required": "Password is Required",
+  "password_min": "Password must minimum eight characters",
+  "password_form": "Password at least one uppercase letter, one lowercase letter and one number",
+  "login": "Log In"
 }
