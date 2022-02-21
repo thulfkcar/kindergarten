@@ -9,11 +9,12 @@ import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/ChildAction.dart';
 import '../../../providers/Providers.dart';
-import '../genral_components/ActionGroup.dart';
-import '../genral_components/ChildActionRow.dart';
-import '../genral_components/Error.dart';
-import '../genral_components/MultiSelectChip.dart';
-import '../genral_components/loading.dart';
+import '../general_components/ActionGroup.dart';
+import '../general_components/ChildActionRow.dart';
+import '../general_components/Error.dart';
+import '../general_components/MultiSelectChip.dart';
+import '../general_components/loading.dart';
+
 
 class ChildActions extends StatefulWidget {
   String childId;

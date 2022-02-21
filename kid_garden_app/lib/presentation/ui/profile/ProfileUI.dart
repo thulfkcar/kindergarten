@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
-import 'package:kid_garden_app/presentation/ui/genral_components/ProfileControl.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 
 import '../../../providers/Providers.dart';
+import '../general_components/ProfileControl.dart';
 
 class ProfileUI extends StatefulWidget {
   const ProfileUI({Key? key}) : super(key: key);

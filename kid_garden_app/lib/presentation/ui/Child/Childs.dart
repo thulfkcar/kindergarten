@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/genral_components/ChildRow.dart';
 import 'package:kid_garden_app/providers/Providers.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
-import '../genral_components/Error.dart';
-import '../genral_components/loading.dart';
+import '../general_components/ChildRow.dart';
+import '../general_components/Error.dart';
+import '../general_components/loading.dart';
+
 
 class ChildrenExplorer extends StatefulWidget {
   ChildrenExplorer({Key? key}) : super(key: key);

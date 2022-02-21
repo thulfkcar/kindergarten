@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/domain/Child.dart';
-import 'package:kid_garden_app/presentation/ui/Home/Activities/ChildInfoRow.dart';
-import 'package:kid_garden_app/presentation/ui/genral_components/loading.dart';
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext contet, T item);
 

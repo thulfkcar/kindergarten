@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../domain/Child.dart';
 
 ChildRow ({required BuildContext context,required Child child, double roundBy=30,bool boarder=true}) {

@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/providers/Providers.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
-import '../genral_components/Error.dart';
-import '../genral_components/loading.dart';
+
+import '../general_components/Error.dart';
+import '../general_components/loading.dart';
 import 'Activities/Activities.dart';
 import 'Activities/ChildInfoRow.dart';
 import 'HomeViewModel.dart';
@@ -45,7 +46,7 @@ class _HomeXXState extends ConsumerState<Home> {
           scrollController: _scrollController,
           items: viewModel.childActivitiesApiResponse.data!,
           loadNext: true,
-          itemBuilder: (BuildContext contet, Child item) {
+          itemBuilder: (BuildContext content, Child item) {
             return ChildInfoRow(child: item);
           },
         );
@@ -59,7 +60,7 @@ class _HomeXXState extends ConsumerState<Home> {
           scrollController: _scrollController,
           items: viewModel.childActivitiesApiResponse.data!,
           loadNext: false,
-          itemBuilder: (BuildContext contet, Child item) {
+          itemBuilder: (BuildContext content, Child item) {
             return ChildInfoRow(child: item);
           },
         );
@@ -74,7 +75,6 @@ class _HomeXXState extends ConsumerState<Home> {
     if (_scrollController.position.maxScrollExtent ==
         _scrollController.position.pixels) {
       if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
-        print("bottom end");
         await viewModel.fetchNextChildrenWithInfo();
       }
     }
