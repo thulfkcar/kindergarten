@@ -5,9 +5,7 @@ import '../../../../domain/Child.dart';
 
 class ChildInfoRow extends StatelessWidget {
   final Child child;
-
   const ChildInfoRow({Key? key, required this.child}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +19,7 @@ class ChildInfoRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(30)),
         child: Column(
       children: [
-        ChildRow(context: context, child: child, roundBy: 0,boarder :false),
+        childRow(context: context, child: child, roundBy: 0,boarder :false),
         ListView.builder(
             shrinkWrap: true,
             itemCount: child.childActions!.length,
@@ -36,7 +34,6 @@ class ChildInfoRow extends StatelessWidget {
   Widget childPrefActivity({required ChildAction childAction}) {
     return Container(
       decoration: BoxDecoration(
-          // border: Border.all(color: Colors.black12, width: 0.5),
           color: Colors.white70,
           borderRadius: BorderRadius.circular(30)),
       margin: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
@@ -68,7 +65,7 @@ class ChildInfoRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    childAction.actionGroup!.name,
+                    childAction.value,
                   ),
                 ],
               ),

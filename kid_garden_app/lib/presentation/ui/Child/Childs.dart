@@ -45,7 +45,7 @@ class _childsExplorerState extends State<ChildrenExplorer> {
     return ListView.builder(
         itemCount: children.length,
         itemBuilder: (BuildContext context, int index) {
-          return ChildRow(context: context, child: children[index]);
+          return childRow(context: context, child: children[index]);
         });
   }
 }

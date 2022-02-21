@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../domain/Child.dart';
 
-ChildRow ({required BuildContext context,required Child child, double roundBy=30,bool boarder=true}) {
+childRow ({required BuildContext context,required Child child, double roundBy=30,bool boarder=true}) {
   return Container(
-      margin: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+      margin: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
       decoration: BoxDecoration(
 
           border:boarder? Border.all(color: Colors.black12, width: 0.5): null,
@@ -12,7 +12,7 @@ ChildRow ({required BuildContext context,required Child child, double roundBy=30
       width: double.infinity,
       height: 100,
       child:InkWell (onTap: (){Navigator.pushNamed(context, "/ChildActions");},child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+        padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,27 +29,27 @@ ChildRow ({required BuildContext context,required Child child, double roundBy=30
             // Image.network(children[index].image),
             Expanded(
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Title Here',
-                      style: TextStyle(
+                     Text(
+                      child.name,
+                      style: const TextStyle(
                         fontFamily: 'Lexend Deca',
                         color: Color(0xFF090F13),
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Padding(
+                     Padding(
                       padding:
-                      EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                       child: Text(
-                        'Subtitle',
-                        style: TextStyle(
+                        child.age.toString(),
+                        style: const TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF57636C),
                           fontSize: 12,
@@ -61,7 +61,7 @@ ChildRow ({required BuildContext context,required Child child, double roundBy=30
                 ),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 4),
               child: Icon(
                 Icons.chevron_right_rounded,
