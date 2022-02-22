@@ -1,13 +1,12 @@
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
+import 'dart:async';
+import 'package:flutter/material.dart';
 import '../../utile/LangUtiles.dart';
 
 class SplashScreen extends StatefulWidget {
-  Function() completed;
+final  Function() completed;
 
-  SplashScreen({Key? key, required this.completed}) : super(key: key);
+  const SplashScreen({Key? key, required this.completed}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -59,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   mainWidget() {
-    widget.completed();
+      widget.completed();
   }
 
   @override

@@ -48,40 +48,36 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       // condition here
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, HomeScreenRoute);
-        viewModel.dispose();
       });
     }
     if (!isCompleted) {
-
       return SplashScreen(
         completed: () {
-          setState(() {
+          if (mounted) {
+            setState(() {
             isCompleted = true;
-          });
+          });}
         },
       );
-
     } else {
-
-      if(user==null) {
+      if (user == null) {
         return Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Form(
-                  key: _key,
-                  autovalidateMode: _validate,
-                  child: _getFormUI(),
+          body: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Form(
+                    key: _key,
+                    autovalidateMode: _validate,
+                    child: _getFormUI(),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
+        );
       }
-
     }
 
     return Container();
@@ -116,7 +112,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             obscureText: _obscureText,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
-              hintText: StringResources.of(context)?.getText("password") ?? "Error",
+              hintText:
+                  StringResources.of(context)?.getText("password") ?? "Error",
               contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
@@ -155,10 +152,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       onPressed: () async {
         await _sendToServer();
       },
-      child:  Text(StringResources.of(context)?.getText("login") ?? "Error", style: TextStyle(color: Colors.white)),
+      child: Text(StringResources.of(context)?.getText("login") ?? "Error",
+          style: TextStyle(color: Colors.white)),
     );
   }
-
 
   Future _sendToServer() async {
     if (_key.currentState!.validate()) {
@@ -173,7 +170,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       });
     }
   }
-
 
   Widget body() {
     var login = loginButton();
