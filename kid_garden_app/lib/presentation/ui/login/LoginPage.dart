@@ -55,8 +55,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         completed: () {
           if (mounted) {
             setState(() {
-            isCompleted = true;
-          });}
+              isCompleted = true;
+            });
+          }
         },
       );
     } else {

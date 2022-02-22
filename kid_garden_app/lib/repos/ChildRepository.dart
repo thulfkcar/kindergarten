@@ -267,4 +267,9 @@ class ChildRepository {
       rethrow;
     }
   }
+
+ Future<List<Child>> getChildren() async {
+
+   return await getMyChildList(userId: "fdg");
+ }
 }
