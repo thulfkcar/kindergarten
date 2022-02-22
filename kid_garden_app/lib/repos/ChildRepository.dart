@@ -78,10 +78,9 @@ class ChildRepository {
                     'https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png'),
             value: 'shaving'));
       }
-      print(childActions);
       return childActions;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

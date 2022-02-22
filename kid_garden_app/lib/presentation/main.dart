@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           screen = MyHomePage(title: "KinderGarten");
           break;
         case ChildActionsRoute:
-          screen = ChildActions(childId: '');
+          screen = ChildActions();
           break;
         case Login_Page:
           screen = LoginPage();

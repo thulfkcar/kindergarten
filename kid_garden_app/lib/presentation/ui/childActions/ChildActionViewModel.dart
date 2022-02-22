@@ -4,9 +4,8 @@ import 'package:kid_garden_app/domain/ChildAction.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
 
-
 class ChildActionViewModel extends ChangeNotifier {
-  var childActionRepo = ChildRepository();
+  final _repository = ChildRepository();
   String? selectedActionGroupId;
 
   ChildActionViewModel() : super() {
@@ -45,17 +44,19 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchChildActions() async {
     setChildActionsListResponse(ApiResponse.loading());
-    childActionRepo
-        .getChildActions(childId: "sfdf")
-        .then((value) =>
-            setChildActionsListResponse(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            setChildActionsListResponse(ApiResponse.error(error.toString())));
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      _repository
+          .getChildActions(childId: "sfdf")
+          .then((value) =>
+              setChildActionsListResponse(ApiResponse.completed(value)))
+          .onError((error, stackTrace) =>
+              setChildActionsListResponse(ApiResponse.error(error.toString())));
+    });
   }
 
   Future<void> fetchActionGroups() async {
     setActionGroupResponse(ApiResponse.loading());
-    childActionRepo
+    _repository
         .getActionsGroups()
         .then((value) => setActionGroupResponse(ApiResponse.completed(value)))
         .onError((error, stackTrace) =>
@@ -65,12 +66,32 @@ class ChildActionViewModel extends ChangeNotifier {
   void addChildAction({required ChildAction childAction}) {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
-      childActionRepo
+      _repository
           .postChildAction(childAction: childAction)
           .then((value) =>
               setChildActionPostResponse(ApiResponse.completed(value)))
           .onError((error, stackTrace) =>
               setChildActionPostResponse(ApiResponse.error(error.toString())));
     }
+  }
+
+  Future<void> fetchNextChildActions() async {
+    childActionResponse.status = Status.LOADING_NEXT_PAGE;
+    notifyListeners();
+
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      _repository.getChildActions(childId: "SDF").then((value) {
+        setChildActionsListResponse(appendNewItems(value));
+      }).onError((error, stackTrace) {
+        setChildActionsListResponse(ApiResponse.error(error.toString()));
+      });
+      notifyListeners();
+    });
+  }
+
+  ApiResponse<List<ChildAction>> appendNewItems(List<ChildAction> value) {
+    var data = childActionResponse.data;
+    data?.addAll(value);
+    return ApiResponse.completed(data);
   }
 }
