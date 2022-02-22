@@ -7,49 +7,10 @@ import 'package:kid_garden_app/providers/Providers.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
 import '../general_components/ChildRow.dart';
-import '../general_components/Error.dart';
 import '../general_components/loading.dart';
 
 
-// class ChildrenExplorer extends StatefulWidget {
-//   ChildrenExplorer({Key? key}) : super(key: key);
-//
-//   @override
-//   _childsExplorerState createState() => _childsExplorerState();
-// }
 
-class _childsExplorerState extends State<ChildrenExplorer> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Consumer(
-      builder: (context, ref, child) {
-        final viewModel = ref.watch(childViewModelProvider);
-        switch (viewModel.childListResponse.status) {
-          case Status.LOADING:
-            print("thug :: LOADING");
-            return LoadingWidget();
-          case Status.ERROR:
-            print("thug :: ERROR");
-            return MyErrorWidget(viewModel.childListResponse.message ?? "NA");
-          case Status.COMPLETED:
-            print("thug :: COMPLETED");
-            return childrenListView(viewModel.childListResponse.data!);
-          default:
-        }
-        return Container();
-      },
-    ));
-  }
-
-  Widget childrenListView(List<Child> children) {
-    return ListView.builder(
-        itemCount: children.length,
-        itemBuilder: (BuildContext context, int index) {
-          return childRow(context: context, child: children[index]);
-        });
-  }
-}
 
 class ChildrenExplorer extends ConsumerStatefulWidget {
   const ChildrenExplorer({
@@ -75,8 +36,8 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
     var status=_viewModel.childListResponse.status;
     switch (status){
       case Status.LOADING:
-        LoadingWidget();
-        break;
+       return LoadingWidget();
+
       case Status.COMPLETED:
         return CustomListView(scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
@@ -84,8 +45,8 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
           return childRow(context: context, child: item);
         });
       case Status.ERROR:
-        ErrorWidget(_viewModel.childListResponse.message ?? "Error");
-        break;
+       return ErrorWidget(_viewModel.childListResponse.message ?? "Error");
+
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
