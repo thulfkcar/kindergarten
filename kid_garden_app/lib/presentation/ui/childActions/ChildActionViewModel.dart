@@ -19,25 +19,22 @@ class ChildActionViewModel extends ChangeNotifier {
 
   ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
   ApiResponse<List<ActionGroup>> actionGroupResponse = ApiResponse.loading();
-  ApiResponse<ChildAction> childActionPostResponse = ApiResponse.loading();
+  ApiResponse<ChildAction> childActionPostResponse = ApiResponse.non();
 
   void setChildActionsListResponse(ApiResponse<List<ChildAction>> response) {
-    print("thug :: child actions $response");
     childActionResponse = response;
     notifyListeners();
   }
 
   void setChildActionPostResponse(ApiResponse<ChildAction> response) {
-    print("thug :: child actions $response");
-    childActionPostResponse = response;
-    // if (response.status == Status.COMPLETED) {
-    //   childActionResponse.data!.add(response.data!);
-    // }
+
+
+      childActionPostResponse = response;
+
     notifyListeners();
   }
 
   void setActionGroupResponse(ApiResponse<List<ActionGroup>> response) {
-    print("thug :: action groups $response");
     actionGroupResponse = response;
     notifyListeners();
   }
@@ -56,25 +53,29 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchActionGroups() async {
     setActionGroupResponse(ApiResponse.loading());
+    Future.delayed(const Duration(milliseconds: 2000), () {
+
     _repository
         .getActionsGroups()
         .then((value) => setActionGroupResponse(ApiResponse.completed(value)))
         .onError((error, stackTrace) =>
             setActionGroupResponse(ApiResponse.error(error.toString())));
-  }
+  });}
 
   void addChildAction({required ChildAction childAction}) {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
-      _repository
-          .postChildAction(childAction: childAction)
-          .then((value) =>
-              setChildActionPostResponse(ApiResponse.completed(value)))
-          .onError((error, stackTrace) =>
-              setChildActionPostResponse(ApiResponse.error(error.toString())));
+
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        _repository
+            .postChildAction(childAction: childAction)
+            .then((value) =>
+            setChildActionPostResponse(ApiResponse.completed(value)))
+            .onError((error, stackTrace) =>
+            setChildActionPostResponse(ApiResponse.error(error.toString())));
+      });
     }
   }
-
   Future<void> fetchNextChildActions() async {
     childActionResponse.status = Status.LOADING_NEXT_PAGE;
     notifyListeners();

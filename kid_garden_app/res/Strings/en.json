@@ -7,5 +7,6 @@
   "password_required": "Password is Required",
   "password_min": "Password must minimum eight characters",
   "password_form": "Password at least one uppercase letter, one lowercase letter and one number",
-  "login": "Log In"
+  "login": "Log In",
+  "child_actions": "Child Actions"
 }

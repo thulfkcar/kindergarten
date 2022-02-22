@@ -48,7 +48,7 @@ class _HomeXXState extends ConsumerState<Home> {
           loadNext: true,
           itemBuilder: (BuildContext content, Child item) {
             return ChildInfoRow(child: item);
-          },
+          }, direction: Axis.vertical,
         );
       case Status.LOADING:
         return LoadingWidget();
@@ -62,7 +62,7 @@ class _HomeXXState extends ConsumerState<Home> {
           loadNext: false,
           itemBuilder: (BuildContext content, Child item) {
             return ChildInfoRow(child: item);
-          },
+          }, direction: Axis.vertical,
         );
       default:
     }

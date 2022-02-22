@@ -6,7 +6,10 @@ class CustomListView<T> extends StatelessWidget {
   List<T> items = [];
   ScrollController scrollController;
   bool loadNext = false;
+
   final ItemWidgetBuilder<T> itemBuilder;
+
+  Axis direction=Axis.vertical;
 
   CustomListView({
     Key? key,
@@ -14,6 +17,7 @@ class CustomListView<T> extends StatelessWidget {
     required this.items,
     required this.loadNext,
     required this.itemBuilder,
+    required this.direction
   }) : super(key: key);
 
   @override
@@ -23,6 +27,7 @@ class CustomListView<T> extends StatelessWidget {
         child: ListView.builder(
           controller: scrollController,
            itemCount: items.length,
+          scrollDirection: direction,
 
           itemBuilder: (BuildContext context, int index) {
             return itemBuilder(context, items[index]);
