@@ -25,3 +25,11 @@ class UnauthorisedException extends AppException {
 class InvalidInputException extends AppException {
   InvalidInputException([String? message]) : super(message, "Invalid Input: ");
 }
+
+class UrlNotFoundException extends AppException {
+  UrlNotFoundException([String? message]) : super(message, "Not Found: ");
+}
+class ErrorDuringCommunication extends AppException{
+  ErrorDuringCommunication([String? message]) : super(message, "Not Found: ");
+
+}

@@ -124,7 +124,7 @@ class _ProfileUIState extends State<ProfileUI> {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Text(user.name),
+                            Text(user.name!),
                           ],
                         ),
                       ),
@@ -134,7 +134,7 @@ class _ProfileUIState extends State<ProfileUI> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                             child: Text(
-                              user.email,
+                              user.email!,
                             ),
                           ),
                         ],

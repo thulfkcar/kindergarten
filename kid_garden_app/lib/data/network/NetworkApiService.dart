@@ -5,7 +5,11 @@ import 'AppException.dart';
 import 'BaseApiService.dart';
 
 class NetworkApiService extends BaseApiService {
-
+ var jsonHeaders= {
+  "Content-type": "application/json",
+  "Accept": "application/json",
+  "charset":"utf-8"
+  };
   @override
   Future getResponse(String url) async {
     dynamic responseJson;
@@ -19,10 +23,26 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future postResponse(String url, Map<String, String> JsonBody) async{
+  Future postResponse(String url, Map<String, dynamic> JsonBody) async {
     dynamic responseJson;
     try {
-      final response = await http.post(Uri.parse(baseUrl + url),body: JsonBody);
+      final response =
+          await http.post(Uri.parse(baseUrl + url), body: JsonBody);
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  @override
+  Future postResponseJsonBody(String url, String JsonBody) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http.post(Uri.parse(baseUrl + url),
+          body: JsonBody,
+      headers: jsonHeaders);
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
@@ -41,7 +61,9 @@ class NetworkApiService extends BaseApiService {
       case 403:
         throw UnauthorisedException(response.body.toString());
       case 404:
-        throw UnauthorisedException(response.body.toString());
+        throw UrlNotFoundException(response.body.toString());
+      case 415:
+        throw ErrorDuringCommunication(response.body.toString());
       case 500:
       default:
         throw FetchDataException(

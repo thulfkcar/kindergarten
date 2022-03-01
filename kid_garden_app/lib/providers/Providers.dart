@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
@@ -16,16 +15,17 @@ final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
 final LoginPageViewModelProvider =
     ChangeNotifierProvider<LoginPageViewModel>((ref) {
-      var  provider=LoginPageViewModel();
-      provider.getUserChanges();
+  var provider = LoginPageViewModel();
+  provider.getUserChanges();
   return provider;
 });
 
-
-
 setUser(User? user) async {
-  final prefs = await SharedPreferences.getInstance();
-  if (user == null) prefs.setString("User", 'null');
-  prefs.setString("User", user.toString());
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    if (user == null) prefs.setString("User", 'null');
+    prefs.setString("User", user.toString());
+  } catch (e) {
+    rethrow;
+  }
 }
-

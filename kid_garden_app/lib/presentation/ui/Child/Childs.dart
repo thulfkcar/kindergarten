@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Home/Activities/Activities.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/providers/Providers.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
@@ -45,7 +46,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
           return childRow(context: context, child: item);
         }, direction: Axis.vertical,);
       case Status.ERROR:
-       return ErrorWidget(_viewModel.childListResponse.message ?? "Error");
+       return MyErrorWidget(_viewModel.childListResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(scrollController: _scrollController,

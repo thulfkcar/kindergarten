@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:kid_garden_app/data/network/models/MultiResponse.dart';
+import 'package:kid_garden_app/data/network/models/SingleResponse.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
@@ -7,7 +9,7 @@ import 'package:kid_garden_app/domain/User.dart';
 
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
-
+import '../data/network/models/LoginRequestData.dart';
 
 class ChildRepository {
   ChildRepository();
@@ -41,24 +43,17 @@ class ChildRepository {
 
   Future<List<Child>> getMyChildList({required String userId}) async {
     try {
-      // dynamic response = await _apiService.getResponse("child/${userId}");
-      List<Child> childes = [];
-      // childes = (json.decode(response.body) as List)
-      //     .map((i) => Child.fromJson(i))
-      //     .toList();
+      dynamic response = await _apiService.getResponse("Child/getAll/1");
 
-      for (int i = 0; i < 10; i++) {
-        childes.add(Child(
-            name: "gfgih",
-            id: "nuihuihopkop",
-            image:
-                "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
-            date: DateTime.now(),
-            gender: Gender.Female));
-      }
+      List<Child> childes;
+
+      var object = MultiResponse.fromJson(response).data;
+      var jsonObject = json.decode(object!) as List;
+      childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
+
       return childes;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -258,17 +253,27 @@ class ChildRepository {
     }
   }
 
-  Future<User> auth({required String userName, required String password}) async {
+  Future<User?> auth(
+      {required String userName, required String password}) async {
     try {
+      dynamic response = await _apiService.postResponseJsonBody(
+          "User/login", "{email: '$userName', password: '$password'}");
 
-      return  User('id', DateTime.now(), 'thug', 'thug45', 'staff');
+      var user;
+        SingleResponse<User>.fromJson(
+          await response,  (json)   {
+             user=   User.fromJson(json as Map<String, dynamic>);
+            return user;
+          });
+      return await user;
+
+
     } catch (e) {
       rethrow;
     }
   }
 
- Future<List<Child>> getChildren() async {
-
-   return await getMyChildList(userId: "fdg");
- }
+  Future<List<Child>> getChildren() async {
+    return await getMyChildList(userId: "fdg");
+  }
 }

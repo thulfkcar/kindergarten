@@ -12,11 +12,12 @@ class FormValidator {
   FormValidator._({required this.context});
 
   String? validatePassword(String? value) {
-    String patttern = r'(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$)';
+    String patttern = r'[0-9][0-9][0-9][@]';
+    // String patttern = r'(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$)';
     RegExp regExp =  RegExp(patttern);
     if (value!.isEmpty) {
       return StringResources.of(context)?.getText("password_required") ?? "Error";
-    } else if (value.length < 8) {
+    } else if (value.length < 3) {
       return StringResources.of(context)?.getText("password_min") ?? "Error";
     } else if (!regExp.hasMatch(value)) {
       return StringResources.of(context)?.getText("password_form") ?? "Error";

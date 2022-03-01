@@ -1,5 +1,4 @@
 
-
 import 'ChildAction.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ActionGroup.g.dart';

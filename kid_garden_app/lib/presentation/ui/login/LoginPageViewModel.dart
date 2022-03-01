@@ -36,8 +36,7 @@ class LoginPageViewModel extends ChangeNotifier {
 
   Future<void> auth({required LoginRequestData loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      _childRepo
+   await   _childRepo
           .auth(
               userName: loginRequestData.email,
               password: loginRequestData.password)
@@ -46,8 +45,10 @@ class LoginPageViewModel extends ChangeNotifier {
         setUserApiResponse(ApiResponse.completed(value));
       }).onError((error, stackTrace) {
         ApiResponse.error(error.toString());
-      });
-    });
+      }).whenComplete(() => {
+
+   });
+
   }
 
   void logOut() {
