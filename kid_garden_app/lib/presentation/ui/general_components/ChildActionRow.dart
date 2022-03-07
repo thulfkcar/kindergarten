@@ -42,7 +42,7 @@ import 'package:kid_garden_app/domain/ChildAction.dart';
                         ),
                       ),
                        Text(
-                        childAction.actionGroup!.name,
+                        childAction.actionGroup!.actionName,
                         style: TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF090F13),

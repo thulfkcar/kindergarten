@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
-import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
+import '../../../repos/ActionRepository.dart';
 
 class ChildActionViewModel extends ChangeNotifier {
-  final _repository = ChildRepository();
+  final _repository = ActionRepository();
   String? selectedActionGroupId;
 
   ChildActionViewModel() : super() {
@@ -27,9 +27,7 @@ class ChildActionViewModel extends ChangeNotifier {
   }
 
   void setChildActionPostResponse(ApiResponse<ChildAction> response) {
-
-
-      childActionPostResponse = response;
+    childActionPostResponse = response;
 
     notifyListeners();
   }
@@ -53,14 +51,12 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchActionGroups() async {
     setActionGroupResponse(ApiResponse.loading());
-    Future.delayed(const Duration(milliseconds: 2000), () {
-
     _repository
-        .getActionsGroups()
+        .getActionsGroups(page: 1)
         .then((value) => setActionGroupResponse(ApiResponse.completed(value)))
         .onError((error, stackTrace) =>
             setActionGroupResponse(ApiResponse.error(error.toString())));
-  });}
+  }
 
   void addChildAction({required ChildAction childAction}) {
     if (childActionResponse.data != null) {
@@ -70,12 +66,13 @@ class ChildActionViewModel extends ChangeNotifier {
         _repository
             .postChildAction(childAction: childAction)
             .then((value) =>
-            setChildActionPostResponse(ApiResponse.completed(value)))
-            .onError((error, stackTrace) =>
-            setChildActionPostResponse(ApiResponse.error(error.toString())));
+                setChildActionPostResponse(ApiResponse.completed(value)))
+            .onError((error, stackTrace) => setChildActionPostResponse(
+                ApiResponse.error(error.toString())));
       });
     }
   }
+
   Future<void> fetchNextChildActions() async {
     childActionResponse.status = Status.LOADING_NEXT_PAGE;
     notifyListeners();

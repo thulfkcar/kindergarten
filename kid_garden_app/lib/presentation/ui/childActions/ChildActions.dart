@@ -15,8 +15,6 @@ import '../general_components/Error.dart';
 import '../general_components/MultiSelectChip.dart';
 import '../general_components/loading.dart';
 
-
-
 class ChildActions extends ConsumerStatefulWidget {
   const ChildActions({
     Key? key,
@@ -25,55 +23,67 @@ class ChildActions extends ConsumerStatefulWidget {
   @override
   ConsumerState createState() => _ChildActionsState();
 }
+
 class _ChildActionsState extends ConsumerState<ChildActions> {
   late ScrollController _scrollController;
   late ChildActionViewModel _viewModel;
   ActionGroup? selectedActionGroup;
-  TextEditingController textFieldController=TextEditingController();
+  TextEditingController textFieldController = TextEditingController();
   Audience? selectedAudience;
-  bool isAddingAction=false;
-    List<Audience> audienceList = [
-      Audience.All,
-      Audience.OnlyMe,
-      Audience.Parents,
-      Audience.Staff,
-    ];
-    String description = "";
-    List<Audience> selectedAudienceList = [];
+  bool isAddingAction = false;
+  List<Audience> audienceList = [
+    Audience.All,
+    Audience.OnlyMe,
+    Audience.Parents,
+    Audience.Staff,
+  ];
+  String description = "";
+  List<Audience> selectedAudienceList = [];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _scrollController = ScrollController()..addListener(getNext);
   }
+
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(ChildActionViewModelProvider);
     return Scaffold(
       floatingActionButton: selectedActionGroup != null
           ? FloatingActionButton(
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.white,
-          onPressed: () {
-            setState(() {
-              isAddingAction=true;
-            });
-
-          })
+              child: const Icon(Icons.add),
+              backgroundColor: Colors.white,
+              onPressed: () {
+                setState(() {
+                  isAddingAction = true;
+                });
+              })
           : null,
-        body:Stack(children: [ Column(mainAxisSize: MainAxisSize.max, children: [
-          bodyHead(),
-          Expanded(child: body()),
-        ],),isAddingAction ? addChildActionDialog():Container(),postProgress()],),
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            title: Text(
-              StringResources.of(context)?.getText("child_actions") ?? "Error",
-              style: TextStyle(color: Colors.black),
-            ),
-            elevation: 0),
-       );
+      body: Stack(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              bodyHead(),
+              Expanded(child: body()),
+            ],
+          ),
+          isAddingAction ? addChildActionDialog() : Container(),
+          postProgress()
+        ],
+      ),
+      appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          title: Text(
+            StringResources.of(context)?.getText("child_actions") ?? "Error",
+            style: TextStyle(color: Colors.black),
+          ),
+          elevation: 0),
+    );
   }
+
   void getNext() async {
     var state = _viewModel.childActionResponse.status;
     if (_scrollController.position.maxScrollExtent ==
@@ -91,7 +101,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         return LoadingWidget();
       case Status.COMPLETED:
         return SizedBox(
-            height: 60,
+            height: 90,
             child: ActionGroups(
                 actionGroups: _viewModel.actionGroupResponse.data!,
                 selectedItem: (value) {
@@ -251,11 +261,10 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
   }
 
   Widget postProgress() {
-
-    var status=_viewModel.childActionPostResponse.status;
-    switch(status){
+    var status = _viewModel.childActionPostResponse.status;
+    switch (status) {
       case Status.LOADING:
-       return LoadingWidget();
+        return LoadingWidget();
       case Status.COMPLETED:
         _viewModel.appendNewItems([_viewModel.childActionPostResponse.data!]);
         break;
@@ -268,5 +277,4 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
 
     return Container();
   }
-
 }

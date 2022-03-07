@@ -23,8 +23,12 @@ final LoginPageViewModelProvider =
 setUser(User? user) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    if (user == null) prefs.setString("User", 'null');
-    prefs.setString("User", user.toString());
+    if (user == null) {
+      prefs.setString("User", 'null');
+    } else {
+      prefs.setString("User", user.toString());
+      print(prefs.getString("User"));
+    }
   } catch (e) {
     rethrow;
   }

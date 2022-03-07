@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
-
 import '../../../providers/Providers.dart';
 import '../general_components/ProfileControl.dart';
+import 'EditProfiileDialog.dart';
 
 class ProfileUI extends StatefulWidget {
   const ProfileUI({Key? key}) : super(key: key);
@@ -14,6 +14,8 @@ class ProfileUI extends StatefulWidget {
 }
 
 class _ProfileUIState extends State<ProfileUI> {
+  var isEditing = false;
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -24,161 +26,184 @@ class _ProfileUIState extends State<ProfileUI> {
         if (user != null) {
           return Scaffold(
             backgroundColor: Color(0xFFF1F4F8),
-            body: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+            body: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Card(
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              color: KidThem.lightTheme.primaryColor,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40),
-                              ),
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-                                child: Container(
-                                  width: 60,
-                                  height: 60,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/UI_avatar_2@3x.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                      width: 44,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.edit_outlined,
-                                          size: 24,
-                                        ),
-                                        onPressed: () async {},
-                                      )),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
-                                    child: Container(
-                                      width: 44,
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Consumer(
-                                        builder: (context, ref, child) {
-                                          return IconButton(
-                                            icon: Icon(
-                                              Icons.login_rounded,
-                                              size: 24,
-                                            ),
-                                            onPressed: () async {
-                                              ref.read(LoginPageViewModelProvider).logOut();
-                                              Navigator.pushReplacementNamed(
-                                                  context, Login_Page);
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(user.name!),
-                          ],
-                        ),
-                      ),
-                      Row(
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                      child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
-                            child: Text(
-                              user.email!,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color: KidThem.lightTheme.primaryColor,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        2, 2, 2, 2),
+                                    child: Container(
+                                      width: 60,
+                                      height: 60,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/UI_avatar_2@3x.png',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 16, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Container(
+                                          width: 44,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.edit_outlined,
+                                              size: 24,
+                                            ),
+                                            onPressed: () async {
+                                              setState(() {
+                                                isEditing = true;
+                                              });
+                                            },
+                                          )),
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(12, 0, 0, 0),
+                                        child: Container(
+                                          width: 44,
+                                          height: 44,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Consumer(
+                                            builder: (context, ref, child) {
+                                              return IconButton(
+                                                icon: Icon(
+                                                  Icons.login_rounded,
+                                                  size: 24,
+                                                ),
+                                                onPressed: () async {
+                                                  ref
+                                                      .read(
+                                                          LoginPageViewModelProvider)
+                                                      .logOut();
+                                                  Navigator
+                                                      .pushReplacementNamed(
+                                                          context, Login_Page);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(user.name!),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                                child: Text(
+                                  user.email!,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
+                    ),
+                    Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
-                          child: Text(
-                            'Account Settings',
-                          ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: const [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
+                              child: Text(
+                                'Account Settings',
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          ProfileControl(
+                              icon: Icons.account_tree_rounded,
+                              title: "Staff:Admin",
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.pushNamed(context, StaffUI_Route);
+                                });
+                              }),
+                          ProfileControl(
+                              icon: Icons.baby_changing_station,
+                              title: "MyChildren:Staff,Parents,Admin",
+                              onPressed: () {}),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      ProfileControl(
-                          icon: Icons.account_tree_rounded,
-                          title: "Staff:Admin",
-                          onPressed: () {
-                            setState(() {
-                              Navigator.pushNamed(context, StaffUI_Route);
-                            });
-                          }),
-                      ProfileControl(
-                          icon: Icons.baby_changing_station,
-                          title: "MyChildren:Staff,Parents,Admin",
-                          onPressed: () {}),
-                    ],
+                if (isEditing)
+                  EditProfile(
+                    proceedEditing: (userForm) =>
+                        setState(() => isEditing = false),
+                    canceled: () => setState(() => isEditing = false),
                   ),
-                ),
               ],
             ),
           );

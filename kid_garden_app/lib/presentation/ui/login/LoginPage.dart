@@ -4,7 +4,7 @@ import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/splash/Splash.dart';
 import '../../../data/network/ApiResponse.dart';
-import '../../../data/network/models/LoginRequestData.dart';
+import '../../../data/network/FromData/User.dart';
 import '../../../domain/User.dart';
 import '../../../providers/Providers.dart';
 import '../../utile/FormValidator.dart';
@@ -24,11 +24,11 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   bool isCompleted = false;
   User? user;
-  var form =LoginRequestData();
+  var form =LoginFormData();
   LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
-  final LoginRequestData _loginData = LoginRequestData();
+  final LoginFormData _loginData = LoginFormData();
   bool _obscureText = true;
 
   @override

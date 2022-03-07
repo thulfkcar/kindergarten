@@ -22,7 +22,7 @@ class ChildViewModel extends ChangeNotifier {
     setChildListResponse(ApiResponse.loading());
     Future.delayed(const Duration(milliseconds: 2000), () {
       _repository
-          .getMyChildList(userId: "sfdf")
+          .getMyChildList()
           .then((value) => setChildListResponse(ApiResponse.completed(value)))
           .onError((error, stackTrace) =>
               setChildListResponse(ApiResponse.error(error.toString())));

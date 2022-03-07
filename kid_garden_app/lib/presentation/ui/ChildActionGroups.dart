@@ -11,7 +11,7 @@ class _ChildActionsGroupsState extends State<ChildActionsGroups> {
   @override
   Widget build(BuildContext context) {
 
-    var actionGroup=ActionGroup(id: "id", date: DateTime.now(), name: "ActionGroupNmae",image: "");
+    var actionGroup=ActionGroup(id: "id", actionName: "ActionGroupNmae",image: "");
     List<ActionGroup> actionsGroups=[
       actionGroup,
       actionGroup,actionGroup,actionGroup,actionGroup,actionGroup,actionGroup,actionGroup

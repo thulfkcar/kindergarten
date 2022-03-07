@@ -28,36 +28,40 @@ class _ActionGroupsState extends State<ActionGroups> {
       scrollDirection: Axis.horizontal,
       itemCount: widget.actionGroups.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-          margin: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
-          width: 55,
-          height: 65,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              width: 2,
-              color: Color(0xFF898989),
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              setState(
-                () {
-                  selectedIndex = index;
-                  widget.selectedItem(widget.actionGroups[index]);
+        return Column(
+          children: [
+            Container(
+              margin: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
+              width: 55,
+              height: 65,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  width: 2,
+                  color: Color(0xFF898989),
+                ),
+              ),
+              child: InkWell(
+                onTap: () {
+                  setState(
+                    () {
+                      selectedIndex = index;
+                      widget.selectedItem(widget.actionGroups[index]);
+                    },
+                  );
                 },
-              );
-            },
-            child: Container(
-              color: index == selectedIndex ? backColor : Colors.transparent,
-              child: const Center(
-                child: FaIcon(
-                  FontAwesomeIcons.babyCarriage,
-                  size: 35,
+                child: Container(
+                  color:
+                      index == selectedIndex ? backColor : Colors.transparent,
+                  child: Center(
+                      child: (widget.actionGroups[index].image) != null
+                          ? Image.network(widget.actionGroups[index].image!)
+                          : const Icon(Icons.gradient)),
                 ),
               ),
             ),
-          ),
+            Text(widget.actionGroups[index].actionName)
+          ],
         );
       },
     );
