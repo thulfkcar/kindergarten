@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
 import '../data/network/models/MultiResponse.dart';
+import '../data/network/models/SingleResponse.dart';
 import '../domain/ActionGroup.dart';
 import '../domain/ChildAction.dart';
 
@@ -32,22 +37,27 @@ class ActionRepository {
     }
   }
 
-  Future<List<ChildAction>> getChildActions({required String childId}) async {
+  Future<List<ChildAction>> getChildActions(
+      {required String childId, required int page}) async {
     try {
-      List<ChildAction> childActions = [];
+      dynamic response =
+          await _apiService.getResponse("ChildAction/getAll/$page");
 
-      for (int i = 0; i < 5; i++) {
-        childActions.add(ChildAction(
-            id: "id",
-            actionGroupId: "actionGroupId",
-            actionGroup: ActionGroup(
-                actionName: 'sdfdf',
-                id: 'sdfdf',
-                image:
-                    'https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png'),
-            value: 'shaving'));
+      var childActions;
+      MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          childActions =
+              (jsonList as List).map((i) => ChildAction.fromJson(i)).toList();
+          return childActions;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      if (await childActions.isNotEmpty) {
+        return await childActions;
+      } else {
+        throw "no Data Available";
       }
-      return childActions;
     } catch (e) {
       rethrow;
     }
@@ -56,14 +66,28 @@ class ActionRepository {
   Future<ChildAction> postChildAction(
       {required ChildAction childAction}) async {
     try {
-      childAction.actionGroup = ActionGroup(
-          image:
-              "https://clipart-best.com/img/simpsons/simpsons-clip-art-2.png",
-          id: "id",
-          actionName: "name");
+      Map<String, String> jsonBody = {};
+      jsonBody.addAll({
+        "ChildId": childAction.childId,
+        "ActionListId": childAction.actionGroupId,
+        "Value": childAction.value,
+        "Audience": childAction.audience.index.toString()
+      });
+
+      dynamic response =
+          await _apiService.multiPartPostResponse("ChildAction/add", jsonBody);
+
+      var data;
+
+      SingleResponse<ChildAction>.fromJson(await response, (json) {
+        data = ChildAction.fromJson(json as Map<String, dynamic>);
+        return data;
+      });
+      return await data;
+
       return childAction;
     } catch (e) {
-      rethrow;
+     rethrow;
     }
   }
 }

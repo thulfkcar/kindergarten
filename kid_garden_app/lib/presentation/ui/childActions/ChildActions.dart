@@ -248,8 +248,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                   var childAction = ChildAction(
                       id: "",
                       actionGroupId: selectedActionGroup!.id,
-                      audience: selectedAudience,
-                      value: textFieldController.text);
+                      audience: selectedAudience!,
+                      value: textFieldController.text, childId: '', userId: '', date: DateTime.now());
                   _viewModel.addChildAction(childAction: childAction);
                   isAddingAction = false;
                 }

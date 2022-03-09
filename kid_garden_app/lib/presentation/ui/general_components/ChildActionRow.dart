@@ -41,15 +41,15 @@ import 'package:kid_garden_app/domain/ChildAction.dart';
                           ),
                         ),
                       ),
-                       Text(
-                        childAction.actionGroup!.actionName,
-                        style: TextStyle(
+                      childAction.actionGroupName!=null?  Text(
+                        childAction.actionGroupName!,
+                        style: const TextStyle(
                           fontFamily: 'Lexend Deca',
                           color: Color(0xFF090F13),
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
-                      ),
+                      ):const Text(""),
                     ],
                   ),
                   Column(

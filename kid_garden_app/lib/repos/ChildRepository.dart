@@ -41,143 +41,6 @@ class ChildRepository {
     try {
       List<Child> children = [];
 
-      children.add(Child(
-          name: "name",
-          id: "asdfaf",
-          image:
-              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
-          childActions: [
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-          ]));
-      children.add(Child(
-          name: "name",
-          id: "asdfaf",
-          image:
-              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
-          childActions: [
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-          ]));
-      children.add(Child(
-          name: "name",
-          id: "asdfaf",
-          image:
-              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
-          childActions: [
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-          ]));
-      children.add(Child(
-          name: "name",
-          id: "asdfaf",
-          image:
-              "https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png",
-          childActions: [
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-            ChildAction(
-                id: "id",
-                actionGroupId: "actionGroupId",
-                value: "asdfdasfdfdf",
-                actionGroup: ActionGroup(
-                    id: '',
-                    image:
-                        'https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584853.png',
-                    actionName: 'gsdfgsfg')),
-          ]));
-
       return children;
     } catch (e) {
       rethrow;
@@ -187,12 +50,12 @@ class ChildRepository {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
           "User/login", "{email: '$userName', password: '$password'}");
-      var user;
-      SingleResponse<User>.fromJson(await response, (json) {
-        user = User.fromJson(json as Map<String, dynamic>);
-        return user;
-      });
-      return await user;
+        var user;
+        SingleResponse<User>.fromJson(await response, (json) {
+          user = User.fromJson(json as Map<String, dynamic>);
+          return user;
+        });
+        return await user;
     } catch (e) {
       rethrow;
     }

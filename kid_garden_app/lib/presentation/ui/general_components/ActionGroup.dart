@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:kid_garden_app/data/network/NetworkApiService.dart';
 import '../../../domain/ActionGroup.dart';
-
+import '../../../data/network/BaseApiService.dart';
 class ActionGroups extends StatefulWidget {
   ActionGroups(
       {Key? key, required this.actionGroups, required this.selectedItem})
@@ -55,7 +54,7 @@ class _ActionGroupsState extends State<ActionGroups> {
                       index == selectedIndex ? backColor : Colors.transparent,
                   child: Center(
                       child: (widget.actionGroups[index].image) != null
-                          ? Image.network(widget.actionGroups[index].image!)
+                          ? Image.network((domain+widget.actionGroups[index].image!))
                           : const Icon(Icons.gradient)),
                 ),
               ),

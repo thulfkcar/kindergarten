@@ -8,19 +8,17 @@ part 'Child.g.dart';
 class Child {
   String name;
   String id;
-  String image;
-  DateTime? date;
+  String? image;
+  DateTime? birthDate;
   Gender? gender;
   int? age;
-  DateTime? birthDate;
   List<ChildAction>? childActions;
   User? user;
-
+  String? mediaId;
   Child(
       {required this.name,
       required this.id,
       required this.image,
-      this.date,
       this.gender,
       this.age,
       this.birthDate,
@@ -34,8 +32,8 @@ class Child {
 }
 
 enum Gender {
-  @JsonValue(1)
+  @JsonValue(0)
   Male,
-  @JsonValue(2)
+  @JsonValue(1)
   Female,
 }

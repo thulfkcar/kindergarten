@@ -7,6 +7,8 @@ import '../../../repos/ActionRepository.dart';
 class ChildActionViewModel extends ChangeNotifier {
   final _repository = ActionRepository();
   String? selectedActionGroupId;
+  int pageChildAction = 1;
+  String childId = "";
 
   ChildActionViewModel() : super() {
     fetchActionGroups();
@@ -39,14 +41,12 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchChildActions() async {
     setChildActionsListResponse(ApiResponse.loading());
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      _repository
-          .getChildActions(childId: "sfdf")
-          .then((value) =>
-              setChildActionsListResponse(ApiResponse.completed(value)))
-          .onError((error, stackTrace) =>
-              setChildActionsListResponse(ApiResponse.error(error.toString())));
-    });
+    _repository
+        .getChildActions(childId: childId, page: 1)
+        .then((value) =>
+            setChildActionsListResponse(ApiResponse.completed(value)))
+        .onError((error, stackTrace) =>
+            setChildActionsListResponse(ApiResponse.error(error.toString())));
   }
 
   Future<void> fetchActionGroups() async {
@@ -74,17 +74,26 @@ class ChildActionViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchNextChildActions() async {
+    incrementPageChildAction();
     childActionResponse.status = Status.LOADING_NEXT_PAGE;
     notifyListeners();
 
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      _repository.getChildActions(childId: "SDF").then((value) {
-        setChildActionsListResponse(appendNewItems(value));
-      }).onError((error, stackTrace) {
-        setChildActionsListResponse(ApiResponse.error(error.toString()));
-      });
-      notifyListeners();
+    _repository
+        .getChildActions(childId: childId, page: pageChildAction)
+        .then((value) {
+      setChildActionsListResponse(appendNewItems(value));
+    }).onError((error, stackTrace) {
+      setChildActionsListResponse(ApiResponse.error(error.toString()));
     });
+    notifyListeners();
+  }
+
+  void incrementPageChildAction() {
+    pageChildAction += 1;
+  }
+
+  void setChildId(String id) {
+    childId = id;
   }
 
   ApiResponse<List<ChildAction>> appendNewItems(List<ChildAction> value) {

@@ -22,8 +22,7 @@ childRow ({required BuildContext context,required Child child, double roundBy=30
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(30), // Image radius
                 // child: Image.network('https://192.168.1.108:5126/StaticFiles/images/img.png',
-                child: Image.network(child.image,
-                    fit: BoxFit.cover),
+                child:child.image!=null ? Image.network(child.image!,fit: BoxFit.cover):null,
               ),
             ),
             // Image.network(children[index].image),

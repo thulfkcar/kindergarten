@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import '../../providers/Providers.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
@@ -18,10 +19,10 @@ class NetworkApiService extends BaseApiService {
     dynamic responseJson;
     try {
       var provide = ProviderContainer().read(LoginPageViewModelProvider);
-     await provide.getUserChanges();
-      var user =  provide.currentUser;
+      await provide.getUserChanges();
+      var user = provide.currentUser;
       if (user != null) {
-        jsonHeaders.addAll({'Authorization':"Bearer ${user.token}"});
+        jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
       }
 
       final response =
@@ -37,9 +38,48 @@ class NetworkApiService extends BaseApiService {
   Future postResponse(String url, Map<String, dynamic> JsonBody) async {
     dynamic responseJson;
     try {
-      final response =
-          await http.post(Uri.parse(baseUrl + url), body: JsonBody);
-      responseJson = returnResponse(response);
+      var provide = ProviderContainer().read(LoginPageViewModelProvider);
+      await provide.getUserChanges();
+      var user = provide.currentUser;
+      if (user != null) {
+        final response = await http.post(Uri.parse(baseUrl + url),
+            body: JsonBody,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': "Bearer ${user.token}"
+            },
+            encoding: Encoding.getByName("utf-8"));
+        responseJson = returnResponse(response);
+      }
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  @override
+  Future multiPartPostResponse(String url, Map<String, String> JsonBody) async {
+    dynamic responseJson;
+    try {
+      var provide = ProviderContainer().read(LoginPageViewModelProvider);
+      await provide.getUserChanges();
+      var user = provide.currentUser;
+      if (user != null) {
+        var headers = {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Bearer ${user.token}"
+        };
+        var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+
+        request.fields.addAll(JsonBody);
+        request.headers.addAll(headers);
+        http.StreamedResponse response = await request.send();
+
+          responseJson =
+              returnResponse(await http.Response.fromStream(response));
+
+
+      }
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -73,7 +113,7 @@ class NetworkApiService extends BaseApiService {
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
-        throw BadRequestException(response.toString());
+        throw ErrorResponse.fromJson(jsonDecode(response.body));
       case 401:
       case 403:
         throw UnauthorisedException(response.body.toString());

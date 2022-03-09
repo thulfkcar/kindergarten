@@ -3,30 +3,48 @@ import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'User.dart';
+
 part 'ChildAction.g.dart';
+
 @JsonSerializable()
 class ChildAction {
   String id;
-  DateTime? date;
-
+  String childId;
+  @JsonKey(name: 'actionListId')
   String actionGroupId;
-  ActionGroup? actionGroup;
+  String? actionGroupName;
   String value;
+  String userId;
+  String? userName;
+  Audience audience;
+  DateTime date;
+  List<String>? images;
 
-  User? user;
+  ChildAction(
+      {required this.id,
+      required this.childId,
+      required this.actionGroupId,
+      required this.value,
+      required this.userId,
+      this.userName,
+      required this.audience,
+      required this.date,
+      this.actionGroupName});
 
-
-
-  Audience? audience;
-
-  ChildAction({required this.id, this.date,
-    required this.actionGroupId,
-      required this.value, this.user,
-       this.audience, this.actionGroup});
-
-  factory ChildAction.fromJson(Map<String, dynamic> json) => _$ChildActionFromJson(json);
+  factory ChildAction.fromJson(Map<String, dynamic> json) =>
+      _$ChildActionFromJson(json);
 
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$ChildActionToJson(this);
 }
-enum Audience { @JsonValue(1)All, @JsonValue(2)Parents, @JsonValue(3)Staff, @JsonValue(4)OnlyMe }
+
+enum Audience {
+  @JsonValue(0)
+  All,
+  @JsonValue(1)
+  Parents,
+  @JsonValue(2)
+  Staff,
+  @JsonValue(3)
+  OnlyMe
+}
