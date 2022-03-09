@@ -87,7 +87,10 @@ class ActionRepository {
 
       return childAction;
     } catch (e) {
-     rethrow;
+      if (e is ErrorResponse) {
+        throw e.errorMsg.toString();
+      }
+      rethrow;
     }
   }
 }

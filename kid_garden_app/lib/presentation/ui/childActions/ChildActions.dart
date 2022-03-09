@@ -16,9 +16,13 @@ import '../general_components/MultiSelectChip.dart';
 import '../general_components/loading.dart';
 
 class ChildActions extends ConsumerStatefulWidget {
-  const ChildActions({
-    Key? key,
-  }) : super(key: key);
+  String? childId;
+  //  ChildActions(
+  //    this.childId,
+  //   Key? key,
+  // ) : super(key: key);
+
+  ChildActions({this.childId, Key? key}) : super(key: key);
 
   @override
   ConsumerState createState() => _ChildActionsState();
@@ -249,7 +253,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                       id: "",
                       actionGroupId: selectedActionGroup!.id,
                       audience: selectedAudience!,
-                      value: textFieldController.text, childId: '', userId: '', date: DateTime.now());
+                      value: textFieldController.text, childId: widget.childId!, userId: '', date: DateTime.now());
                   _viewModel.addChildAction(childAction: childAction);
                   isAddingAction = false;
                 }

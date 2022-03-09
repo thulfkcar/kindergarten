@@ -62,14 +62,12 @@ class ChildActionViewModel extends ChangeNotifier {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
 
-      Future.delayed(const Duration(milliseconds: 2000), () {
         _repository
             .postChildAction(childAction: childAction)
             .then((value) =>
                 setChildActionPostResponse(ApiResponse.completed(value)))
             .onError((error, stackTrace) => setChildActionPostResponse(
                 ApiResponse.error(error.toString())));
-      });
     }
   }
 

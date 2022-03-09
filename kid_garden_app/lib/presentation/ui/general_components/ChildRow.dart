@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../domain/Child.dart';
+import '../childActions/ChildActions.dart';
 
 childRow ({required BuildContext context,required Child child, double roundBy=30,bool boarder=true}) {
   return Container(
@@ -11,7 +12,12 @@ childRow ({required BuildContext context,required Child child, double roundBy=30
           borderRadius: BorderRadius.circular(roundBy)),
       width: double.infinity,
       height: 100,
-      child:InkWell (onTap: (){Navigator.pushNamed(context, "/ChildActions");},child: Padding(
+      child:InkWell (onTap: (){
+
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChildActions(childId: child.id,)));
+        // Navigator.pushNamed(context, "/ChildActions",arguments: {'id':child.id});
+
+        },child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
         child: Row(
           mainAxisSize: MainAxisSize.max,

@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
       return MaterialApp(
-
         locale: Locale("en"), // switch between en and ru to see effect
         localizationsDelegates: const [DemoLocalizationsDelegate()],
         supportedLocales: const [Locale('en', ''), Locale('ar', '')],
@@ -52,7 +51,7 @@ class MyApp extends StatelessWidget {
 
   RouteFactory _routes() {
     return (settings) {
-      final Object? arguments = settings.arguments;
+      final  Object? arguments = settings.arguments ;
       Widget screen;
       switch (settings.name) {
         case HomeScreenRoute:
