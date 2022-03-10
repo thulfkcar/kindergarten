@@ -14,9 +14,11 @@ import '../general_components/ChildActionRow.dart';
 import '../general_components/Error.dart';
 import '../general_components/MultiSelectChip.dart';
 import '../general_components/loading.dart';
+import 'AddChildActionDialog.dart';
 
 class ChildActions extends ConsumerStatefulWidget {
   String? childId;
+
   //  ChildActions(
   //    this.childId,
   //   Key? key,
@@ -73,7 +75,21 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               Expanded(child: body()),
             ],
           ),
-          isAddingAction ? addChildActionDialog() : Container(),
+          isAddingAction
+              ? AddChildActionDialog(selectedActionGroup: selectedActionGroup!,childId: widget.childId!,
+            addChild: (value) {
+              setState(() {
+                _viewModel.addChildAction(childAction: value);
+              });
+            },
+                  onDismiss: (value) {
+                    setState(() {
+                      isAddingAction = value;
+                    });
+                  },
+
+                )
+              : Container(),
           postProgress()
         ],
       ),
@@ -158,112 +174,6 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
     return Container();
   }
 
-  Widget addChildActionDialog() {
-    return Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
-        child: AlertDialog(
-          title: (Text("Adding Action")),
-          content: Container(
-            height: 500,
-            child: SingleChildScrollView(
-              primary: false,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: TextField(
-                      controller: textFieldController,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              width: 2,
-                              color: Color(0xFF898989),
-                              style: BorderStyle.none,
-                            )),
-                        filled: true,
-                        hintStyle: TextStyle(color: Colors.grey[400]),
-                        hintText: "bsdfg dfg sdfg dh sdghft",
-                      ),
-                      maxLines: 6,
-                      minLines: 4,
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        DatePicker.showDatePicker(context,
-                            showTitleActions: true,
-
-                            // minTime: DateTime(2018, 3, 5),
-                            // maxTime: DateTime(2019, 6, 7),
-                            onChanged: (date) {
-                          print('change $date');
-                        }, onConfirm: (date) {
-                          print('confirm $date');
-                          DatePicker.showTime12hPicker(
-                            context,
-                            onChanged: (time) {
-                              print('change $time');
-                            },
-                            onConfirm: (time) {
-                              print('change $time');
-                            },
-                          );
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
-                      },
-                      child: const Text(
-                        'Choose Time Of Action',
-                        style: TextStyle(color: Colors.blue),
-                      )),
-                  MultiSelectChip(
-                    audienceList,
-                    onSelectionChanged: (selectedList) {
-                      setState(
-                        () {
-                          selectedAudience = selectedList.first;
-                        },
-                      );
-                    },
-                    maxSelection: 1,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() => isAddingAction = false);
-              },
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              //todo missing validate before that
-
-              onPressed: () {
-                setState(() {
-                  isAddingAction = false;
-                });
-
-                if (selectedActionGroup != null) {
-                  var childAction = ChildAction(
-                      id: "",
-                      actionGroupId: selectedActionGroup!.id,
-                      audience: selectedAudience!,
-                      value: textFieldController.text, childId: widget.childId!, userId: '', date: DateTime.now());
-                  _viewModel.addChildAction(childAction: childAction);
-                  isAddingAction = false;
-                }
-              },
-              child: const Text("Save"),
-            )
-          ],
-        ));
-  }
-
   Widget postProgress() {
     var status = _viewModel.childActionPostResponse.status;
     switch (status) {
@@ -281,4 +191,113 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
 
     return Container();
   }
+
+// Widget addChildActionDialog() {
+//   return Padding(
+//       padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
+//       child: AlertDialog(
+//         title: (Text("Adding Action")),
+//         content: Container(
+//           height: 500,
+//           child: SingleChildScrollView(
+//             primary: false,
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Container(
+//                   padding: const EdgeInsets.only(top: 8),
+//                   child: TextField(
+//                     controller: textFieldController,
+//                     decoration: InputDecoration(
+//                       contentPadding:
+//                       const EdgeInsets.fromLTRB(10, 10, 10, 10),
+//                       border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                           borderSide: const BorderSide(
+//                             width: 2,
+//                             color: Color(0xFF898989),
+//                             style: BorderStyle.none,
+//                           )),
+//                       filled: true,
+//                       hintStyle: TextStyle(color: Colors.grey[400]),
+//                       hintText: "bsdfg dfg sdfg dh sdghft",
+//                     ),
+//                     maxLines: 6,
+//                     minLines: 4,
+//                   ),
+//                 ),
+//                 TextButton(
+//                     onPressed: () {
+//                       DatePicker.showDatePicker(context,
+//                           showTitleActions: true,
+//
+//                           // minTime: DateTime(2018, 3, 5),
+//                           // maxTime: DateTime(2019, 6, 7),
+//                           onChanged: (date) {
+//                             print('change $date');
+//                           }, onConfirm: (date) {
+//                             print('confirm $date');
+//                             DatePicker.showTime12hPicker(
+//                               context,
+//                               onChanged: (time) {
+//                                 print('change $time');
+//                               },
+//                               onConfirm: (time) {
+//                                 print('change $time');
+//                               },
+//                             );
+//                           }, currentTime: DateTime.now(), locale: LocaleType.en);
+//                     },
+//                     child: const Text(
+//                       'Choose Time Of Action',
+//                       style: TextStyle(color: Colors.blue),
+//                     )),
+//                 MultiSelectChip(
+//                   audienceList,
+//                   onSelectionChanged: (selectedList) {
+//                     setState(
+//                           () {
+//                         selectedAudience = selectedList.first;
+//                       },
+//                     );
+//                   },
+//                   maxSelection: 1,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               setState(() => isAddingAction = false);
+//             },
+//             child: Text("Cancel"),
+//           ),
+//           TextButton(
+//             //todo missing validate before that
+//
+//             onPressed: () {
+//               setState(() {
+//                 isAddingAction = false;
+//               });
+//
+//               if (selectedActionGroup != null) {
+//                 var childAction = ChildAction(
+//                     id: "",
+//                     actionGroupId: selectedActionGroup!.id,
+//                     audience: selectedAudience!,
+//                     value: textFieldController.text,
+//                     childId: widget.childId!,
+//                     userId: '',
+//                     date: DateTime.now());
+//                 _viewModel.addChildAction(childAction: childAction);
+//                 isAddingAction = false;
+//               }
+//             },
+//             child: const Text("Save"),
+//           )
+//         ],
+//       ));
+// }
 }
