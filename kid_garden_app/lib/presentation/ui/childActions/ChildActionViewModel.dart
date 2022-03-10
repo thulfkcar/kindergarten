@@ -9,6 +9,7 @@ class ChildActionViewModel extends ChangeNotifier {
   String? selectedActionGroupId;
   int pageChildAction = 1;
   String childId = "";
+  var childActionsLastPage = false;
 
   ChildActionViewModel() : super() {
     fetchActionGroups();
@@ -41,12 +42,12 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchChildActions() async {
     setChildActionsListResponse(ApiResponse.loading());
-    _repository
-        .getChildActions(childId: childId, page: 1)
-        .then((value) =>
-            setChildActionsListResponse(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            setChildActionsListResponse(ApiResponse.error(error.toString())));
+    _repository.getChildActions(childId: childId, page: pageChildAction).then((value) {
+      childActionsLastPage = value.item2;
+      setChildActionsListResponse(ApiResponse.completed(value.item1));
+    }).onError((error, stackTrace) {
+      setChildActionsListResponse(ApiResponse.error(error.toString()));
+    });
   }
 
   Future<void> fetchActionGroups() async {
@@ -62,28 +63,31 @@ class ChildActionViewModel extends ChangeNotifier {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
 
-        _repository
-            .postChildAction(childAction: childAction)
-            .then((value) =>
-                setChildActionPostResponse(ApiResponse.completed(value)))
-            .onError((error, stackTrace) => setChildActionPostResponse(
-                ApiResponse.error(error.toString())));
+      _repository
+          .postChildAction(childAction: childAction)
+          .then((value) =>
+              setChildActionPostResponse(ApiResponse.completed(value)))
+          .onError((error, stackTrace) =>
+              setChildActionPostResponse(ApiResponse.error(error.toString())));
     }
   }
 
   Future<void> fetchNextChildActions() async {
-    incrementPageChildAction();
-    childActionResponse.status = Status.LOADING_NEXT_PAGE;
-    notifyListeners();
+    if (childActionsLastPage == false) {
+      incrementPageChildAction();
+      childActionResponse.status = Status.LOADING_NEXT_PAGE;
+      notifyListeners();
 
-    _repository
-        .getChildActions(childId: childId, page: pageChildAction)
-        .then((value) {
-      setChildActionsListResponse(appendNewItems(value));
-    }).onError((error, stackTrace) {
-      setChildActionsListResponse(ApiResponse.error(error.toString()));
-    });
-    notifyListeners();
+      _repository
+          .getChildActions(childId: childId, page: pageChildAction)
+          .then((value) {
+        childActionsLastPage = value.item2;
+        setChildActionsListResponse(appendNewItems(value.item1));
+      }).onError((error, stackTrace) {
+        setChildActionsListResponse(ApiResponse.error(error.toString()));
+      });
+      notifyListeners();
+    }
   }
 
   void incrementPageChildAction() {

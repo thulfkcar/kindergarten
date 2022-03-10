@@ -4,11 +4,11 @@ part 'MultiResponse.g.dart';
 class MultiResponse<T> {
   bool? status;
   String? message;
-  int? count;
+  int count;
   T? data;
-  int? pages;
+  int pages;
 
-  MultiResponse({this.status, this.message, this.count, this.data, this.pages});
+  MultiResponse({this.status, this.message,required this.count, this.data ,required this.pages});
 
 
   factory MultiResponse.fromJson(

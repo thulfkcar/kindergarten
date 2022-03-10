@@ -75,10 +75,7 @@ class NetworkApiService extends BaseApiService {
         request.headers.addAll(headers);
         http.StreamedResponse response = await request.send();
 
-          responseJson =
-              returnResponse(await http.Response.fromStream(response));
-
-
+        responseJson = returnResponse(await http.Response.fromStream(response));
       }
     } on SocketException {
       throw FetchDataException('No Internet Connection');

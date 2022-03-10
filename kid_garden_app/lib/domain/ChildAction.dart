@@ -17,7 +17,7 @@ class ChildAction {
   String userId;
   String? userName;
   Audience audience;
-  DateTime date;
+  DateTime? date;
   List<String>? images;
 
   ChildAction(

@@ -8,6 +8,7 @@ import '../data/network/models/MultiResponse.dart';
 import '../data/network/models/SingleResponse.dart';
 import '../domain/ActionGroup.dart';
 import '../domain/ChildAction.dart';
+import 'package:tuple/tuple.dart';
 
 class ActionRepository {
   final BaseApiService _apiService = NetworkApiService();
@@ -37,14 +38,16 @@ class ActionRepository {
     }
   }
 
-  Future<List<ChildAction>> getChildActions(
+  Future<Tuple2<List<ChildAction>, bool>> getChildActions(
       {required String childId, required int page}) async {
     try {
       dynamic response =
           await _apiService.getResponse("ChildAction/getAll/$page");
 
-      var childActions;
-      MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
+      bool isLastPage = false;
+      List<ChildAction> childActions = [];
+      var mainResponse =
+          MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
           childActions =
               (jsonList as List).map((i) => ChildAction.fromJson(i)).toList();
@@ -53,8 +56,13 @@ class ActionRepository {
           throw "no Data Available";
         }
       });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
       if (await childActions.isNotEmpty) {
-        return await childActions;
+        return Tuple2(await childActions, isLastPage);
       } else {
         throw "no Data Available";
       }
