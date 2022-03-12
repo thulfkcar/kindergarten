@@ -42,7 +42,7 @@ class ActionRepository {
       {required String childId, required int page}) async {
     try {
       dynamic response =
-          await _apiService.getResponse("ChildAction/getAll/$page");
+          await _apiService.getResponse("ChildAction/getAll/$page?ChildId=$childId");
 
       bool isLastPage = false;
       List<ChildAction> childActions = [];

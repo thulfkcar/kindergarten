@@ -7,6 +7,7 @@ import '../../../domain/ActionGroup.dart';
 import '../../../domain/ChildAction.dart';
 import '../general_components/MultiSelectChip.dart';
 import 'ChildActionViewModel.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class AddChildActionDialog extends ConsumerStatefulWidget {
   List<Audience> audienceList = [
@@ -43,6 +44,9 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
 
   @override
   Widget build(BuildContext context) {
+
+    picImage();
+
     return Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
         child: AlertDialog(
@@ -148,5 +152,10 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
             )
           ],
         ));
+  }
+
+  Future<void> picImage() async {
+    final List<AssetEntity>? assets = await AssetPicker.pickAssets(context);
+
   }
 }

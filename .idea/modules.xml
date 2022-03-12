@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/kid_garden_app/kid_garden_app.iml" filepath="$PROJECT_DIR$/kid_garden_app/kid_garden_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kid_garden_app/android/kid_garden_app_android.iml" filepath="$PROJECT_DIR$/kid_garden_app/android/kid_garden_app_android.iml" />
     </modules>
   </component>
 </project>

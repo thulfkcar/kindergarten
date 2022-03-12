@@ -148,6 +148,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       case Status.COMPLETED:
         return CustomListView(
           scrollController: _scrollController,
+
           items: _viewModel.childActionResponse.data!,
           loadNext: false,
           itemBuilder: (BuildContext context, ChildAction item) {
@@ -192,112 +193,4 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
     return Container();
   }
 
-// Widget addChildActionDialog() {
-//   return Padding(
-//       padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
-//       child: AlertDialog(
-//         title: (Text("Adding Action")),
-//         content: Container(
-//           height: 500,
-//           child: SingleChildScrollView(
-//             primary: false,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   padding: const EdgeInsets.only(top: 8),
-//                   child: TextField(
-//                     controller: textFieldController,
-//                     decoration: InputDecoration(
-//                       contentPadding:
-//                       const EdgeInsets.fromLTRB(10, 10, 10, 10),
-//                       border: OutlineInputBorder(
-//                           borderRadius: BorderRadius.circular(10),
-//                           borderSide: const BorderSide(
-//                             width: 2,
-//                             color: Color(0xFF898989),
-//                             style: BorderStyle.none,
-//                           )),
-//                       filled: true,
-//                       hintStyle: TextStyle(color: Colors.grey[400]),
-//                       hintText: "bsdfg dfg sdfg dh sdghft",
-//                     ),
-//                     maxLines: 6,
-//                     minLines: 4,
-//                   ),
-//                 ),
-//                 TextButton(
-//                     onPressed: () {
-//                       DatePicker.showDatePicker(context,
-//                           showTitleActions: true,
-//
-//                           // minTime: DateTime(2018, 3, 5),
-//                           // maxTime: DateTime(2019, 6, 7),
-//                           onChanged: (date) {
-//                             print('change $date');
-//                           }, onConfirm: (date) {
-//                             print('confirm $date');
-//                             DatePicker.showTime12hPicker(
-//                               context,
-//                               onChanged: (time) {
-//                                 print('change $time');
-//                               },
-//                               onConfirm: (time) {
-//                                 print('change $time');
-//                               },
-//                             );
-//                           }, currentTime: DateTime.now(), locale: LocaleType.en);
-//                     },
-//                     child: const Text(
-//                       'Choose Time Of Action',
-//                       style: TextStyle(color: Colors.blue),
-//                     )),
-//                 MultiSelectChip(
-//                   audienceList,
-//                   onSelectionChanged: (selectedList) {
-//                     setState(
-//                           () {
-//                         selectedAudience = selectedList.first;
-//                       },
-//                     );
-//                   },
-//                   maxSelection: 1,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               setState(() => isAddingAction = false);
-//             },
-//             child: Text("Cancel"),
-//           ),
-//           TextButton(
-//             //todo missing validate before that
-//
-//             onPressed: () {
-//               setState(() {
-//                 isAddingAction = false;
-//               });
-//
-//               if (selectedActionGroup != null) {
-//                 var childAction = ChildAction(
-//                     id: "",
-//                     actionGroupId: selectedActionGroup!.id,
-//                     audience: selectedAudience!,
-//                     value: textFieldController.text,
-//                     childId: widget.childId!,
-//                     userId: '',
-//                     date: DateTime.now());
-//                 _viewModel.addChildAction(childAction: childAction);
-//                 isAddingAction = false;
-//               }
-//             },
-//             child: const Text("Save"),
-//           )
-//         ],
-//       ));
-// }
 }
