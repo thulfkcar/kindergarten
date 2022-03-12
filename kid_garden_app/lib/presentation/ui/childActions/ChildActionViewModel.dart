@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../repos/ActionRepository.dart';
 
@@ -59,12 +60,12 @@ class ChildActionViewModel extends ChangeNotifier {
             setActionGroupResponse(ApiResponse.error(error.toString())));
   }
 
-  void addChildAction({required ChildAction childAction}) {
+  void addChildAction({required ChildAction  childAction,  List<AssetEntity>? assets}) {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
 
       _repository
-          .postChildAction(childAction: childAction)
+          .postChildAction(childAction: childAction,assets: assets)
           .then((value) =>
               setChildActionPostResponse(ApiResponse.completed(value)))
           .onError((error, stackTrace) =>

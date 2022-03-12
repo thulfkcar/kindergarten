@@ -1,6 +1,6 @@
-import 'dart:io';
 
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
@@ -72,7 +72,7 @@ class ActionRepository {
   }
 
   Future<ChildAction> postChildAction(
-      {required ChildAction childAction}) async {
+      {required ChildAction childAction, List<AssetEntity>? assets}) async {
     try {
       Map<String, String> jsonBody = {};
       jsonBody.addAll({
@@ -83,7 +83,7 @@ class ActionRepository {
       });
 
       dynamic response =
-          await _apiService.multiPartPostResponse("ChildAction/add", jsonBody);
+          await _apiService.multiPartPostResponse("ChildAction/add",  jsonBody, assets);
 
       var data;
 

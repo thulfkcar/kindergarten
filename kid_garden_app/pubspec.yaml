@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^9.2.0
-  flutter_datetime_picker: ^1.5.1
   cupertino_icons: ^1.0.2
   http: ^0.13.3 #This is used for the API call
   flutter_riverpod: ^2.0.0-dev.3

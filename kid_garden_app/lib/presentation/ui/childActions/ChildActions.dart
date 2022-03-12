@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/ui/Home/Activities/Activities.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
-import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/ChildAction.dart';
 import '../../../providers/Providers.dart';
 import '../general_components/ActionGroup.dart';
 import '../general_components/ChildActionRow.dart';
 import '../general_components/Error.dart';
-import '../general_components/MultiSelectChip.dart';
 import '../general_components/loading.dart';
 import 'AddChildActionDialog.dart';
 
@@ -77,9 +74,9 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           ),
           isAddingAction
               ? AddChildActionDialog(selectedActionGroup: selectedActionGroup!,childId: widget.childId!,
-            addChild: (value) {
+            addChild: (value,assets) {
               setState(() {
-                _viewModel.addChildAction(childAction: value);
+                _viewModel.addChildAction(childAction: value,assets: assets);
               });
             },
                   onDismiss: (value) {

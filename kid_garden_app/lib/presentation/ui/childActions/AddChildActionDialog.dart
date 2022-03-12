@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../domain/ActionGroup.dart';
 import '../../../domain/ChildAction.dart';
 import '../general_components/MultiSelectChip.dart';
-import 'ChildActionViewModel.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class AddChildActionDialog extends ConsumerStatefulWidget {
@@ -23,7 +19,9 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   bool isAddingAction = false;
   String childId;
   Function(bool) onDismiss;
-  Function(ChildAction) addChild;
+  Function(ChildAction,List<AssetEntity>?) addChild;
+
+  List<AssetEntity>? medias;
 
   AddChildActionDialog(
       {required this.addChild,
@@ -37,6 +35,7 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   @override
   ConsumerState createState() => _AddChildActionDialogState();
 
+
 }
 
 class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
@@ -45,14 +44,13 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
   @override
   Widget build(BuildContext context) {
 
-    picImage();
 
     return Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
+        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
         child: AlertDialog(
           title: (Text("Adding Action")),
           content: Container(
-            height: 500,
+
             child: SingleChildScrollView(
               primary: false,
               child: Column(
@@ -80,32 +78,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                       minLines: 4,
                     ),
                   ),
-                  TextButton(
-                      onPressed: () {
-                        DatePicker.showDatePicker(context,
-                            showTitleActions: true,
 
-                            // minTime: DateTime(2018, 3, 5),
-                            // maxTime: DateTime(2019, 6, 7),
-                            onChanged: (date) {
-                          print('change $date');
-                        }, onConfirm: (date) {
-                          print('confirm $date');
-                          DatePicker.showTime12hPicker(
-                            context,
-                            onChanged: (time) {
-                              print('change $time');
-                            },
-                            onConfirm: (time) {
-                              print('change $time');
-                            },
-                          );
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
-                      },
-                      child: const Text(
-                        'Choose Time Of Action',
-                        style: TextStyle(color: Colors.blue),
-                      )),
                   MultiSelectChip(
                     widget.audienceList,
                     onSelectionChanged: (selectedList) {
@@ -117,6 +90,15 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                     },
                     maxSelection: 1,
                   ),
+                  TextButton(
+                      onPressed: () {
+                        picImage();
+                      },
+                      child: const Text(
+                        'Choose images',
+                        style: TextStyle(color: Colors.blue),
+                      )),
+
                 ],
               ),
             ),
@@ -144,7 +126,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                     childId: widget.childId,
                     userId: '',
                     date: DateTime.now());
-                widget.addChild(childAction);
+                widget.addChild(childAction,widget.medias);
                 widget.isAddingAction = false;
                 widget.onDismiss(false);
               },
@@ -156,6 +138,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
 
   Future<void> picImage() async {
     final List<AssetEntity>? assets = await AssetPicker.pickAssets(context);
+    widget.medias=assets;
 
   }
 }

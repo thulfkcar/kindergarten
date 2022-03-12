@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../providers/Providers.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
@@ -58,7 +59,7 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future multiPartPostResponse(String url, Map<String, String> JsonBody) async {
+  Future multiPartPostResponse( String url, Map<String, String> jsonBody,List<AssetEntity>? assets) async {
     dynamic responseJson;
     try {
       var provide = ProviderContainer().read(LoginPageViewModelProvider);
@@ -71,7 +72,12 @@ class NetworkApiService extends BaseApiService {
         };
         var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
 
-        request.fields.addAll(JsonBody);
+        if(assets!=null){
+          for (var element in assets) {
+            request.files.add(await http.MultipartFile.fromPath('files', element.relativePath.toString()+"/"+ await element.titleAsync));
+          }
+        }
+        request.fields.addAll(jsonBody);
         request.headers.addAll(headers);
         http.StreamedResponse response = await request.send();
 
