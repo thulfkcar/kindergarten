@@ -10,13 +10,14 @@ class User {
   String? id;
   String? name;
   String? email;
-  int? role;
+  Role role;
   String token;
   int? tokenExpire;
   int? refreshExpire;
   String? image;
   List<ActionGroup>? actionGroups;
   List<Child>? children;
+
 
   User(this.id,  this.name, this.email, this.role, this.token,
       this.refreshExpire, this.tokenExpire);
@@ -36,4 +37,12 @@ class User {
 //   return '{"id": "$id", "date": "$date", "name": "$name", "email": "$email", "role": "$role","token": $token,"tokenExpire": $tokenExpire, "image": $image}';
 // }
 
+}
+enum Role {
+  @JsonValue(0)
+  admin,
+  @JsonValue(1)
+  Staff,
+  @JsonValue(2)
+  Parents,
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/main.dart';
+import 'package:kid_garden_app/presentation/ui/profile/ChildAdding/ChildAddingScreen.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
+import '../../../domain/Child.dart';
 import '../../../providers/Providers.dart';
 import '../general_components/ProfileControl.dart';
 import 'EditProfiileDialog.dart';
@@ -25,7 +28,6 @@ class _ProfileUIState extends State<ProfileUI> {
         var user = viewModel.currentUser;
         if (user != null) {
           return Scaffold(
-            backgroundColor: Color(0xFFF1F4F8),
             body: Stack(
               children: [
                 Column(
@@ -52,13 +54,14 @@ class _ProfileUIState extends State<ProfileUI> {
                                     borderRadius: BorderRadius.circular(40),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        2, 2, 2, 2),
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            2, 2, 2, 2),
                                     child: Container(
                                       width: 60,
                                       height: 60,
                                       clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.asset(
@@ -68,7 +71,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 16, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -110,7 +113,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                           child: Consumer(
                                             builder: (context, ref, child) {
                                               return IconButton(
-                                                icon: Icon(
+                                                icon: const Icon(
                                                   Icons.login_rounded,
                                                   size: 24,
                                                 ),
@@ -135,8 +138,8 @@ class _ProfileUIState extends State<ProfileUI> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0, 12, 0, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -144,55 +147,45 @@ class _ProfileUIState extends State<ProfileUI> {
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
-                                child: Text(
-                                  user.email!,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: const [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
-                              child: Text(
-                                'Account Settings',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                     Expanded(
                       child: ListView(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.vertical,
                         children: [
-                          ProfileControl(
-                              icon: Icons.account_tree_rounded,
-                              title: "Staff:Admin",
-                              onPressed: () {
-                                setState(() {
-                                  Navigator.pushNamed(context, StaffUI_Route);
-                                });
-                              }),
-                          ProfileControl(
-                              icon: Icons.baby_changing_station,
-                              title: "MyChildren:Staff,Parents,Admin",
-                              onPressed: () {}),
+                          (user.role == Role.admin)
+                              ? ProfileControl(
+                                  icon: Icons.account_tree_rounded,
+                                  title: "My Staff",
+                                  onPressed: () {
+                                    setState(() {
+                                      Navigator.pushNamed(
+                                          context, StaffUI_Route);
+                                    });
+                                  })
+                              : Container(),
+                          (user.role == Role.admin || user.role == Role.Staff)
+                              ? ProfileControl(
+                                  icon: Icons.baby_changing_station,
+                                  title: "Add Child",
+                                  onPressed: () async {
+                                    var result = Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChildAddingScreen()));
+                                    if (await result is Child) {
+//add child
+                                      ScaffoldMessenger.of(context)
+                                        ..removeCurrentSnackBar()
+                                        ..showSnackBar(SnackBar(
+                                            content: Text(
+                                                (await result as Child).name)));
+                                    }
+                                  })
+                              : Container(),
                         ],
                       ),
                     ),
