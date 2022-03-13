@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/providers/Providers.dart';
 import '../../../data/network/ApiResponse.dart';
+import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 
 import '../general_components/Error.dart';

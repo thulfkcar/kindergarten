@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import '../../providers/Providers.dart';
+import '../../di/Modules.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
 
@@ -59,7 +59,8 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future multiPartPostResponse( String url, Map<String, String> jsonBody,List<AssetEntity>? assets) async {
+  Future multiPartPostResponse(String url, Map<String, String> jsonBody,
+      List<AssetEntity>? assets) async {
     dynamic responseJson;
     try {
       var provide = ProviderContainer().read(LoginPageViewModelProvider);
@@ -72,9 +73,21 @@ class NetworkApiService extends BaseApiService {
         };
         var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
 
-        if(assets!=null){
-          for (var element in assets) {
-            request.files.add(await http.MultipartFile.fromPath('files', element.relativePath.toString()+"/"+ await element.titleAsync));
+        if (assets != null) {
+          if (assets.length == 1) {
+            request.files.add(await http.MultipartFile.fromPath(
+                'file',
+                assets.first.relativePath.toString() +
+                    "/" +
+                    await assets.first.titleAsync));
+          } else {
+            for (var element in assets) {
+              request.files.add(await http.MultipartFile.fromPath(
+                  'files',
+                  element.relativePath.toString() +
+                      "/" +
+                      await element.titleAsync));
+            }
           }
         }
         request.fields.addAll(jsonBody);

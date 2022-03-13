@@ -4,8 +4,8 @@ import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ChildAdding/ChildAddingScreen.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
+import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
-import '../../../providers/Providers.dart';
 import '../general_components/ProfileControl.dart';
 import 'EditProfiileDialog.dart';
 

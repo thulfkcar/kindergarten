@@ -4,7 +4,6 @@ import 'package:kid_garden_app/repos/ChildRepository.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
-import '../../../providers/Providers.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final childRepo = ChildRepository();

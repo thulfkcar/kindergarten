@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 
@@ -6,6 +7,8 @@ import '../../../data/network/ApiResponse.dart';
 
 class ChildViewModel extends ChangeNotifier {
   final _repository = ChildRepository();
+
+  ApiResponse<Child> addingChildResponse = ApiResponse.non();
 
   ChildViewModel() : super() {
     fetchChildren();
@@ -15,6 +18,11 @@ class ChildViewModel extends ChangeNotifier {
 
   void setChildListResponse(ApiResponse<List<Child>> response) {
     childListResponse = response;
+    notifyListeners();
+  }
+
+  void setAddingChildResponse(ApiResponse<Child> apiResponse) {
+    addingChildResponse = apiResponse;
     notifyListeners();
   }
 
@@ -47,5 +55,14 @@ class ChildViewModel extends ChangeNotifier {
     var data = childListResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);
+  }
+
+  void addChild({required ChildForm childForm}) {
+    setChildListResponse(ApiResponse.loading());
+    _repository.addChild(childForm).then((value) {
+      setAddingChildResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setChildListResponse(ApiResponse.error(error.toString()));
+    });
   }
 }

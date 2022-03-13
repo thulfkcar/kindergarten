@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MessageDialog extends StatefulWidget {
+class ActionDialog extends StatefulWidget {
   String message;
   String title;
   DialogType type;
@@ -11,7 +11,7 @@ class MessageDialog extends StatefulWidget {
 
   bool dismissed = false;
 
-  MessageDialog(
+  ActionDialog(
       {Key? key,
       this.delay = 2000,
       required this.type,
@@ -20,10 +20,10 @@ class MessageDialog extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<MessageDialog> createState() => _MessageDialogState();
+  State<ActionDialog> createState() => _ActionDialogState();
 }
 
-class _MessageDialogState extends State<MessageDialog> {
+class _ActionDialogState extends State<ActionDialog> {
   @override
   Widget build(BuildContext context) {
     if (widget.type != DialogType.loading) {

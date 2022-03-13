@@ -1,4 +1,8 @@
 
+import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+
 import '../data/network/models/MultiResponse.dart';
 import 'package:kid_garden_app/data/network/models/SingleResponse.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
@@ -62,6 +66,34 @@ class ChildRepository {
   }
   Future<List<Child>> getChildren() async {
     return await getMyChildList();
+  }
+
+  Future<Child> addChild(ChildForm childForm) async {
+    try {
+      Map<String, String> jsonBody = Map();
+      jsonBody.addAll({
+        "Name": childForm.childName,
+        "Gender": childForm.gender.toString(),
+        "BirthDate": childForm.birthDate.toString()
+      });
+      List<AssetEntity>? assest=null;
+      assest=[childForm.imageFile];
+      dynamic response = await _apiService.multiPartPostResponse(
+          "Child/add", jsonBody, assest);
+
+      var child;
+      SingleResponse<Child>.fromJson(await response, (json) {
+        child = Child.fromJson(json as Map<String, dynamic>);
+        return child;
+      });
+      return await child;
+    }
+    catch(e){
+      if(e is ErrorResponse) {
+        throw e.errorMsg.toString();
+      }
+      rethrow;
+    }
   }
 
 }

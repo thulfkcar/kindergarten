@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
+import '../../../../di/Modules.dart';
 import '../../../../domain/Child.dart';
 import '../../general_components/loadingView.dart';
 
@@ -21,7 +24,7 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
   List gender = [Gender.Male, Gender.Female];
   ScrollController scrollController = ScrollController();
   Gender selectedGender = Gender.Male;
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().toUtc();
   String message = "";
 
   @override
@@ -147,38 +150,85 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
                           )),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Tuple2 result = validateAddChildInputs();
-                          if (result.item1 != null) {
-                            // ShowAlertDialog(messageDialog: MessageDialog(type: DialogType.loading, title: "adding child", message: "please waite"));
-                            // Navigator.pop(
-                            //   context,
-                            // );
-                          } else {
-                            setState(() {
+                        padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
+                        child: Consumer(builder: (context, ref, child) {
+                          var viewModel = ref.watch(childViewModelProvider);
 
-                              ShowAlertDialog(
-                                  messageDialog: MessageDialog(
-                                      type: DialogType.error,
-                                      title: 'Input Validation',
-                                      message: result.item2,delay: 4000,));
-                            });
-                          }
-                        },
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0.0),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide()))),
-                        child: Text("Add"),
-                      ),
-                    )
+                          return ElevatedButton(
+                            onPressed: () {
+                              Tuple2 result = validateAddChildInputs();
+                              if (result.item1 != null) {
+                                viewModel.addChild(childForm: result.item1);
+                                var status =
+                                    viewModel.addingChildResponse.status;
+                                switch (status) {
+                                  case  Status.LOADING:
+                                    setState(() {
+                                      ShowAlertDialog(
+                                          messageDialog: ActionDialog(
+                                              type: DialogType.loading,
+                                              title: "adding child",
+                                              message: "please waite"));
+                                    });
+
+                                    break;
+                                  case Status.COMPLETED:
+                                    setState(() {
+                                      ShowAlertDialog(
+                                          messageDialog: ActionDialog(
+                                              type: DialogType.completed,
+                                              title: "adding child",
+                                              message: "the child ${viewModel.addingChildResponse.data!.name} is added successfully."));
+                                    });
+
+                                    break;
+                                  case Status.ERROR:
+                                    setState(() {
+                                      ShowAlertDialog(
+                                          messageDialog: ActionDialog(
+                                              type: DialogType.error,
+                                              title: "adding child",
+                                              message: viewModel.addingChildResponse.message! ));
+                                    });
+
+                                    break;
+                                  case Status.LOADING_NEXT_PAGE:
+                                    // TODO: Handle this case.
+                                    break;
+                                  case Status.NON:
+                                    // TODO: Handle this case.
+                                    break;
+                                  default:
+                                }
+                                //
+                                // Navigator.pop(
+                                //   context,
+                                // );
+                              } else {
+                                setState(() {
+                                  ShowAlertDialog(
+                                      messageDialog: ActionDialog(
+                                    type: DialogType.error,
+                                    title: 'Input Validation',
+                                    message: result.item2,
+                                    delay: 4000,
+                                  ));
+                                });
+                              }
+                            },
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0.0),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: BorderSide()))),
+                            child: Text("Add"),
+                          );
+                        }))
                   ],
                 ),
               ),
@@ -189,7 +239,7 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
     );
   }
 
-  Future<void> ShowAlertDialog({required MessageDialog messageDialog}) async {
+  Future<void> ShowAlertDialog({required ActionDialog messageDialog}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -207,7 +257,7 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked.toUtc();
       });
     }
   }
@@ -242,9 +292,9 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
     return Tuple2(
         ChildForm(
             childName: childNameController.text,
-            birthDate: selectedDate.toLocal(),
+            birthDate: selectedDate.toUtc(),
             gender: selectedGender.index,
-            imageFile: widget.imagePath),
+            imageFile: widget.imagePath!),
         "adding image scheduled");
   }
 }

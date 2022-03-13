@@ -5,8 +5,8 @@ import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/splash/Splash.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
+import '../../../di/Modules.dart';
 import '../../../domain/User.dart';
-import '../../../providers/Providers.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
 

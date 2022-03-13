@@ -6,7 +6,7 @@ import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
-import '../../../providers/Providers.dart';
+import '../../../di/Modules.dart';
 
 class LoginPageViewModel extends ChangeNotifier {
   var _childRepo = ChildRepository();
