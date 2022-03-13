@@ -9,6 +9,8 @@ class MessageDialog extends StatefulWidget {
   DialogType type;
   int? delay;
 
+  bool dismissed = false;
+
   MessageDialog(
       {Key? key,
       this.delay = 2000,
@@ -25,9 +27,13 @@ class _MessageDialogState extends State<MessageDialog> {
   @override
   Widget build(BuildContext context) {
     if (widget.type != DialogType.loading) {
-      Future.delayed(Duration(milliseconds: widget.delay!), () async {
-        Navigator.pop(context);
-      });
+      if (widget.delay != null) {
+        Future.delayed(Duration(milliseconds: widget.delay!), () async {
+          if (widget.dismissed == false) {
+            Navigator.pop(context);
+          }
+        });
+      }
     }
     return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -49,6 +55,16 @@ class _MessageDialogState extends State<MessageDialog> {
                   )),
             ],
           ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    widget.dismissed = true;
+                    Navigator.pop(context);
+                  });
+                },
+                child: const Text("Dismiss"))
+          ],
         ));
   }
 

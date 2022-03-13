@@ -152,12 +152,13 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
                         onPressed: () {
                           Tuple2 result = validateAddChildInputs();
                           if (result.item1 != null) {
-                            ShowAlertDialog(messageDialog: MessageDialog(type: DialogType.loading, title: "adding child", message: "please waite"));
+                            // ShowAlertDialog(messageDialog: MessageDialog(type: DialogType.loading, title: "adding child", message: "please waite"));
                             // Navigator.pop(
                             //   context,
                             // );
                           } else {
                             setState(() {
+
                               ShowAlertDialog(
                                   messageDialog: MessageDialog(
                                       type: DialogType.error,
