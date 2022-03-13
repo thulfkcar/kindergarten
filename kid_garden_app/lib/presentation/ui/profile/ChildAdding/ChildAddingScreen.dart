@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../../domain/Child.dart';
+import '../../general_components/loadingView.dart';
 
 class ChildAddingScreen extends StatefulWidget {
   ChildAddingScreen({Key? key}) : super(key: key);
@@ -16,19 +19,24 @@ class ChildAddingScreen extends StatefulWidget {
 class _ChildAddingScreenState extends State<ChildAddingScreen> {
   TextEditingController childNameController = TextEditingController();
   List gender = [Gender.Male, Gender.Female];
-
-  Gender select = Gender.Male;
+  ScrollController scrollController = ScrollController();
+  Gender selectedGender = Gender.Male;
   DateTime selectedDate = DateTime.now();
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Add Child"),
-        ),
-        body: SafeArea(
-            maintainBottomViewPadding: true,
-            child: Container(
+      appBar: AppBar(
+        title: const Text("Add Child"),
+      ),
+      body: SafeArea(
+        maintainBottomViewPadding: true,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              controller: scrollController,
+              child: Container(
                 padding: EdgeInsets.fromLTRB(16, 22, 16, 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -138,13 +146,56 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
                             ],
                           )),
                     ),
-                    Expanded(
-                        child: TextButton(
-                      child: Text("save"),
-                      onPressed: () {},
-                    ))
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Tuple2 result = validateAddChildInputs();
+                          if (result.item1 != null) {
+                            ShowAlertDialog(messageDialog: MessageDialog(type: DialogType.loading, title: "adding child", message: "please waite"));
+                            // Navigator.pop(
+                            //   context,
+                            // );
+                          } else {
+                            setState(() {
+                              ShowAlertDialog(
+                                  messageDialog: MessageDialog(
+                                      type: DialogType.error,
+                                      title: 'Input Validation',
+                                      message: result.item2,delay: 4000,));
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0.0),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide()))),
+                        child: Text("Add"),
+                      ),
+                    )
                   ],
-                ))));
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> ShowAlertDialog({required MessageDialog messageDialog}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return messageDialog;
+      },
+    );
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -167,16 +218,32 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
         Radio<Gender>(
           activeColor: Theme.of(context).primaryColor,
           value: gender[btnValue],
-          groupValue: select,
+          groupValue: selectedGender,
           onChanged: (gender) {
             setState(() {
               print(gender.toString());
-              select = gender!;
+              selectedGender = gender!;
             });
           },
         ),
         Text(title)
       ],
     );
+  }
+
+  Tuple2<ChildForm?, String> validateAddChildInputs() {
+    if (childNameController.text.trim().isEmpty) {
+      return const Tuple2(null, "pleas enter child name");
+    }
+    if (widget.imagePath == null) {
+      return const Tuple2(null, "please choose poper image");
+    }
+    return Tuple2(
+        ChildForm(
+            childName: childNameController.text,
+            birthDate: selectedDate.toLocal(),
+            gender: selectedGender.index,
+            imageFile: widget.imagePath),
+        "adding image scheduled");
   }
 }
