@@ -68,7 +68,8 @@ class _ActionDialogState extends State<ActionDialog> {
                         Navigator.pop(context);
                         if (widget.type == DialogType.completed ||
                             widget.type == DialogType.warning) {
-                          widget.onCompleted();
+                          if(widget.onCompleted!=null){
+                          widget.onCompleted!();}
                         }
                       });
                     },
