@@ -1,6 +1,7 @@
 
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../data/network/models/MultiResponse.dart';
@@ -17,12 +18,13 @@ class ChildRepository {
   ChildRepository();
 
   final BaseApiService _apiService = NetworkApiService();
-  Future<List<Child>> getMyChildList() async {
+  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page}) async {
     try {
-      dynamic response = await _apiService.getResponse("Child/getAll/1");
+      dynamic response = await _apiService.getResponse("Child/getAll/$page");
+      bool isLastPage = false;
 
       var childes;
-      MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
+      var mainResponse =  MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
           childes = (jsonList as List).map((i) => Child.fromJson(i)).toList();
           return childes;
@@ -30,8 +32,13 @@ class ChildRepository {
           throw "no Data Available";
         }
       });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
       if (await childes.isNotEmpty) {
-        return await childes;
+        return Tuple2(await childes, isLastPage);
       } else {
         throw "no Data Available";
       }
@@ -64,9 +71,7 @@ class ChildRepository {
       rethrow;
     }
   }
-  Future<List<Child>> getChildren() async {
-    return await getMyChildList();
-  }
+
 
   Future<Child> addChild(ChildForm childForm) async {
     try {
@@ -95,5 +100,6 @@ class ChildRepository {
       rethrow;
     }
   }
+
 
 }
