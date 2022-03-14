@@ -42,7 +42,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(childPostingViewModelProvider);
     Future.delayed(Duration.zero, () async {
-      postingActionResponse();
+      postingChildResponse();
     });
 
     return Scaffold(
@@ -266,7 +266,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         "adding image scheduled");
   }
 
-  void postingActionResponse() {
+  void postingChildResponse() {
     var status = _viewModel.addingChildResponse.status;
 
     switch (status) {

@@ -9,7 +9,8 @@ class ChildActionViewModel extends ChangeNotifier {
   final _repository = ActionRepository();
   String? selectedActionGroupId;
   int pageChildAction = 1;
-  String? childId ;
+  String? childId;
+
   var childActionsLastPage = false;
 
   ChildActionViewModel({required this.childId}) : super() {
@@ -32,7 +33,10 @@ class ChildActionViewModel extends ChangeNotifier {
 
   void setChildActionPostResponse(ApiResponse<ChildAction> response) {
     childActionPostResponse = response;
+    if(response.data!=null) {
 
+      setChildActionsListResponse(appendNewItems([response.data!]));
+    }
     notifyListeners();
   }
 
@@ -62,18 +66,19 @@ class ChildActionViewModel extends ChangeNotifier {
             setActionGroupResponse(ApiResponse.error(error.toString())));
   }
 
-  void addChildAction(
-      {required ChildAction childAction, List<AssetEntity>? assets}) {
-    if (childActionResponse.data != null) {
-      setChildActionPostResponse(ApiResponse.loading());
+  Future<void> addChildAction(
+      {required ChildAction childAction, List<AssetEntity>? assets}) async {
+    setChildActionPostResponse(ApiResponse.loading());
 
-      _repository
-          .postChildAction(childAction: childAction, assets: assets)
-          .then((value) =>
-              setChildActionPostResponse(ApiResponse.completed(value)))
-          .onError((error, stackTrace) =>
-              setChildActionPostResponse(ApiResponse.error(error.toString())));
-    }
+    _repository
+        .postChildAction(childAction: childAction, assets: assets)
+        .then((value) {
+      childActionResponse.data ??= [];
+
+      return setChildActionPostResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setChildActionPostResponse(ApiResponse.error(error.toString()));
+    });
   }
 
   Future<void> fetchNextChildActions() async {

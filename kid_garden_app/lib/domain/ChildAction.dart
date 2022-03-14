@@ -12,6 +12,7 @@ class ChildAction {
   String childId;
   @JsonKey(name: 'actionListId')
   String actionGroupId;
+  @JsonKey(name: 'actionName')
   String? actionGroupName;
   String value;
   String userId;

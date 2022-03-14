@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
+import '../general_components/ActionDialog.dart';
 import '../general_components/ActionGroup.dart';
 import '../general_components/ChildActionRow.dart';
 import '../general_components/Error.dart';
@@ -52,7 +53,9 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(ChildActionViewModelProvider(widget.childId!));
-
+    Future.delayed(Duration.zero, () async {
+      postingChildActionResponse();
+    });
     return Scaffold(
       floatingActionButton: selectedActionGroup != null
           ? FloatingActionButton(
@@ -90,7 +93,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                   },
                 )
               : Container(),
-          postProgress()
+          //postProgress()
         ],
       ),
       appBar: AppBar(
@@ -130,7 +133,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                   });
                 }));
       case Status.ERROR:
-        return MyErrorWidget(_viewModel.actionGroupResponse.message!);
+        return MyErrorWidget(msg: _viewModel.actionGroupResponse.message!);
       case Status.NON:
         break;
       default:
@@ -156,7 +159,9 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           direction: Axis.vertical,
         );
       case Status.ERROR:
-        return ErrorWidget(_viewModel.childActionResponse.message!);
+        return MyErrorWidget(msg: _viewModel.childActionResponse.message!,onRefresh: (){
+          _viewModel.fetchChildActions();
+        },);
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(
           scrollController: _scrollController,
@@ -174,21 +179,54 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
     return Container();
   }
 
-  Widget postProgress() {
+
+
+  void postingChildActionResponse() {
     var status = _viewModel.childActionPostResponse.status;
+
     switch (status) {
       case Status.LOADING:
-        return LoadingWidget();
+        showAlertDialog(
+            messageDialog: ActionDialog(
+              type: DialogType.loading,
+              title: "Adding Child",
+              message: "pleas wait until process complete..",
+              onCompleted: () {},
+            ));
+        break;
       case Status.COMPLETED:
-        _viewModel.appendNewItems([_viewModel.childActionPostResponse.data!]);
+        Navigator.pop(context);
+        showAlertDialog(
+            messageDialog: ActionDialog(
+              type: DialogType.completed,
+              title: "Competed",
+              message: "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
+              onCompleted: () {
+                _viewModel.setChildActionPostResponse(ApiResponse.non());
+              },
+            ));
         break;
       case Status.ERROR:
-        return MyErrorWidget(_viewModel.childActionPostResponse.message!);
-      case Status.NON:
+        Navigator.pop(context);
+        showAlertDialog(
+            messageDialog: ActionDialog(
+              type: DialogType.error,
+              title: "error",
+              message: _viewModel.childActionPostResponse.message.toString(),
+              onCompleted: () {},
+            ));
         break;
       default:
     }
-
-    return Container();
   }
+  Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return messageDialog;
+      },
+    );
+  }
+
 }

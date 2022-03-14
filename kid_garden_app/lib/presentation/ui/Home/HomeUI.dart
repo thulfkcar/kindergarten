@@ -53,7 +53,7 @@ class _HomeXXState extends ConsumerState<Home> {
       case Status.LOADING:
         return LoadingWidget();
       case Status.ERROR:
-        return MyErrorWidget(
+        return MyErrorWidget(msg:
             viewModel.childActivitiesApiResponse.message ?? "NA");
       case Status.COMPLETED:
         return CustomListView(

@@ -46,7 +46,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
           return childRow(context: context, child: item);
         }, direction: Axis.vertical,);
       case Status.ERROR:
-       return MyErrorWidget(_viewModel.childListResponse.message ?? "Error");
+       return MyErrorWidget(msg:_viewModel.childListResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(scrollController: _scrollController,
