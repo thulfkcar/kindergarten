@@ -25,7 +25,7 @@ class ChildAddingScreen extends ConsumerStatefulWidget {
 }
 
 class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
-  var _viewModel;
+ late ChildPostingViewModel _viewModel;
   TextEditingController childNameController = TextEditingController();
   List gender = [Gender.Male, Gender.Female];
   ScrollController scrollController = ScrollController();
@@ -171,18 +171,17 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                           onPressed: () async {
                             Tuple2 result = validateAddChildInputs();
                             if (result.item1 != null) {
-
-                                await _viewModel.addChild(
-                                    childForm: result.item1);
-
+                              await _viewModel.addChild(
+                                  childForm: result.item1);
                             } else {
                               setState(() {
-                                ShowAlertDialog(
+                                showAlertDialog(
                                     messageDialog: ActionDialog(
                                   type: DialogType.error,
                                   title: 'Input Validation',
                                   message: result.item2,
-                                  delay: 4000, onCompleted: (){},
+                                  delay: 4000,
+                                  onCompleted: () {},
                                 ));
                               });
                             }
@@ -208,7 +207,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
     );
   }
 
-  Future<void> ShowAlertDialog({required ActionDialog messageDialog}) async {
+  Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -270,29 +269,37 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
   void postingActionResponse() {
     var status = _viewModel.addingChildResponse.status;
 
-
-
     switch (status) {
       case Status.LOADING:
-        ShowAlertDialog(
+        showAlertDialog(
             messageDialog: ActionDialog(
-                type: DialogType.loading,
-                title: "loading",
-                message: "message", onCompleted: (){},));
+          type: DialogType.loading,
+          title: "Adding Child",
+          message: "pleas wait until process complete..",
+          onCompleted: () {},
+        ));
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
-        ShowAlertDialog(messageDialog:
-        ActionDialog(
-            type: DialogType.completed, title: "loading", message: "message", onCompleted: (){Navigator.pop(context);},));
+        showAlertDialog(
+            messageDialog: ActionDialog(
+          type: DialogType.completed,
+          title: "Competed",
+          message: "child ${_viewModel.addingChildResponse.data?.name}",
+          onCompleted: () {
+            Navigator.pop(context);
+          },
+        ));
         break;
       case Status.ERROR:
         Navigator.pop(context);
-        ShowAlertDialog(
+        showAlertDialog(
             messageDialog: ActionDialog(
-                type: DialogType.error,
-                title: "error",
-                message: _viewModel.addingChildResponse.message.toString(), onCompleted: (){},));
+          type: DialogType.error,
+          title: "error",
+          message: _viewModel.addingChildResponse.message.toString(),
+          onCompleted: () {},
+        ));
         break;
       default:
     }

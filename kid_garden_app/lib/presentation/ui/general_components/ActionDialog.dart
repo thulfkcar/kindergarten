@@ -8,7 +8,7 @@ class ActionDialog extends StatefulWidget {
   String title;
   DialogType type;
   int? delay;
-  Function onCompleted;
+  Function? onCompleted;
   bool dismissed = false;
 
   ActionDialog(
@@ -17,7 +17,7 @@ class ActionDialog extends StatefulWidget {
       required this.type,
       required this.title,
       required this.message,
-      required this.onCompleted})
+      this.onCompleted})
       : super(key: key);
 
   @override
@@ -32,7 +32,9 @@ class _ActionDialogState extends State<ActionDialog> {
         Future.delayed(Duration(milliseconds: widget.delay!), () async {
           if (widget.dismissed == false) {
             Navigator.pop(context);
-            widget.onCompleted();
+            if (widget.onCompleted != null) {
+              widget.onCompleted!();
+            }
           }
         });
       }
@@ -57,18 +59,21 @@ class _ActionDialogState extends State<ActionDialog> {
                   )),
             ],
           ),
-            actions: [
-            widget.type!=DialogType.loading?TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.dismissed = true;
-                    Navigator.pop(context);
-                    if(widget.type==DialogType.completed || widget.type==DialogType.warning) {
-                      widget.onCompleted();
-                    }
-                  });
-                },
-                child: const Text("Dismiss")):Container()
+          actions: [
+            widget.type != DialogType.loading
+                ? TextButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.dismissed = true;
+                        Navigator.pop(context);
+                        if (widget.type == DialogType.completed ||
+                            widget.type == DialogType.warning) {
+                          widget.onCompleted();
+                        }
+                      });
+                    },
+                    child: const Text("Dismiss"))
+                : Container()
           ],
         ));
   }
