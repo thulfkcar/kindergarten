@@ -8,7 +8,7 @@ class ActionDialog extends StatefulWidget {
   String title;
   DialogType type;
   int? delay;
-
+  Function onCompleted;
   bool dismissed = false;
 
   ActionDialog(
@@ -16,7 +16,8 @@ class ActionDialog extends StatefulWidget {
       this.delay = 2000,
       required this.type,
       required this.title,
-      required this.message})
+      required this.message,
+      required this.onCompleted})
       : super(key: key);
 
   @override
@@ -31,6 +32,7 @@ class _ActionDialogState extends State<ActionDialog> {
         Future.delayed(Duration(milliseconds: widget.delay!), () async {
           if (widget.dismissed == false) {
             Navigator.pop(context);
+            widget.onCompleted();
           }
         });
       }
@@ -55,15 +57,18 @@ class _ActionDialogState extends State<ActionDialog> {
                   )),
             ],
           ),
-          actions: [
-            TextButton(
+            actions: [
+            widget.type!=DialogType.loading?TextButton(
                 onPressed: () {
                   setState(() {
                     widget.dismissed = true;
                     Navigator.pop(context);
+                    if(widget.type==DialogType.completed || widget.type==DialogType.warning) {
+                      widget.onCompleted();
+                    }
                   });
                 },
-                child: const Text("Dismiss"))
+                child: const Text("Dismiss")):Container()
           ],
         ));
   }

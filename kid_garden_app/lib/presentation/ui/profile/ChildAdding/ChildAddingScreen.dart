@@ -4,22 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../../di/Modules.dart';
 import '../../../../domain/Child.dart';
-import '../../general_components/loadingView.dart';
+import '../../Child/ChildViewModel.dart';
+import '../../general_components/ActionDialog.dart';
+import 'ChildAddingViewModel.dart';
 
-class ChildAddingScreen extends StatefulWidget {
-  ChildAddingScreen({Key? key}) : super(key: key);
+class ChildAddingScreen extends ConsumerStatefulWidget {
+  ChildAddingScreen({
+    Key? key,
+  }) : super(key: key);
   AssetEntity? imagePath;
 
   @override
-  State<ChildAddingScreen> createState() => _ChildAddingScreenState();
+  ConsumerState createState() => _ChildAddingScreenState();
 }
 
-class _ChildAddingScreenState extends State<ChildAddingScreen> {
+class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
+  var _viewModel;
   TextEditingController childNameController = TextEditingController();
   List gender = [Gender.Male, Gender.Female];
   ScrollController scrollController = ScrollController();
@@ -28,7 +34,17 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
   String message = "";
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _viewModel = ref.watch(childPostingViewModelProvider);
+    Future.delayed(Duration.zero, () async {
+      postingActionResponse();
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Child"),
@@ -151,84 +167,37 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
                     ),
                     Padding(
                         padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
-                        child: Consumer(builder: (context, ref, child) {
-                          var viewModel = ref.watch(childViewModelProvider);
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            Tuple2 result = validateAddChildInputs();
+                            if (result.item1 != null) {
 
-                          return ElevatedButton(
-                            onPressed: () {
-                              Tuple2 result = validateAddChildInputs();
-                              if (result.item1 != null) {
-                                viewModel.addChild(childForm: result.item1);
-                                var status =
-                                    viewModel.addingChildResponse.status;
-                                switch (status) {
-                                  case  Status.LOADING:
-                                    setState(() {
-                                      ShowAlertDialog(
-                                          messageDialog: ActionDialog(
-                                              type: DialogType.loading,
-                                              title: "adding child",
-                                              message: "please waite"));
-                                    });
+                                await _viewModel.addChild(
+                                    childForm: result.item1);
 
-                                    break;
-                                  case Status.COMPLETED:
-                                    setState(() {
-                                      ShowAlertDialog(
-                                          messageDialog: ActionDialog(
-                                              type: DialogType.completed,
-                                              title: "adding child",
-                                              message: "the child ${viewModel.addingChildResponse.data!.name} is added successfully."));
-                                    });
-
-                                    break;
-                                  case Status.ERROR:
-                                    setState(() {
-                                      ShowAlertDialog(
-                                          messageDialog: ActionDialog(
-                                              type: DialogType.error,
-                                              title: "adding child",
-                                              message: viewModel.addingChildResponse.message! ));
-                                    });
-
-                                    break;
-                                  case Status.LOADING_NEXT_PAGE:
-                                    // TODO: Handle this case.
-                                    break;
-                                  case Status.NON:
-                                    // TODO: Handle this case.
-                                    break;
-                                  default:
-                                }
-                                //
-                                // Navigator.pop(
-                                //   context,
-                                // );
-                              } else {
-                                setState(() {
-                                  ShowAlertDialog(
-                                      messageDialog: ActionDialog(
-                                    type: DialogType.error,
-                                    title: 'Input Validation',
-                                    message: result.item2,
-                                    delay: 4000,
-                                  ));
-                                });
-                              }
-                            },
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0.0),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side: BorderSide()))),
-                            child: Text("Add"),
-                          );
-                        }))
+                            } else {
+                              setState(() {
+                                ShowAlertDialog(
+                                    messageDialog: ActionDialog(
+                                  type: DialogType.error,
+                                  title: 'Input Validation',
+                                  message: result.item2,
+                                  delay: 4000, onCompleted: (){},
+                                ));
+                              });
+                            }
+                          },
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0.0),
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide()))),
+                          child: Text("Add"),
+                        ))
                   ],
                 ),
               ),
@@ -296,5 +265,36 @@ class _ChildAddingScreenState extends State<ChildAddingScreen> {
             gender: selectedGender.index,
             imageFile: widget.imagePath!),
         "adding image scheduled");
+  }
+
+  void postingActionResponse() {
+    var status = _viewModel.addingChildResponse.status;
+
+
+
+    switch (status) {
+      case Status.LOADING:
+        ShowAlertDialog(
+            messageDialog: ActionDialog(
+                type: DialogType.loading,
+                title: "loading",
+                message: "message", onCompleted: (){},));
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        ShowAlertDialog(messageDialog:
+        ActionDialog(
+            type: DialogType.completed, title: "loading", message: "message", onCompleted: (){Navigator.pop(context);},));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+        ShowAlertDialog(
+            messageDialog: ActionDialog(
+                type: DialogType.error,
+                title: "error",
+                message: _viewModel.addingChildResponse.message.toString(), onCompleted: (){},));
+        break;
+      default:
+    }
   }
 }

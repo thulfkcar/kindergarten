@@ -43,7 +43,9 @@ class ChildActionViewModel extends ChangeNotifier {
 
   Future<void> fetchChildActions() async {
     setChildActionsListResponse(ApiResponse.loading());
-    _repository.getChildActions(childId: childId, page: pageChildAction).then((value) {
+    _repository
+        .getChildActions(childId: childId, page: pageChildAction)
+        .then((value) {
       childActionsLastPage = value.item2;
       setChildActionsListResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
@@ -60,12 +62,13 @@ class ChildActionViewModel extends ChangeNotifier {
             setActionGroupResponse(ApiResponse.error(error.toString())));
   }
 
-  void addChildAction({required ChildAction  childAction,  List<AssetEntity>? assets}) {
+  void addChildAction(
+      {required ChildAction childAction, List<AssetEntity>? assets}) {
     if (childActionResponse.data != null) {
       setChildActionPostResponse(ApiResponse.loading());
 
       _repository
-          .postChildAction(childAction: childAction,assets: assets)
+          .postChildAction(childAction: childAction, assets: assets)
           .then((value) =>
               setChildActionPostResponse(ApiResponse.completed(value)))
           .onError((error, stackTrace) =>

@@ -65,7 +65,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.asset(
-                                        'assets/images/UI_avatar_2@3x.png',
+                                        'res/images/logo_kindergarten.png',
                                       ),
                                     ),
                                   ),
