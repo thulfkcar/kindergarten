@@ -1,4 +1,3 @@
-import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
@@ -6,7 +5,6 @@ import '../../../data/network/ApiResponse.dart';
 
 class ChildViewModel extends ChangeNotifier {
   final _repository = ChildRepository();
-
 
   ChildViewModel() : super() {
     fetchChildren();
@@ -19,17 +17,14 @@ class ChildViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
-    Future.delayed(const Duration(milliseconds: 2000), () {
       _repository
           .getMyChildList()
           .then((value) => setChildListResponse(ApiResponse.completed(value)))
           .onError((error, stackTrace) =>
               setChildListResponse(ApiResponse.error(error.toString())));
-    });
+
   }
 
   Future<void> fetchNextChildren() async {
@@ -51,5 +46,4 @@ class ChildViewModel extends ChangeNotifier {
     data?.addAll(value);
     return ApiResponse.completed(data);
   }
-
 }

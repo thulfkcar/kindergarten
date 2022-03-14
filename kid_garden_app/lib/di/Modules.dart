@@ -11,8 +11,8 @@ final childViewModelProvider =
     ChangeNotifierProvider<ChildViewModel>((ref) => ChildViewModel());
 
 final ChildActionViewModelProvider =
-    ChangeNotifierProvider.autoDispose<ChildActionViewModel>(
-        (ref) => ChildActionViewModel());
+    ChangeNotifierProvider.autoDispose.family<ChildActionViewModel,String>(
+        (ref,childId) => ChildActionViewModel(childId: childId));
 
 final childPostingViewModelProvider =
     ChangeNotifierProvider.autoDispose<ChildPostingViewModel>(

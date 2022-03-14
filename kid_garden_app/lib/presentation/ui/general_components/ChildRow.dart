@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/data/network/BaseApiService.dart';
 import '../../../domain/Child.dart';
 import '../childActions/ChildActions.dart';
 
@@ -28,7 +29,7 @@ childRow ({required BuildContext context,required Child child, double roundBy=30
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(30), // Image radius
                 // child: Image.network('https://192.168.1.108:5126/StaticFiles/images/img.png',
-                child:child.image!=null ? Image.network(child.image!,fit: BoxFit.cover):null,
+                child:child.image!=null ? Image.network(domain +child.image!,fit: BoxFit.cover):null,
               ),
             ),
             // Image.network(children[index].image),

@@ -9,10 +9,10 @@ class ChildActionViewModel extends ChangeNotifier {
   final _repository = ActionRepository();
   String? selectedActionGroupId;
   int pageChildAction = 1;
-  String childId = "";
+  String? childId ;
   var childActionsLastPage = false;
 
-  ChildActionViewModel() : super() {
+  ChildActionViewModel({required this.childId}) : super() {
     fetchActionGroups();
     fetchChildActions();
   }
@@ -44,7 +44,7 @@ class ChildActionViewModel extends ChangeNotifier {
   Future<void> fetchChildActions() async {
     setChildActionsListResponse(ApiResponse.loading());
     _repository
-        .getChildActions(childId: childId, page: pageChildAction)
+        .getChildActions(childId: childId!, page: pageChildAction)
         .then((value) {
       childActionsLastPage = value.item2;
       setChildActionsListResponse(ApiResponse.completed(value.item1));
@@ -83,7 +83,7 @@ class ChildActionViewModel extends ChangeNotifier {
       notifyListeners();
 
       _repository
-          .getChildActions(childId: childId, page: pageChildAction)
+          .getChildActions(childId: childId!, page: pageChildAction)
           .then((value) {
         childActionsLastPage = value.item2;
         setChildActionsListResponse(appendNewItems(value.item1));

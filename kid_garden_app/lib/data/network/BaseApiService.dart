@@ -11,4 +11,4 @@ abstract class BaseApiService {
 
 
 }
-const String domain="http://5.182.33.67";
+const String domain="http://5.182.33.67/";

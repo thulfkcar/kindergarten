@@ -51,7 +51,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
 
   @override
   Widget build(BuildContext context) {
-    _viewModel = ref.watch(ChildActionViewModelProvider);
+    _viewModel = ref.watch(ChildActionViewModelProvider(widget.childId!));
+
     return Scaffold(
       floatingActionButton: selectedActionGroup != null
           ? FloatingActionButton(
@@ -73,18 +74,20 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             ],
           ),
           isAddingAction
-              ? AddChildActionDialog(selectedActionGroup: selectedActionGroup!,childId: widget.childId!,
-            addChild: (value,assets) {
-              setState(() {
-                _viewModel.addChildAction(childAction: value,assets: assets);
-              });
-            },
+              ? AddChildActionDialog(
+                  selectedActionGroup: selectedActionGroup!,
+                  childId: widget.childId!,
+                  addChild: (value, assets) {
+                    setState(() {
+                      _viewModel.addChildAction(
+                          childAction: value, assets: assets);
+                    });
+                  },
                   onDismiss: (value) {
                     setState(() {
                       isAddingAction = value;
                     });
                   },
-
                 )
               : Container(),
           postProgress()
@@ -145,7 +148,6 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       case Status.COMPLETED:
         return CustomListView(
           scrollController: _scrollController,
-
           items: _viewModel.childActionResponse.data!,
           loadNext: false,
           itemBuilder: (BuildContext context, ChildAction item) {
@@ -189,5 +191,4 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
 
     return Container();
   }
-
 }
