@@ -7,6 +7,8 @@ part 'User.g.dart';
 
 @JsonSerializable()
 class User {
+
+
   String? id;
   String? name;
   String? email;
@@ -15,8 +17,7 @@ class User {
   int? tokenExpire;
   int? refreshExpire;
   String? image;
-  List<ActionGroup>? actionGroups;
-  List<Child>? children;
+
 
 
   User(this.id,  this.name, this.email, this.role, this.token,
@@ -29,7 +30,7 @@ class User {
 
   @override
   String toString() {
-    return '{"id": "$id", "name": "$name", "email": "$email", "role": $role, "token": "$token", "tokenExpire": $tokenExpire, "refreshExpire": $refreshExpire, "image": "$image"}';
+    return '{"id": "$id", "name": "$name", "email": "$email", "role": ${role.index}, "token": "$token", "tokenExpire": $tokenExpire, "refreshExpire": $refreshExpire, "image": "$image"}';
   }
 
 // @override

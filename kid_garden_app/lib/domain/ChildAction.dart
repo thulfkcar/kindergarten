@@ -1,9 +1,4 @@
-import 'package:kid_garden_app/domain/ActionGroup.dart';
-
 import 'package:json_annotation/json_annotation.dart';
-
-import 'User.dart';
-
 part 'ChildAction.g.dart';
 
 @JsonSerializable()

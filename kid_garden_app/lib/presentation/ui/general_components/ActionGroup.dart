@@ -28,6 +28,7 @@ class _ActionGroupsState extends State<ActionGroups> {
       itemCount: widget.actionGroups.length,
       itemBuilder: (BuildContext context, int index) {
         return Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Container(
               margin: const EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
@@ -59,7 +60,8 @@ class _ActionGroupsState extends State<ActionGroups> {
                 ),
               ),
             ),
-            Text(widget.actionGroups[index].actionName)
+            Expanded(child:
+            Text(widget.actionGroups[index].actionName))
           ],
         );
       },
