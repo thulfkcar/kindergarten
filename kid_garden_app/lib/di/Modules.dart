@@ -4,6 +4,7 @@ import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/User.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
+import '../presentation/ui/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
 
 final childViewModelProvider =
@@ -16,6 +17,9 @@ final ChildActionViewModelProvider =
 
 final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
+
+final staffViewModelProvider =
+    ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
 
 final LoginPageViewModelProvider =
     ChangeNotifierProvider<LoginPageViewModel>((ref) {

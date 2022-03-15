@@ -1,7 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../data/network/FromData/ChildForm.dart';
 import 'LangUtiles.dart';
 
 class FormValidator {
@@ -41,4 +40,27 @@ class FormValidator {
   }
 
 
+
+  String? validatePhone(String? value) {
+    String pattern =
+        r'07[3-9][0-9]{8}';
+    RegExp regExp =  RegExp(pattern);
+    if (value!.isEmpty) {
+      return StringResources.of(context)?.getText("phone_required") ?? "Error";
+    } else if (!regExp.hasMatch(value)) {
+      return StringResources.of(context)?.getText("phone_form") ?? "Error";
+    } else {
+      return null;
+    }
+  }
+  String? validateNotEmpty(String? value) {
+    String pattern =
+        r'/^$|\s+/';
+    RegExp regExp =  RegExp(pattern);
+    if (value!.isEmpty) {
+      return StringResources.of(context)?.getText("txt_required") ?? "Error";
+    }  else {
+      return null;
+    }
+  }
 }

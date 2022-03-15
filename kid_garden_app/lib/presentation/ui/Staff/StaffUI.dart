@@ -1,92 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/presentation/ui/Staff/addStaff.dart';
 
-class StaffUI extends StatefulWidget {
-  const StaffUI({Key? key}) : super(key: key);
+
+
+class StaffUI extends ConsumerStatefulWidget {
+  const StaffUI({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _StaffUIState createState() => _StaffUIState();
+  ConsumerState createState() => _StaffUIState();
 }
 
-class _StaffUIState extends State<StaffUI> {
+class _StaffUIState extends ConsumerState<StaffUI> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          StaffListView(),
-          Positioned(
-            right: 10,
-            bottom: 10,
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {});
-              },
-              child: const Icon(Icons.add),
+    return   Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          "My Staff",
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        actions: [
+          Padding(padding: EdgeInsetsDirectional.all(16),child:
+          GestureDetector(
+            onTap: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>StaffAdding()));
+            },
+            child: const FaIcon(
+              FontAwesomeIcons.plus,
             ),
-          )
+          ),),
         ],
       ),
     );
   }
-}
-
-Widget StaffRow() {
-  return Row(
-    mainAxisSize: MainAxisSize.max,
-    children: [
-      ClipRRect(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(0),
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(0),
-        ),
-        child: Image.network(
-          'https://picsum.photos/seed/544/600',
-          width: 100,
-          height: 100,
-          fit: BoxFit.cover,
-        ),
-      ),
-      Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Title',
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                  child: Text(
-                    'Subtitle',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(4, 4, 0, 0),
-                  child: Text('subtext'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
-Widget StaffListView() {
-  return ListView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: 9,
-      itemBuilder: (BuildContext context, int index) {
-        return StaffRow();
-      });
 }

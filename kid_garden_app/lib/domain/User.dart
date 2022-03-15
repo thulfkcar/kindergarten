@@ -40,6 +40,8 @@ class User {
 
 }
 enum Role {
+  // @JsonValue(-1)
+  // superAdmin,
   @JsonValue(0)
   admin,
   @JsonValue(1)

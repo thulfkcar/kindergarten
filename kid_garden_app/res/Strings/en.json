@@ -1,8 +1,12 @@
 {
   "app_name": "KenderGarten",
   "email": "Email",
-  "email_required": "Password is Required",
+  "email_required": "email is Required",
   "email_form": "Email Invalid",
+  "phone_required": "phone number is Required",
+  "phone_form": "phone number Invalid",
+  "txt_required": "field is Required",
+  "txt_form": "Invalid input",
   "password": "Password",
   "password_required": "Password is Required",
   "password_min": "Password must minimum eight characters",
