@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import 'Media.dart';
 part 'ChildAction.g.dart';
 
 @JsonSerializable()
@@ -15,6 +17,8 @@ class ChildAction {
   Audience audience;
   DateTime? date;
   List<String>? images;
+  @JsonKey(name: 'mediaDto')
+  List<Media>? medias;
 
   ChildAction(
       {required this.id,

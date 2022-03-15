@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/main.dart';
-import 'package:kid_garden_app/presentation/ui/profile/ChildAdding/ChildAddingScreen.dart';
+import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';

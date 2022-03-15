@@ -5,10 +5,10 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 
+import '../general_components/CustomListView.dart';
+import '../general_components/ChildInfoRow.dart';
 import '../general_components/Error.dart';
 import '../general_components/loading.dart';
-import 'Activities/Activities.dart';
-import 'Activities/ChildInfoRow.dart';
 import 'HomeViewModel.dart';
 
 class Home extends ConsumerStatefulWidget {

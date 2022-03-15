@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/Home/Activities/Activities.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 import '../general_components/ChildRow.dart';
+import '../general_components/CustomListView.dart';
 import '../general_components/loading.dart';
 
 

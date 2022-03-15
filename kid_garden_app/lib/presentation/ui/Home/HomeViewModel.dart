@@ -6,41 +6,52 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final childRepo = ChildRepository();
+  final _repository = ChildRepository();
+  var childActionsLastPage = false;
+  int pageChildAction = 1;
+
+  HomeViewModel() : super() {
+    fetchChildren();
+  }
+
   ApiResponse<List<Child>> childActivitiesApiResponse = ApiResponse.loading();
 
-  void setChildActivitiesApiResponse(ApiResponse<List<Child>> response) {
+  void setChildListResponse(ApiResponse<List<Child>> response) {
     childActivitiesApiResponse = response;
     notifyListeners();
   }
-  Future<void> fetchChildrenWithInfo() async {
-    setChildActivitiesApiResponse(ApiResponse.loading());
-    childRepo
-        .getChildrenWithInfo()
-        .then((value) =>
-            setChildActivitiesApiResponse(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            setChildActivitiesApiResponse(ApiResponse.error(error.toString())));
+
+  Future<void> fetchChildren() async {
+    setChildListResponse(ApiResponse.loading());
+    _repository.getMyChildList(page:pageChildAction).then((value) {
+      childActionsLastPage = value.item2;
+      setChildListResponse(ApiResponse.completed(value.item1));
+    }).onError((error, stackTrace) {
+      setChildListResponse(ApiResponse.error(error.toString()));
+    });
   }
 
-  HomeViewModel() : super() {
-    fetchChildrenWithInfo();
-  }
 
   Future<void> fetchNextChildrenWithInfo() async {
-    childActivitiesApiResponse.status = Status.LOADING_NEXT_PAGE;
-    notifyListeners();
-
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      childRepo.getChildrenWithInfo().then((value) {
-      setChildActivitiesApiResponse(appendNewItems(value));
-    }).onError((error, stackTrace) {
-      setChildActivitiesApiResponse(ApiResponse.error(error.toString()));
-    });
+    if (childActionsLastPage == false) {
+      incrementPageChildAction();
+      childActivitiesApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
-    });
-  }
 
+      _repository
+          .getMyChildList( page: pageChildAction)
+          .then((value) {
+        childActionsLastPage = value.item2;
+        setChildListResponse(appendNewItems(value.item1));
+      }).onError((error, stackTrace) {
+        setChildListResponse(ApiResponse.error(error.toString()));
+      });
+      notifyListeners();
+    }
+  }
+  void incrementPageChildAction() {
+    pageChildAction += 1;
+  }
   ApiResponse<List<Child>> appendNewItems(List<Child> value) {
     var data = childActivitiesApiResponse.data;
     data?.addAll(value);

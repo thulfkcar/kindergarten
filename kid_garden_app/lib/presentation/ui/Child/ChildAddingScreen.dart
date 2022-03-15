@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
-import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-
-import '../../../../di/Modules.dart';
-import '../../../../domain/Child.dart';
-import '../../Child/ChildViewModel.dart';
-import '../../general_components/ActionDialog.dart';
-import 'ChildAddingViewModel.dart';
+import '../../../di/Modules.dart';
+import '../../../domain/Child.dart';
+import 'ChildViewModel.dart';
+import '../general_components/ActionDialog.dart';
 
 class ChildAddingScreen extends ConsumerStatefulWidget {
   ChildAddingScreen({
@@ -25,7 +21,7 @@ class ChildAddingScreen extends ConsumerStatefulWidget {
 }
 
 class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
- late ChildPostingViewModel _viewModel;
+ late ChildViewModel _viewModel;
   TextEditingController childNameController = TextEditingController();
   List gender = [Gender.Male, Gender.Female];
   ScrollController scrollController = ScrollController();
@@ -40,7 +36,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _viewModel = ref.watch(childPostingViewModelProvider);
+    _viewModel = ref.watch(childViewModelProvider);
     Future.delayed(Duration.zero, () async {
       postingChildResponse();
     });

@@ -48,15 +48,37 @@ class ChildRepository {
       rethrow;
     }
   }
-  Future<List<Child>> getChildrenWithInfo() async {
+  Future<Tuple2<List<Child>, bool>> getChildrenWithInfo({required int page}) async {
     try {
-      List<Child> children = [];
+      dynamic response = await _apiService.getResponse("Child/getLastActions/${page}?actionsCount=4");
+      bool isLastPage = false;
 
-      return children;
+      var childes;
+      var mainResponse =  MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          childes = (jsonList as List).map((i) => Child.fromJson(i)).toList();
+          return childes;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await childes.isNotEmpty) {
+        return Tuple2(await childes, isLastPage);
+      } else {
+        throw "no Data Available";
+      }
+      // var jsonObject = json.decode(object!) as List;
+      // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
     } catch (e) {
       rethrow;
     }
   }
+
   Future<User?> auth({required String userName, required String password}) async {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
