@@ -90,7 +90,8 @@ class NetworkApiService extends BaseApiService {
             }
           }
         }
-        request.fields.addAll(jsonBody);
+
+        request.fields.addAll(jsonBody );
         request.headers.addAll(headers);
         http.StreamedResponse response = await request.send();
 

@@ -30,27 +30,23 @@ class StaffAdding extends ConsumerStatefulWidget {
 class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
   late StaffViewModel _viewModel;
   TextEditingController nameController = TextEditingController();
-  List role = [Role.Staff, Role.Parents,Role.admin];
+  List role = [Role.Staff, Role.Parents, Role.admin];
   ScrollController scrollController = ScrollController();
   DateTime selectedDate = DateTime.now().toUtc();
   String message = "";
   Role selectedGender = Role.Staff;
-
   final StaffAddingForm _staffAddingForm = StaffAddingForm();
   final GlobalKey<FormState> _key = GlobalKey();
-
   AutovalidateMode _validate = AutovalidateMode.disabled;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
-
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(staffViewModelProvider);
     Future.delayed(Duration.zero, () async {
-      postingChildResponse();
+      postingResponse();
     });
 
     return Scaffold(
@@ -147,36 +143,6 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                           },
                         ),
                         Padding(padding: EdgeInsets.all(8)),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color(0xFF898989), width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30))),
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: GestureDetector(
-                              onTap: () {
-                                _selectDate(context);
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.date_range),
-                                  Expanded(
-                                      child: Row(children: [
-                                    const Text(
-                                      "Birth Date:      ",
-                                      style:
-                                          TextStyle(color: Color(0xFF898989)),
-                                    ),
-                                    Text("${selectedDate.toLocal()}"
-                                        .split(' ')[0])
-                                  ])),
-                                ],
-                              )),
-                        ),
-                        Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
                           onChanged: ((text) => _staffAddingForm.email = text),
                           keyboardType: TextInputType.emailAddress,
@@ -194,9 +160,27 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                           },
                         ),
                         Padding(padding: EdgeInsets.all(8)),
-
                         TextFormField(
-                          onChanged: ((text) => _staffAddingForm.phoneNumber = text),
+                          onChanged: ((text) =>
+                              _staffAddingForm.password = text),
+                          keyboardType: TextInputType.visiblePassword,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            hintText: "123@",
+                            contentPadding: const EdgeInsets.fromLTRB(
+                                20.0, 15.0, 20.0, 15.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0)),
+                          ),
+                          validator: FormValidator(context).validatePassword,
+                          onSaved: (String? value) {
+                            _staffAddingForm.password = value!;
+                          },
+                        ),
+                        Padding(padding: EdgeInsets.all(8)),
+                        TextFormField(
+                          onChanged: ((text) =>
+                              _staffAddingForm.phoneNumber = text),
                           keyboardType: TextInputType.phone,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -225,22 +209,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 await _sendToServer();
-                                // Tuple2 result = validateAddChildInputs();
-                                // if (result.item1 != null) {
-                                //   await _viewModel.addStaff(
-                                //       childForm: result.item1);
-                                // } else {
-                                //   setState(() {
-                                //     showAlertDialog(
-                                //         messageDialog: ActionDialog(
-                                //           type: DialogType.error,
-                                //           title: 'Input Validation',
-                                //           message: result.item2,
-                                //           delay: 4000,
-                                //           onCompleted: () {},
-                                //         ));
-                                //   });
-                                // }
+
                               },
                               style: ButtonStyle(
                                   elevation: MaterialStateProperty.all(0.0),
@@ -254,7 +223,6 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                                           side: BorderSide()))),
                               child: Text("Add"),
                             )),
-
                       ],
                     ),
                   ),
@@ -264,7 +232,6 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           ),
         ));
   }
-
   Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
     return showDialog<void>(
       context: context,
@@ -273,19 +240,6 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
         return messageDialog;
       },
     );
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked.toUtc();
-      });
-    }
   }
   Row addRadioButton(int btnValue, String title) {
     return Row(
@@ -306,23 +260,9 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
       ],
     );
   }
-
-  // Tuple2<StaffAddingForm?, String> validateAddChildInputs() {
-  //   if (nameController.text.trim().isEmpty) {
-  //     return const Tuple2(null, "pleas enter child name");
-  //   }
-  //   if (widget.imagePath == null) {
-  //     return const Tuple2(null, "please choose poper image");
-  //   }
-  //   return Tuple2(
-  //       StaffAddingForm(
-  //           birthDate: selectedDate.toUtc(),
-  //           role: Role.Staff, name: nameController.text, password: "4565@1", image: widget.imagePath!, email: "thiggr@gmaifgdlg"),
-  //       "adding image scheduled");
-  // }
   Future _sendToServer() async {
     if (_key.currentState!.validate()) {
-      // await viewModel.auth(loginRequestData: form);
+      await _viewModel.addStaff(staffAddingForm: _staffAddingForm);
       /// No any error in validation
       _key.currentState!.save();
     } else {
@@ -333,7 +273,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
     }
   }
 
-  void postingChildResponse() {
+  void postingResponse() {
     var status = _viewModel.addingStaffResponse.status;
 
     switch (status) {

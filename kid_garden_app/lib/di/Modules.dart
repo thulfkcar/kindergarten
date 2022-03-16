@@ -19,7 +19,7 @@ final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
 
 final staffViewModelProvider =
-    ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
+    ChangeNotifierProvider.autoDispose<StaffViewModel>((ref) => StaffViewModel());
 
 final LoginPageViewModelProvider =
     ChangeNotifierProvider<LoginPageViewModel>((ref) {

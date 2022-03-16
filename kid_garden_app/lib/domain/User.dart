@@ -18,6 +18,10 @@ class User {
   int? refreshExpire;
   String? image;
 
+  int? childrenCount;
+
+  int? actionsCount;
+
 
 
   User(this.id,  this.name, this.email, this.role, this.token,
