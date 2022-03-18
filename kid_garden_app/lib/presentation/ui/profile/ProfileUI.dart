@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
-import 'package:kid_garden_app/presentation/ui/QRReader.dart';
+import 'package:kid_garden_app/presentation/ui/AssingScreen/QRReader.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../di/Modules.dart';
@@ -193,8 +193,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                     }
                                   })
                               : Container(),
-                          Container(height: 300,width: 300,child:
-                          QRReader())
+
                         ],
                       ),
                     ),

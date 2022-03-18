@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/AssingScreen/QRReader.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
 
 import '../../../data/network/ApiResponse.dart';
@@ -41,19 +42,9 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: Container(),
+          child: Container(height: 300, width: 300, child: QRReader()),
         ));
   }
-  Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return messageDialog;
-      },
-    );
-  }
-
 
   void postingResponse() {
     var status = _viewModel.addingStaffResponse.status;
@@ -61,6 +52,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
     switch (status) {
       case Status.LOADING:
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
               title: "Adding Child",
@@ -71,6 +63,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
       case Status.COMPLETED:
         Navigator.pop(context);
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
               type: DialogType.completed,
               title: "Competed",
@@ -83,6 +76,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
       case Status.ERROR:
         Navigator.pop(context);
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
               type: DialogType.error,
               title: "error",
