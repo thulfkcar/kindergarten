@@ -1,7 +1,7 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ActionDialog extends StatefulWidget {
   String message;
@@ -10,6 +10,7 @@ class ActionDialog extends StatefulWidget {
   int? delay;
   Function? onCompleted;
   bool dismissed = false;
+  String? qr;
 
   ActionDialog(
       {Key? key,
@@ -17,7 +18,8 @@ class ActionDialog extends StatefulWidget {
       required this.type,
       required this.title,
       required this.message,
-      this.onCompleted})
+      this.onCompleted,
+      this.qr})
       : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class ActionDialog extends StatefulWidget {
 class _ActionDialogState extends State<ActionDialog> {
   @override
   Widget build(BuildContext context) {
-    if (widget.type != DialogType.loading) {
+    if (widget.type != DialogType.loading && widget.type != DialogType.qr) {
       if (widget.delay != null) {
         Future.delayed(Duration(milliseconds: widget.delay!), () async {
           if (widget.dismissed == false) {
@@ -68,8 +70,9 @@ class _ActionDialogState extends State<ActionDialog> {
                         Navigator.pop(context);
                         if (widget.type == DialogType.completed ||
                             widget.type == DialogType.warning) {
-                          if(widget.onCompleted!=null){
-                          widget.onCompleted!();}
+                          if (widget.onCompleted != null) {
+                            widget.onCompleted!();
+                          }
                         }
                       });
                     },
@@ -100,8 +103,29 @@ class _ActionDialogState extends State<ActionDialog> {
           color: Colors.blueAccent,
           size: 60,
         );
+      case DialogType.qr:
+        return Container(
+            height: 300,
+            width: 300,
+            child: QrImage(
+              data: widget.qr!,
+              version: QrVersions.auto,
+              size: 200.0,
+            ));
     }
   }
 }
 
-enum DialogType { error, loading, warning, completed }
+Future<void> showAlertDialog(
+    {required BuildContext context,
+    required ActionDialog messageDialog}) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return messageDialog;
+    },
+  );
+}
+
+enum DialogType { error, loading, warning, completed, qr }

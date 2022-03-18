@@ -171,7 +171,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                                   childForm: result.item1);
                             } else {
                               setState(() {
-                                showAlertDialog(
+                                showAlertDialog(context: context,
                                     messageDialog: ActionDialog(
                                   type: DialogType.error,
                                   title: 'Input Validation',
@@ -203,15 +203,6 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
     );
   }
 
-  Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return messageDialog;
-      },
-    );
-  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -267,7 +258,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
 
     switch (status) {
       case Status.LOADING:
-        showAlertDialog(
+        showAlertDialog(context: context,
             messageDialog: ActionDialog(
           type: DialogType.loading,
           title: "Adding Child",
@@ -277,7 +268,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
-        showAlertDialog(
+        showAlertDialog(context: context,
             messageDialog: ActionDialog(
           type: DialogType.completed,
           title: "Competed",
@@ -289,7 +280,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         break;
       case Status.ERROR:
         Navigator.pop(context);
-        showAlertDialog(
+        showAlertDialog(context: context,
             messageDialog: ActionDialog(
           type: DialogType.error,
           title: "error",

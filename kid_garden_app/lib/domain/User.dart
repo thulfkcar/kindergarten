@@ -5,10 +5,8 @@ import 'Child.dart';
 
 part 'User.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class User {
-
-
   String? id;
   String? name;
   String? email;
@@ -22,9 +20,7 @@ class User {
 
   int? actionsCount;
 
-
-
-  User(this.id,  this.name, this.email, this.role, this.token,
+  User(this.id, this.name, this.email, this.role, this.token,
       this.refreshExpire, this.tokenExpire);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -34,7 +30,7 @@ class User {
 
   @override
   String toString() {
-    return '{"id": "$id", "name": "$name", "email": "$email", "role": ${role.index}, "token": "$token", "tokenExpire": $tokenExpire, "refreshExpire": $refreshExpire, "image": "$image"}';
+    return '{"id": "$id", "name": "$name", "email": "$email", "role": ${role.index-1}, "token": "$token", "tokenExpire": $tokenExpire, "refreshExpire": $refreshExpire, "image": "$image"}';
   }
 
 // @override
@@ -43,9 +39,10 @@ class User {
 // }
 
 }
+
 enum Role {
-  // @JsonValue(-1)
-  // superAdmin,
+  @JsonValue(-1)
+  superAdmin,
   @JsonValue(0)
   admin,
   @JsonValue(1)
