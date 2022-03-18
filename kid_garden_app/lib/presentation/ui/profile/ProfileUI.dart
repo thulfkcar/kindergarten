@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/User.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
+import '../AssingScreen/AssginScreen.dart';
 import '../general_components/ProfileControl.dart';
 import 'EditProfiileDialog.dart';
 
@@ -41,7 +43,7 @@ class _ProfileUIState extends State<ProfileUI> {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
+                            EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,8 +57,8 @@ class _ProfileUIState extends State<ProfileUI> {
                                   ),
                                   child: Padding(
                                     padding:
-                                        const EdgeInsetsDirectional.fromSTEB(
-                                            2, 2, 2, 2),
+                                    const EdgeInsetsDirectional.fromSTEB(
+                                        2, 2, 2, 2),
                                     child: Container(
                                       width: 60,
                                       height: 60,
@@ -81,7 +83,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                           height: 44,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(8),
+                                            BorderRadius.circular(8),
                                             border: Border.all(
                                               width: 2,
                                             ),
@@ -105,7 +107,7 @@ class _ProfileUIState extends State<ProfileUI> {
                                           height: 44,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(8),
+                                            BorderRadius.circular(8),
                                             border: Border.all(
                                               width: 2,
                                             ),
@@ -120,11 +122,11 @@ class _ProfileUIState extends State<ProfileUI> {
                                                 onPressed: () async {
                                                   ref
                                                       .read(
-                                                          LoginPageViewModelProvider)
+                                                      LoginPageViewModelProvider)
                                                       .logOut();
                                                   Navigator
                                                       .pushReplacementNamed(
-                                                          context, Login_Page);
+                                                      context, Login_Page);
                                                 },
                                               );
                                             },
@@ -157,35 +159,41 @@ class _ProfileUIState extends State<ProfileUI> {
                         children: [
                           (user.role == Role.admin)
                               ? ProfileControl(
-                                  icon: Icons.account_tree_rounded,
-                                  title: "My Staff",
-                                  onPressed: () {
-                                    setState(() {
-                                      Navigator.pushNamed(
-                                          context, StaffUI_Route);
-                                    });
-                                  })
+                              icon: Icons.account_tree_rounded,
+                              title: "My Staff",
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.pushNamed(
+                                      context, StaffUI_Route);
+                                });
+                              })
                               : Container(),
                           (user.role == Role.admin || user.role == Role.Staff)
                               ? ProfileControl(
-                                  icon: Icons.baby_changing_station,
-                                  title: "Add Child",
-                                  onPressed: () async {
-                                    var result = Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChildAddingScreen()));
-                                    if (await result is Child) {
+                              icon: Icons.baby_changing_station,
+                              title: "Add Child",
+                              onPressed: () async {
+                                var result = Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChildAddingScreen()));
+                                if (await result is Child) {
 //add child
-                                      ScaffoldMessenger.of(context)
-                                        ..removeCurrentSnackBar()
-                                        ..showSnackBar(SnackBar(
-                                            content: Text(
-                                                (await result as Child).name)));
-                                    }
-                                  })
+                                  ScaffoldMessenger.of(context)
+                                    ..removeCurrentSnackBar()
+                                    ..showSnackBar(SnackBar(
+                                        content: Text(
+                                            (await result as Child).name)));
+                                }
+                              })
                               : Container(),
+                          QrImage(
+                            data: "1234567890",
+                            version: QrVersions.auto,
+                            size: 200.0,
+                          ),
+
                         ],
                       ),
                     ),
@@ -201,7 +209,10 @@ class _ProfileUIState extends State<ProfileUI> {
             ),
           );
         }
-        return Container();
+        return
+          Container
+            (
+          );
       },
     );
   }

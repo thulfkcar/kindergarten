@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
+import '../AssingScreen/AssginScreen.dart';
 import '../general_components/ActionDialog.dart';
 import '../general_components/ActionGroup.dart';
 import '../general_components/ChildActionRow.dart';
@@ -97,13 +100,26 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         ],
       ),
       appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            StringResources.of(context)?.getText("child_actions") ?? "Error",
-            style: TextStyle(color: Colors.black),
-          ),
-          elevation: 0),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          StringResources.of(context)?.getText("child_actions") ?? "Error",
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AssignScreen()));
+              },
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  elevation: MaterialStateProperty.all(0)),
+              child: const Icon(FontAwesomeIcons.link))
+        ],
+      ),
     );
   }
 
@@ -159,9 +175,12 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           direction: Axis.vertical,
         );
       case Status.ERROR:
-        return MyErrorWidget(msg: _viewModel.childActionResponse.message!,onRefresh: (){
-          _viewModel.fetchChildActions();
-        },);
+        return MyErrorWidget(
+          msg: _viewModel.childActionResponse.message!,
+          onRefresh: () {
+            _viewModel.fetchChildActions();
+          },
+        );
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(
           scrollController: _scrollController,
@@ -179,8 +198,6 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
     return Container();
   }
 
-
-
   void postingChildActionResponse() {
     var status = _viewModel.childActionPostResponse.status;
 
@@ -188,37 +205,39 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       case Status.LOADING:
         showAlertDialog(
             messageDialog: ActionDialog(
-              type: DialogType.loading,
-              title: "Adding Child",
-              message: "pleas wait until process complete..",
-              onCompleted: () {},
-            ));
+          type: DialogType.loading,
+          title: "Adding Child",
+          message: "pleas wait until process complete..",
+          onCompleted: () {},
+        ));
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
         showAlertDialog(
             messageDialog: ActionDialog(
-              type: DialogType.completed,
-              title: "Competed",
-              message: "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
-              onCompleted: () {
-                _viewModel.setChildActionPostResponse(ApiResponse.non());
-              },
-            ));
+          type: DialogType.completed,
+          title: "Competed",
+          message:
+              "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
+          onCompleted: () {
+            _viewModel.setChildActionPostResponse(ApiResponse.non());
+          },
+        ));
         break;
       case Status.ERROR:
         Navigator.pop(context);
         showAlertDialog(
             messageDialog: ActionDialog(
-              type: DialogType.error,
-              title: "error",
-              message: _viewModel.childActionPostResponse.message.toString(),
-              onCompleted: () {},
-            ));
+          type: DialogType.error,
+          title: "error",
+          message: _viewModel.childActionPostResponse.message.toString(),
+          onCompleted: () {},
+        ));
         break;
       default:
     }
   }
+
   Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
     return showDialog<void>(
       context: context,
@@ -228,5 +247,4 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       },
     );
   }
-
 }

@@ -38,10 +38,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
   final StaffAddingForm _staffAddingForm = StaffAddingForm();
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(staffViewModelProvider);

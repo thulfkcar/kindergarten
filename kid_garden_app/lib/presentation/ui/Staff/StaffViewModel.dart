@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
+import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
 import '../../../domain/Child.dart';
@@ -77,4 +78,6 @@ class StaffViewModel extends ChangeNotifier {
     data?.addAll(value);
     return ApiResponse.completed(data);
   }
+
+  assignChild({required AssignChildForm staffAddingForm}) {}
 }
