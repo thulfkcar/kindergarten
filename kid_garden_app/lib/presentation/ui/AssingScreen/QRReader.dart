@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRReader extends StatefulWidget {
-  const QRReader({Key? key}) : super(key: key);
+  QRReader({Key? key, bool, required this.barcodeResult}) : super(key: key);
+
+  Function(Barcode) barcodeResult;
 
   @override
   State<QRReader> createState() => _QRReaderState();
@@ -31,35 +33,56 @@ class _QRReaderState extends State<QRReader> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+      body: Stack(children: [
+        Column(
+          children: <Widget>[
+            Expanded(
+              flex: 11,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
             ),
+          ],
+        ),
+        Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 300,
+                height: 300,
+                margin: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueAccent, width: 2)),
+              ),
+              Center(
+                child: (result != null)
+                    ? Text(
+                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                    : Text('Scan a code'),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
-            ),
-          )
-        ],
-      ),
+        )
+      ]),
     );
   }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
+    bool scanned = false;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+      result = scanData;
+      if (!scanned) {
+        if (result != null) {
+          setState(() {
+            scanned = true;
+          });
+          widget.barcodeResult(result!);
+        }
+      }
     });
   }
 

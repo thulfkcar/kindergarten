@@ -7,6 +7,7 @@ abstract class BaseApiService {
   Future<dynamic> getResponse(String url);
   Future<dynamic> postResponse(String url,Map<String, dynamic> jsonBody);
   Future<dynamic> multiPartPostResponse(String url,Map<String, String> jsonBody,List<AssetEntity>? assets);
+  Future<dynamic> multiPartPostResponseNoFiles(String url,Map<String, String> jsonBody);
   Future<dynamic> postResponseJsonBody(String url,String jsonBody);
 
 

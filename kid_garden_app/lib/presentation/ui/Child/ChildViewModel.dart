@@ -9,6 +9,8 @@ class ChildViewModel extends ChangeNotifier {
   var childLastPage = false;
   int pageChild = 1;
 
+  String? searchKey;
+
   ChildViewModel() : super() {
     fetchChildren();
   }
@@ -46,7 +48,7 @@ class ChildViewModel extends ChangeNotifier {
 
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
-    _repository.getMyChildList(page: pageChild).then((value) {
+    _repository.getMyChildList(page: pageChild,searchKey:searchKey).then((value) {
       childLastPage = value.item2;
       setChildListResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
@@ -60,7 +62,7 @@ class ChildViewModel extends ChangeNotifier {
       childListResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getMyChildList(page: pageChild).then((value) {
+      _repository.getMyChildList(page: pageChild,searchKey: searchKey).then((value) {
         childLastPage = value.item2;
         setChildListResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
@@ -78,5 +80,10 @@ class ChildViewModel extends ChangeNotifier {
     var data = childListResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);
+  }
+
+  void search(String? value) {
+    this.searchKey=value;
+    fetchChildren();
   }
 }

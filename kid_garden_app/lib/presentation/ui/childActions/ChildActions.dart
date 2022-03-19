@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
+import 'package:kid_garden_app/presentation/ui/childActions/AssignChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
@@ -109,9 +110,10 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         elevation: 0,
         actions: [
           ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AssignScreen()));
+              onPressed: () async {
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AssignScreen(childId:widget.childId)));
+
               },
               style: ButtonStyle(
                   backgroundColor:
@@ -204,47 +206,41 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
     switch (status) {
       case Status.LOADING:
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
-          type: DialogType.loading,
-          title: "Adding Child",
-          message: "pleas wait until process complete..",
-          onCompleted: () {},
-        ));
+              type: DialogType.loading,
+              title: "Adding Child",
+              message: "pleas wait until process complete..",
+              onCompleted: () {},
+            ));
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
-          type: DialogType.completed,
-          title: "Competed",
-          message:
-              "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
-          onCompleted: () {
-            _viewModel.setChildActionPostResponse(ApiResponse.non());
-          },
-        ));
+              type: DialogType.completed,
+              title: "Competed",
+              message:
+                  "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
+              onCompleted: () {
+                _viewModel.setChildActionPostResponse(ApiResponse.non());
+              },
+            ));
         break;
       case Status.ERROR:
         Navigator.pop(context);
         showAlertDialog(
+            context: context,
             messageDialog: ActionDialog(
-          type: DialogType.error,
-          title: "error",
-          message: _viewModel.childActionPostResponse.message.toString(),
-          onCompleted: () {},
-        ));
+              type: DialogType.error,
+              title: "error",
+              message: _viewModel.childActionPostResponse.message.toString(),
+              onCompleted: () {},
+            ));
         break;
       default:
     }
   }
 
-  Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return messageDialog;
-      },
-    );
-  }
 }

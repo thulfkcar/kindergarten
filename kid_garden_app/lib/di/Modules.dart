@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/User.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
+import '../presentation/ui/childActions/AssignChildViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
 
 final childViewModelProvider =
@@ -20,6 +21,8 @@ final HomeViewModelProvider =
 
 final staffViewModelProvider =
     ChangeNotifierProvider.autoDispose<StaffViewModel>((ref) => StaffViewModel());
+final assignChildViewModelProvider =
+    ChangeNotifierProvider.autoDispose.family<AssignChildViewModel,String>((ref,childId) => AssignChildViewModel(childId:childId));
 
 final LoginPageViewModelProvider =
     ChangeNotifierProvider<LoginPageViewModel>((ref) {

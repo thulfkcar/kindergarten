@@ -84,7 +84,6 @@ class ActionRepository {
 
       dynamic response =
           await _apiService.multiPartPostResponse("ChildAction/add",  jsonBody, assets);
-
       var data;
 
       SingleResponse<ChildAction>.fromJson(await response, (json) {

@@ -15,13 +15,14 @@ class User {
   int? tokenExpire;
   int? refreshExpire;
   String? image;
+  String? stringRole;
 
   int? childrenCount;
 
   int? actionsCount;
 
   User(this.id, this.name, this.email, this.role, this.token,
-      this.refreshExpire, this.tokenExpire);
+      this.refreshExpire, this.tokenExpire,this.stringRole);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

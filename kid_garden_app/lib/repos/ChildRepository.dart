@@ -1,3 +1,4 @@
+import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:tuple/tuple.dart';
@@ -15,10 +16,17 @@ import '../data/network/NetworkApiService.dart';
 
 class ChildRepository {
   ChildRepository();
+
   final BaseApiService _apiService = NetworkApiService();
-  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page}) async {
+
+  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page, String? searchKey}) async {
     try {
-      dynamic response = await _apiService.getResponse("Child/getAll/$page");
+      var url="Child/getAll/$page";
+      if(searchKey!=null && searchKey.trim().isNotEmpty) {
+        url+="?childName=$searchKey";
+      }
+      dynamic response = await _apiService.getResponse(url);
+
       bool isLastPage = false;
 
       var childes;
@@ -47,7 +55,9 @@ class ChildRepository {
       rethrow;
     }
   }
-  Future<Tuple2<List<Child>, bool>> getChildrenWithInfo({required int page}) async {
+
+  Future<Tuple2<List<Child>, bool>> getChildrenWithInfo(
+      {required int page}) async {
     try {
       dynamic response = await _apiService
           .getResponse("Child/getLastActions/${page}?actionsCount=4");
@@ -79,7 +89,9 @@ class ChildRepository {
       rethrow;
     }
   }
-  Future<User?> auth({required String userName, required String password}) async {
+
+  Future<User?> auth(
+      {required String userName, required String password}) async {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
           "User/login", "{email: '$userName', password: '$password'}");
@@ -93,6 +105,7 @@ class ChildRepository {
       rethrow;
     }
   }
+
   Future<Child> addChild(ChildForm childForm) async {
     try {
       Map<String, String> jsonBody = Map();
@@ -112,6 +125,20 @@ class ChildRepository {
         return child;
       });
       return await child;
+    } catch (e) {
+      if (e is ErrorResponse) {
+        throw e.errorMsg.toString();
+      }
+      rethrow;
+    }
+  }
+
+  Future<bool> assignChild(AssignChildForm assignChildForm) async {
+    try {
+      dynamic response = await _apiService.postResponseJsonBody(
+          "Child/assign", "{childId: '${assignChildForm.childID!}', userId: '${assignChildForm.staffId!}'}");
+      var isAssign = ErrorResponse.fromJson(await response);
+      return isAssign.status!;
     } catch (e) {
       if (e is ErrorResponse) {
         throw e.errorMsg.toString();

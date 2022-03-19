@@ -102,17 +102,41 @@ class NetworkApiService extends BaseApiService {
     }
     return responseJson;
   }
+  @override
+  Future multiPartPostResponseNoFiles(String url, Map<String, String> jsonBody) async {
+    dynamic responseJson;
+    try {
+      var provide = ProviderContainer().read(LoginPageViewModelProvider);
+      await provide.getUserChanges();
+      var user = provide.currentUser;
+      if (user != null) {
+        var headers = {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Bearer ${user.token}"
+        };
+        var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+        request.fields.addAll(jsonBody );
+        request.headers.addAll(headers);
+        http.StreamedResponse response = await request.send();
 
+        responseJson = returnResponse(await http.Response.fromStream(response));
+      }
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
   @override
   Future postResponseJsonBody(String url, String JsonBody) async {
     dynamic responseJson;
 
     try {
-      var user =
-          ProviderContainer().read(LoginPageViewModelProvider).currentUser;
+      var provide = ProviderContainer().read(LoginPageViewModelProvider);
+      await provide.getUserChanges();
+      var user = provide.currentUser;
 
       if (user != null) {
-        jsonHeaders.addAll({'Authorization': user.token});
+        jsonHeaders.addAll({'Authorization':"Bearer ${user.token}"});
       }
 
       final response = await http.post(Uri.parse(baseUrl + url),

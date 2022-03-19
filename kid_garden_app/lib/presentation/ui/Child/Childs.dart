@@ -9,10 +9,6 @@ import '../../../domain/Child.dart';
 import '../general_components/ChildRow.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/loading.dart';
-
-
-
-
 class ChildrenExplorer extends ConsumerStatefulWidget {
   const ChildrenExplorer({
     Key? key,
@@ -25,6 +21,7 @@ class ChildrenExplorer extends ConsumerStatefulWidget {
 class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   late ScrollController _scrollController;
   late ChildViewModel _viewModel;
+  TextEditingController editingController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -34,35 +31,59 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   @override
   Widget build(BuildContext context) {
     _viewModel=ref.watch(childViewModelProvider);
+
+
+    return Column(children: [head(),Expanded(child:body())],);
+  }
+
+  Widget head(){
+    return   Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: (value) {
+          _viewModel.search(value);
+        },
+        controller: editingController,
+        decoration: const InputDecoration(
+            labelText: "Search",
+            hintText: "Search",
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+      ),
+    );
+  }
+  Widget body() {
     var status=_viewModel.childListResponse.status;
+
     switch (status){
       case Status.LOADING:
-       return LoadingWidget();
+        return LoadingWidget();
 
       case Status.COMPLETED:
         return CustomListView(scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
             loadNext: false, itemBuilder: (BuildContext context,Child item){
-          return childRow(context: context, child: item);
-        }, direction: Axis.vertical,);
+              return childRow(context: context, child: item);
+            }, direction: Axis.vertical);
       case Status.ERROR:
-       return MyErrorWidget(msg:_viewModel.childListResponse.message ?? "Error");
+        return MyErrorWidget(msg:_viewModel.childListResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context,Child item){
-          return childRow(context: context, child: item);
-        }, direction: Axis.vertical,);
+              return childRow(context: context, child: item);
+            }, direction: Axis.vertical);
 
       case Status.NON:
         return Container();
       default:
+
     }
     return Container();
   }
-
   void getNext() async {
     var state = _viewModel.childListResponse.status;
     if (_scrollController.position.maxScrollExtent ==
@@ -72,4 +93,6 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
       }
     }
   }
+
+
 }
