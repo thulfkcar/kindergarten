@@ -34,7 +34,7 @@ class ActionRepository {
         throw "no Data Available";
       }
     } catch (e) {
-      rethrow;
+       rethrow;
     }
   }
 

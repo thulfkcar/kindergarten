@@ -11,7 +11,7 @@ class User {
   String? name;
   String? email;
   Role role;
-  String token;
+  String? token;
   int? tokenExpire;
   int? refreshExpire;
   String? image;
