@@ -5,6 +5,8 @@ import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginByPhone.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPage.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
           screen = ChildActions();
           break;
         case Login_Page:
-          screen = LoginPage();
+          screen = KindergartenScreen();
           break;
         case StaffUI_Route:
           screen = StaffUI();

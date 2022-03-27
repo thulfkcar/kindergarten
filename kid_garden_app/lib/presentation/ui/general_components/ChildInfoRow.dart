@@ -16,8 +16,9 @@ class ChildInfoRow extends StatelessWidget {
         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black12, width: 0.5),
-            color: Colors.white70,
-            borderRadius: BorderRadius.circular(30)),
+            // color: Colors.white70,
+             color: Colors.amber,
+            borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
             childRow(
@@ -37,7 +38,7 @@ class ChildInfoRow extends StatelessWidget {
   Widget childPrefActivity({required ChildAction childAction}) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white70, borderRadius: BorderRadius.circular(30)),
+          color: Colors.white70, borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
       padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
       child: Row(

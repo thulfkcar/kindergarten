@@ -25,7 +25,9 @@ class ChildViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
-
+  ChildPostingViewModel() {
+    //tst();
+  }
   ApiResponse<Child> addingChildResponse = ApiResponse.non();
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
@@ -45,9 +47,7 @@ class ChildViewModel extends ChangeNotifier {
             setAddingChildResponse(ApiResponse.error(error.toString())));
   }
 
-  ChildPostingViewModel() {
-    //tst();
-  }
+
 
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());

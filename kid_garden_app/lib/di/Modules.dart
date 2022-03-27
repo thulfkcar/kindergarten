@@ -7,22 +7,27 @@ import '../presentation/ui/Home/HomeViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/AssignChildViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
+import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
 
 final childViewModelProvider =
     ChangeNotifierProvider<ChildViewModel>((ref) => ChildViewModel());
 
-final ChildActionViewModelProvider =
-    ChangeNotifierProvider.autoDispose.family<ChildActionViewModel,String>(
-        (ref,childId) => ChildActionViewModel(childId: childId));
-
+final ChildActionViewModelProvider = ChangeNotifierProvider.autoDispose
+    .family<ChildActionViewModel, String>(
+        (ref, childId) => ChildActionViewModel(childId: childId));
 
 final HomeViewModelProvider =
     ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
+final kindergartenViewModelProvider =
+    ChangeNotifierProvider<KindergartenViewModel>(
+        (ref) => KindergartenViewModel());
 
 final staffViewModelProvider =
-    ChangeNotifierProvider.autoDispose<StaffViewModel>((ref) => StaffViewModel());
-final assignChildViewModelProvider =
-    ChangeNotifierProvider.autoDispose.family<AssignChildViewModel,String>((ref,childId) => AssignChildViewModel(childId:childId));
+    ChangeNotifierProvider.autoDispose<StaffViewModel>(
+        (ref) => StaffViewModel());
+final assignChildViewModelProvider = ChangeNotifierProvider.autoDispose
+    .family<AssignChildViewModel, String>(
+        (ref, childId) => AssignChildViewModel(childId: childId));
 
 final LoginPageViewModelProvider =
     ChangeNotifierProvider<LoginPageViewModel>((ref) {

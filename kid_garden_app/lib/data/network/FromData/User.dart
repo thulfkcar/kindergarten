@@ -12,7 +12,13 @@ class EditUserForm {
 class AddUserForm {
   String userName;
   String password;
+
   String role;
 
   AddUserForm({required this.userName,required this.password, required this.role});
+}
+class LoginForm{
+  String? phoneNumber;
+
+
 }

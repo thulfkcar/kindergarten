@@ -2,7 +2,7 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 abstract class BaseApiService {
 
-  final String baseUrl = "http://5.182.33.67/api/";
+  final String baseUrl = domain+"api/";
 
   Future<dynamic> getResponse(String url);
   Future<dynamic> postResponse(String url,Map<String, dynamic> jsonBody);

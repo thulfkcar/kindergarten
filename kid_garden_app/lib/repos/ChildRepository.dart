@@ -1,5 +1,6 @@
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:kid_garden_app/data/network/FromData/User.dart';
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -104,6 +105,22 @@ class ChildRepository {
     }
   }
 
+
+  Future<User?> authByPhone(
+      {required LoginForm loginForm}) async {
+    try {
+      dynamic response = await _apiService.postResponseJsonBody(
+          "User/loginByPhone", "{phone: '${loginForm.phoneNumber}'}");
+      var user;
+      SingleResponse<User>.fromJson(await response, (json) {
+        user = User.fromJson(json as Map<String, dynamic>);
+        return user;
+      });
+      return await user;
+    } catch (e) {
+      rethrow;
+    }
+  }
   Future<Child> addChild(ChildForm childForm) async {
     try {
       Map<String, String> jsonBody = Map();
@@ -144,4 +161,5 @@ class ChildRepository {
       rethrow;
     }
   }
+
 }

@@ -28,34 +28,41 @@ class LoginPageViewModel extends ChangeNotifier {
         Map<String, dynamic> userMap = jsonDecode(userJson);
         currentUser = User.fromJson(userMap);
         notifyListeners();
-      }}
-    catch (e) {
-        rethrow;
+      }
+    } catch (e) {
+      rethrow;
     }
   }
-
-
-
 
   Future<void> auth({required LoginFormData loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
     await _childRepo
         .auth(
-        userName: loginRequestData.email,
-        password: loginRequestData.password)
+            userName: loginRequestData.email,
+            password: loginRequestData.password)
         .then((value) async {
       await setUser(value);
       setUserApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       ApiResponse.error(error.toString());
-    }).whenComplete(() =>
-    {
-    });
+    }).whenComplete(() => {});
   }
 
   void logOut() {
     setUser(null);
     currentUser = null;
     notifyListeners();
+  }
+
+  authByPhone({required LoginForm loginRequestData}) async {
+    setUserApiResponse(ApiResponse.loading());
+    await _childRepo
+        .authByPhone(loginForm: loginRequestData)
+        .then((value) async {
+      await setUser(value);
+      setUserApiResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      ApiResponse.error(error.toString());
+    }).whenComplete(() => {});
   }
 }
