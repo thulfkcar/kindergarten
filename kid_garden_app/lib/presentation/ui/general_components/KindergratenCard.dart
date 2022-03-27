@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 
+import '../../../data/network/BaseApiService.dart';
+
 class KindergartenCard extends StatelessWidget {
   Kindergraten kindergraten;
 
@@ -21,7 +23,7 @@ class KindergartenCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
               child:kindergraten.media !=null ? Image.network(
-                kindergraten.media!.url,
+               domain+ kindergraten.media!.url,
                 width: 10,
                 height: 10,
               ):Image.asset("res/images/default_action_group.png",width: 70,

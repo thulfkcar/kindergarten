@@ -43,7 +43,9 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
           bottomSheet: ElevatedButton(
         child: Text('Show Modal Bottom Sheet'),
         onPressed: () async {
-         await showLoginDialog(longinDialog: LoginDialog(),context: context);
+         await showLoginDialog(longinDialog: LoginDialog(loggedIn: (bool isLoggedIn) {
+
+         },),context: context);
         },
       ),
       body: Column(

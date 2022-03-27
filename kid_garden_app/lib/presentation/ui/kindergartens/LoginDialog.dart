@@ -4,8 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginByPhone.dart';
 
+import '../../main.dart';
+
 class LoginDialog extends StatefulWidget {
-  const LoginDialog({Key? key}) : super(key: key);
+  LoginDialog({Key? key, required this.loggedIn}) : super(key: key);
+  Function(bool isLoggedIn) loggedIn;
 
   @override
   State<LoginDialog> createState() => _LoginDialogState();
@@ -16,10 +19,20 @@ class _LoginDialogState extends State<LoginDialog> {
   Widget build(BuildContext context) {
     return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child:  AlertDialog(
-          content: LoginByPhoneNumber(),
+        child: AlertDialog(
+          content: LoginByPhoneNumber(
+            loggedIn: (bool value) {
+              widget.loggedIn(value);
+              if (value) {
+
+                  Future.delayed(Duration.zero, () async {
+                    Navigator.pushReplacementNamed(context, HomeScreenRoute);
+                  });
+              }
+            },
+          ),
           actions: [
-                TextButton(
+            TextButton(
                 onPressed: () {
                   setState(() {
                     Navigator.pop(context);
