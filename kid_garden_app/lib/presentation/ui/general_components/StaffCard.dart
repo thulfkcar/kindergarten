@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/network/BaseApiService.dart';
-import '../../../domain/User.dart';
+import '../../../domain/UserModel.dart';
 
 class StaffCard extends StatelessWidget {
-  User user;
+  UserModel user;
   double roundBy = 30;
   bool boarder;
   Function onClicked;

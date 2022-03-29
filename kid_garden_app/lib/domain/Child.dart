@@ -1,5 +1,5 @@
 import 'ChildAction.dart';
-import 'User.dart';
+import 'UserModel.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Child.g.dart';
@@ -13,7 +13,7 @@ class Child {
   Gender? gender;
   int? age;
   List<ChildAction>? childActions;
-  User? user;
+  UserModel? user;
   String? mediaId;
   Child(
       {required this.name,

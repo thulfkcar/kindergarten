@@ -8,7 +8,7 @@ import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/User.dart';
+import '../../../domain/UserModel.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';
 import '../general_components/loading.dart';
@@ -74,7 +74,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
       case Status.COMPLETED:
         return CustomListView(scrollController: _scrollController,
           items: _viewModel.childListResponse.data!,
-          loadNext: false, itemBuilder: (BuildContext context,User item){
+          loadNext: false, itemBuilder: (BuildContext context,UserModel item){
             return StaffCard( user: item, boarder: true, onClicked: (){}, roundBy: 30,);
           }, direction: Axis.vertical,);
       case Status.ERROR:
@@ -84,7 +84,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
         return CustomListView(scrollController: _scrollController,
           items: _viewModel.childListResponse.data!,
           loadNext: true,
-          itemBuilder: (BuildContext context,User item){
+          itemBuilder: (BuildContext context,UserModel item){
             return StaffCard( user: item, boarder: true, onClicked: (){}, roundBy: 30,);
           }, direction: Axis.vertical,);
 

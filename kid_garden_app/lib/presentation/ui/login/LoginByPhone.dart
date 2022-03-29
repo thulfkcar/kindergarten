@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
@@ -5,7 +6,7 @@ import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/User.dart';
+import '../../../domain/UserModel.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
 
@@ -22,7 +23,7 @@ class LoginByPhoneNumber extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   bool isCompleted = false;
-  User? user;
+  UserModel? user;
   LoginForm form = LoginForm();
   LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();
@@ -107,10 +108,46 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   }
 
   Future _sendToServer() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
     if (_key.currentState!.validate()) {
+
+        await auth.verifyPhoneNumber(
+          phoneNumber: '+9647803497103',
+          timeout: const Duration(seconds: 60),
+          autoRetrievedSmsCodeForTesting:"123456",
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await auth.signInWithCredential(credential);
+            print('credential: $credential');
+
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            if (e.code == 'invalid-phone-number') {
+              print('The provided phone number is not valid.');
+              throw e;
+            }
+          },
+          codeSent: (String verificationId, int? resendToken) async {
+            // Update the UI - wait for the user to enter the SMS code
+            print('verificationId: $verificationId');
+
+            String smsCode = 'xxxx';
+
+            // Create a PhoneAuthCredential with the code
+            PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                verificationId: verificationId, smsCode: smsCode);
+
+            // Sign the user in (or link) with the credential
+            await auth.signInWithCredential(credential);
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        );
+
       await viewModel.authByPhone(loginRequestData: form);
 
       /// No any error in validation
+      ///
+      ///
       _key.currentState!.save();
     } else {
       ///validation error

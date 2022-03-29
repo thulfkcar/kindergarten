@@ -12,8 +12,9 @@ import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../di/Modules.dart';
+import '../firebase_options.dart';
 import 'ui/childActions/ChildActions.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 const HomeScreenRoute = '/Home';
 const ChildrenExplorerRoute = '/ChildrenExplorer';
 const ChildActionsGroupsRoute = '/ChildActionsGroups';
@@ -26,7 +27,7 @@ const StaffUI_Route = '/Staff';
 // }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: MyApp()));
 }
 

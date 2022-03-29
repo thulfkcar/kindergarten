@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kid_garden_app/domain/User.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/presentation/ui/AssingScreen/QRReader.dart';

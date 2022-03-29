@@ -8,7 +8,7 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../data/network/models/MultiResponse.dart';
 import 'package:kid_garden_app/data/network/models/SingleResponse.dart';
 import 'package:kid_garden_app/domain/Child.dart';
-import 'package:kid_garden_app/domain/User.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
@@ -89,14 +89,14 @@ class ChildRepository {
     }
   }
 
-  Future<User?> auth(
+  Future<UserModel?> auth(
       {required String userName, required String password}) async {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
           "User/login", "{email: '$userName', password: '$password'}");
       var user;
-      SingleResponse<User>.fromJson(await response, (json) {
-        user = User.fromJson(json as Map<String, dynamic>);
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
         return user;
       });
       return await user;
@@ -106,14 +106,14 @@ class ChildRepository {
   }
 
 
-  Future<User?> authByPhone(
+  Future<UserModel?> authByPhone(
       {required LoginForm loginForm}) async {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
           "User/loginByPhone", "{phone: '${loginForm.phoneNumber}'}");
       var user;
-      SingleResponse<User>.fromJson(await response, (json) {
-        user = User.fromJson(json as Map<String, dynamic>);
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
         return user;
       });
       return await user;

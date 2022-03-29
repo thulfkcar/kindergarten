@@ -3,10 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'Child.dart';
 
-part 'User.g.dart';
+part 'UserModel.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class User {
+class UserModel {
   String? id;
   String? name;
   String? email;
@@ -21,13 +21,13 @@ class User {
 
   int? actionsCount;
 
-  User(this.id, this.name, this.email, this.role, this.token,
+  UserModel(this.id, this.name, this.email, this.role, this.token,
       this.refreshExpire, this.tokenExpire,this.stringRole);
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   @override
   String toString() {

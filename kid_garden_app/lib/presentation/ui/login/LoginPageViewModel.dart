@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/domain/User.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/network/ApiResponse.dart';
@@ -11,14 +11,14 @@ import '../../../di/Modules.dart';
 class LoginPageViewModel extends ChangeNotifier {
   var _childRepo = ChildRepository();
 
-  ApiResponse<User> userApiResponse = ApiResponse.non();
+  ApiResponse<UserModel> userApiResponse = ApiResponse.non();
 
-  void setUserApiResponse(ApiResponse<User> apiResponse) {
+  void setUserApiResponse(ApiResponse<UserModel> apiResponse) {
     userApiResponse = apiResponse;
     notifyListeners();
   }
 
-  User? currentUser = null;
+  UserModel? currentUser = null;
 
   Future<void> getUserChanges() async {
     try {
@@ -26,7 +26,7 @@ class LoginPageViewModel extends ChangeNotifier {
       var userJson = prefs.getString("User");
       if (userJson != null && userJson != 'null') {
         Map<String, dynamic> userMap = jsonDecode(userJson);
-        currentUser = User.fromJson(userMap);
+        currentUser = UserModel.fromJson(userMap);
         notifyListeners();
       }
     } catch (e) {

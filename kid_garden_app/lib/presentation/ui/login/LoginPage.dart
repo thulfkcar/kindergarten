@@ -6,7 +6,7 @@ import 'package:kid_garden_app/presentation/ui/splash/Splash.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/User.dart';
+import '../../../domain/UserModel.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
 
@@ -23,7 +23,7 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   bool isCompleted = false;
-  User? user;
+  UserModel? user;
   var form =LoginFormData();
   LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();

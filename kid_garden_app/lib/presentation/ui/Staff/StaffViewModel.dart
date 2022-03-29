@@ -6,7 +6,7 @@ import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
 import '../../../domain/Child.dart';
-import '../../../domain/User.dart';
+import '../../../domain/UserModel.dart';
 
 class StaffViewModel extends ChangeNotifier {
   var staffLastPage = false;
@@ -14,9 +14,9 @@ class StaffViewModel extends ChangeNotifier {
 
   final UserRepository _repository = UserRepository();
   ApiResponse addingStaffResponse = ApiResponse.non();
-  ApiResponse<List<User>> childListResponse = ApiResponse.loading();
+  ApiResponse<List<UserModel>> childListResponse = ApiResponse.loading();
 
-  void setStaffListResponse(ApiResponse<List<User>> response) {
+  void setStaffListResponse(ApiResponse<List<UserModel>> response) {
     childListResponse = response;
 
     notifyListeners();
@@ -73,7 +73,7 @@ class StaffViewModel extends ChangeNotifier {
     pageStaff += 1;
   }
 
-  ApiResponse<List<User>> appendNewItems(List<User> value) {
+  ApiResponse<List<UserModel>> appendNewItems(List<UserModel> value) {
     var data = childListResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);

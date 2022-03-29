@@ -1,5 +1,5 @@
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
-import 'package:kid_garden_app/domain/User.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
@@ -13,7 +13,7 @@ import '../domain/Child.dart';
 class UserRepository {
   final BaseApiService _apiService = NetworkApiService();
 
-  Future<User> adduser({required StaffAddingForm staffAddingForm}) async {
+  Future<UserModel> adduser({required StaffAddingForm staffAddingForm}) async {
     try {
       Map<String, String> jsonBody = Map();
       jsonBody.addAll({
@@ -30,8 +30,8 @@ class UserRepository {
           await _apiService.multiPartPostResponse("user/add", jsonBody, assest);
 
       var user;
-      SingleResponse<User>.fromJson(await response, (json) {
-        user = User.fromJson(json as Map<String, dynamic>);
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
         return user;
       });
       return await user;
@@ -46,16 +46,16 @@ class UserRepository {
 
 
 
-  Future<Tuple2<List<User>, bool>> getMyStaffList({required int page}) async {
+  Future<Tuple2<List<UserModel>, bool>> getMyStaffList({required int page}) async {
     try {
       dynamic response = await _apiService.getResponse("User/getAll/$page");
       bool isLastPage = false;
 
       var staffs;
       var mainResponse =
-      MultiResponse<List<User>>.fromJson(await response, (jsonList) {
+      MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
-          staffs = (jsonList as List).map((i) => User.fromJson(i)).toList();
+          staffs = (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
           return staffs;
         } else {
           throw "no Data Available";

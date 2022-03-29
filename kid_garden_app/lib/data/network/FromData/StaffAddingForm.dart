@@ -1,4 +1,4 @@
-import 'package:kid_garden_app/domain/User.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class StaffAddingForm {

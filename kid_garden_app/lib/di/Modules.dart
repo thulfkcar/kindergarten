@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../domain/User.dart';
+import '../domain/UserModel.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/AssignChildViewModel.dart';
@@ -36,7 +36,7 @@ final LoginPageViewModelProvider =
   return provider;
 });
 
-setUser(User? user) async {
+setUser(UserModel? user) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     if (user == null) {
