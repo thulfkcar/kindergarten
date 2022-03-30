@@ -272,13 +272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  flutter_pin_code_fields:
-    dependency: "direct main"
-    description:
-      name: flutter_pin_code_fields
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -555,6 +548,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  pin_code_fields:
+    dependency: "direct main"
+    description:
+      name: pin_code_fields
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "7.3.0"
   platform:
     dependency: transitive
     description:

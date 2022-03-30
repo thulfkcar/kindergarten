@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/main.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/login/PinCodeScreen.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
@@ -110,40 +112,48 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   Future _sendToServer() async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
+
     if (_key.currentState!.validate()) {
 
-        await auth.verifyPhoneNumber(
-          phoneNumber: '+9647803497103',
-          timeout: const Duration(seconds: 60),
-          autoRetrievedSmsCodeForTesting:"123456",
-          verificationCompleted: (PhoneAuthCredential credential) async {
-            await auth.signInWithCredential(credential);
-            print('credential: $credential');
+      showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.loading, title: "sign in", message: "please wait"));
+      await auth.verifyPhoneNumber(
+        phoneNumber: '+964${form.phoneNumber}',
+        timeout: const Duration(seconds: 60),
+        // autoRetrievedSmsCodeForTesting:"123456",
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await signInWithUserCredential(auth, credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == 'invalid-phone-number') {
+            throw e;
+          }
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          // Update the UI - wait for the user to enter the SMS code
 
-          },
-          verificationFailed: (FirebaseAuthException e) {
-            if (e.code == 'invalid-phone-number') {
-              print('The provided phone number is not valid.');
-              throw e;
-            }
-          },
-          codeSent: (String verificationId, int? resendToken) async {
-            // Update the UI - wait for the user to enter the SMS code
-            print('verificationId: $verificationId');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PinCodeVerificationScreen(
+                        onVerify: (pin) async {
+                          String smsCode = pin;
 
-            String smsCode = 'xxxx';
+                          // Create a PhoneAuthCredential with the code
+                          PhoneAuthCredential credential =
+                              PhoneAuthProvider.credential(
+                                  verificationId: verificationId,
+                                  smsCode: smsCode);
 
-            // Create a PhoneAuthCredential with the code
-            PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                verificationId: verificationId, smsCode: smsCode);
+                          // Sign the user in (or link) with the credential
 
-            // Sign the user in (or link) with the credential
-            await auth.signInWithCredential(credential);
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {},
-        );
-
-      await viewModel.authByPhone(loginRequestData: form);
+                          await signInWithUserCredential(auth, credential);
+                        },
+                        onResendCode: () {},
+                        phoneNumber: '+964${form.phoneNumber}',
+                      )));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
 
       /// No any error in validation
       ///
@@ -177,5 +187,23 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
     }
 
     return const CircularProgressIndicator();
+  }
+
+  signInWithUserCredential(
+    FirebaseAuth auth,
+    PhoneAuthCredential credential,
+  ) async {
+    showAlertDialog(
+        context: context,
+        messageDialog: ActionDialog(
+            type: DialogType.loading,
+            title: "Verification",
+            message: "please waite until verification process complete"));
+    await auth.signInWithCredential(credential).then((value) async {
+      await viewModel.authByPhone(loginRequestData: form);
+      Navigator.pop(context);
+    }).onError((error, stackTrace) {
+      Navigator.pop(context);
+    });
   }
 }

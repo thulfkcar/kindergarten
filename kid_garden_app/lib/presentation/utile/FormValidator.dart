@@ -43,7 +43,7 @@ class FormValidator {
 
   String? validatePhone(String? value) {
     String pattern =
-        r'07[3-9][0-9]{8}';
+        r'7[3-9][0-9]{8}';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
       return StringResources.of(context)?.getText("phone_required") ?? "Error";
