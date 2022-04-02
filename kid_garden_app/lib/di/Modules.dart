@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/UserModel.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
@@ -11,6 +12,8 @@ import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
 
 final childViewModelProvider =
     ChangeNotifierProvider<ChildViewModel>((ref) => ChildViewModel());
+final parentViewModelProvider =
+    ChangeNotifierProvider<ParentViewModel>((ref) => ParentViewModel());
 
 final ChildActionViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<ChildActionViewModel, String>(
@@ -25,6 +28,7 @@ final kindergartenViewModelProvider =
 final staffViewModelProvider =
     ChangeNotifierProvider.autoDispose<StaffViewModel>(
         (ref) => StaffViewModel());
+
 final assignChildViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<AssignChildViewModel, String>(
         (ref, childId) => AssignChildViewModel(childId: childId));

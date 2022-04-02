@@ -4,57 +4,68 @@ import 'package:kid_garden_app/repos/ChildRepository.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../domain/Child.dart';
+import '../../../domain/ChildAction.dart';
+import '../../../repos/ActionRepository.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final _repository = ChildRepository();
-  var childActionsLastPage = false;
+  final _repository = ActionRepository();
+  String? selectedActionGroupId;
   int pageChildAction = 1;
 
+  var childActionsLastPage = false;
   HomeViewModel() : super() {
-    fetchChildren();
+    fetchChildActions();
+
   }
 
   ApiResponse<List<Child>> childActivitiesApiResponse = ApiResponse.loading();
-
+  ApiResponse<List<ChildAction>> childActionResponse = ApiResponse.loading();
+  void setChildActionsListResponse(ApiResponse<List<ChildAction>> response) {
+    childActionResponse = response;
+    notifyListeners();
+  }
   void setChildListResponse(ApiResponse<List<Child>> response) {
     childActivitiesApiResponse = response;
     notifyListeners();
   }
 
-  Future<void> fetchChildren() async {
-    setChildListResponse(ApiResponse.loading());
-    _repository.getMyChildList(page:pageChildAction).then((value) {
+  Future<void> fetchChildActions() async {
+    setChildActionsListResponse(ApiResponse.loading());
+    _repository
+        .getChildActions(childId: null, page: pageChildAction)
+        .then((value) {
       childActionsLastPage = value.item2;
-      setChildListResponse(ApiResponse.completed(value.item1));
+      setChildActionsListResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
-      setChildListResponse(ApiResponse.error(error.toString()));
+      setChildActionsListResponse(ApiResponse.error(error.toString()));
     });
   }
-
-
-  Future<void> fetchNextChildrenWithInfo() async {
+  Future<void> fetchNextChildActions() async {
     if (childActionsLastPage == false) {
       incrementPageChildAction();
-      childActivitiesApiResponse.status = Status.LOADING_NEXT_PAGE;
+      childActionResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
       _repository
-          .getMyChildList( page: pageChildAction)
+          .getChildActions(childId: null, page: pageChildAction)
           .then((value) {
         childActionsLastPage = value.item2;
-        setChildListResponse(appendNewItems(value.item1));
+        setChildActionsListResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
-        setChildListResponse(ApiResponse.error(error.toString()));
+        setChildActionsListResponse(ApiResponse.error(error.toString()));
       });
       notifyListeners();
     }
   }
+
   void incrementPageChildAction() {
     pageChildAction += 1;
   }
-  ApiResponse<List<Child>> appendNewItems(List<Child> value) {
-    var data = childActivitiesApiResponse.data;
+
+  ApiResponse<List<ChildAction>> appendNewItems(List<ChildAction> value) {
+    var data = childActionResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);
   }
+
 }

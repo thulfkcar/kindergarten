@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/domain/ChildAction.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 
+import '../general_components/ChildActionRow.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/ChildInfoRow.dart';
 import '../general_components/Error.dart';
@@ -36,46 +38,55 @@ class _HomeXXState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(HomeViewModelProvider);
-    return Scaffold(body:Container() );
+    return Scaffold(body:body() );
   }
 
   Widget body() {
-    switch (viewModel.childActivitiesApiResponse.status) {
-      case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: viewModel.childActivitiesApiResponse.data!,
-          loadNext: true,
-          itemBuilder: (BuildContext content, Child item) {
-            return ChildInfoRow(child: item);
-          }, direction: Axis.vertical,
-        );
+    var status = viewModel.childActionResponse.status;
+    switch (status) {
       case Status.LOADING:
         return LoadingWidget();
-      case Status.ERROR:
-        return MyErrorWidget(msg:
-            viewModel.childActivitiesApiResponse.message ?? "NA");
       case Status.COMPLETED:
         return CustomListView(
           scrollController: _scrollController,
-          items: viewModel.childActivitiesApiResponse.data!,
+          items: viewModel.childActionResponse.data!,
           loadNext: false,
-          itemBuilder: (BuildContext content, Child item) {
-            return ChildInfoRow(child: item);
-          }, direction: Axis.vertical,
+          itemBuilder: (BuildContext context, ChildAction item) {
+            return ChildActionRow(childAction: item);
+          },
+          direction: Axis.vertical,
         );
+      case Status.ERROR:
+        return MyErrorWidget(
+          msg: viewModel.childActionResponse.message!,
+          onRefresh: () {
+            viewModel.fetchChildActions();
+          },
+        );
+      case Status.LOADING_NEXT_PAGE:
+        return CustomListView(
+          scrollController: _scrollController,
+          items: viewModel.childActionResponse.data!,
+          loadNext: true,
+          itemBuilder: (BuildContext context, ChildAction item) {
+            return ChildActionRow(childAction: item);
+          },
+          direction: Axis.vertical,
+        );
+      case Status.NON:
+        break;
       default:
     }
-
     return Container();
   }
+
 
   void getNext() async {
     var state = viewModel.childActivitiesApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
         _scrollController.position.pixels) {
       if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
-        await viewModel.fetchNextChildrenWithInfo();
+        await viewModel.fetchNextChildActions();
       }
     }
   }

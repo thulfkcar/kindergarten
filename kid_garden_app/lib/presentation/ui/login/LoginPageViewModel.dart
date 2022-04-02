@@ -27,7 +27,7 @@ class LoginPageViewModel extends ChangeNotifier {
       if (userJson != null && userJson != 'null') {
         Map<String, dynamic> userMap = jsonDecode(userJson);
         currentUser = UserModel.fromJson(userMap);
-        notifyListeners();
+         notifyListeners();
       }
     } catch (e) {
       rethrow;

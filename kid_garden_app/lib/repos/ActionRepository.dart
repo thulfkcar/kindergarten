@@ -39,7 +39,7 @@ class ActionRepository {
   }
 
   Future<Tuple2<List<ChildAction>, bool>> getChildActions(
-      {required String childId, required int page}) async {
+      {required String? childId, required int page}) async {
     try {
       dynamic response =
           await _apiService.getResponse("ChildAction/getAll/$page?ChildId=$childId");

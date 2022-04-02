@@ -48,7 +48,37 @@ class UserRepository {
 
   Future<Tuple2<List<UserModel>, bool>> getMyStaffList({required int page}) async {
     try {
-      dynamic response = await _apiService.getResponse("User/getAll/$page");
+      dynamic response = await _apiService.getResponse("User/getAll/$page/1");
+      bool isLastPage = false;
+
+      var staffs;
+      var mainResponse =
+      MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          staffs = (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
+          return staffs;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await staffs.isNotEmpty) {
+        return Tuple2(await staffs, isLastPage);
+      } else {
+        throw "no Data Available";
+      }
+      // var jsonObject = json.decode(object!) as List;
+      // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }  Future<Tuple2<List<UserModel>, bool>> getMyParentsList({required int page, required String? searchKey}) async {
+    try {
+      dynamic response = await _apiService.getResponse("User/getAll/$page/2");
       bool isLastPage = false;
 
       var staffs;
@@ -77,5 +107,6 @@ class UserRepository {
       rethrow;
     }
   }
+
 
 }

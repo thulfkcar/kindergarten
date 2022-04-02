@@ -6,8 +6,7 @@ import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginByPhone.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginPage.dart';
+import 'package:kid_garden_app/presentation/ui/parentsScreen/parentsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
@@ -92,7 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
   static final List<Widget> _widgetOptions = <Widget>[
     Home(),
     ChildrenExplorer(),
-    ProfileUI()
+    ParentsScreen(),
+    StaffUI(),
+    ProfileUI(),
   ];
 
   void _onItemTapped(int index) {
@@ -116,6 +117,13 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'Children',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Parents',
+          ),  BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Staff',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

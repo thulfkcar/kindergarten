@@ -19,8 +19,8 @@ class ChildrenExplorer extends ConsumerStatefulWidget {
 }
 
 class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
-  late ScrollController _scrollController;
-  late ChildViewModel _viewModel;
+    late ScrollController _scrollController;
+    late ChildViewModel _viewModel;
   TextEditingController editingController = TextEditingController();
 
   @override
