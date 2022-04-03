@@ -40,7 +40,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
   AutovalidateMode _validate = AutovalidateMode.disabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context1) {
     _viewModel = ref.watch(staffViewModelProvider);
     Future.delayed(Duration.zero, () async {
       postingResponse();
@@ -139,41 +139,41 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             _staffAddingForm.name = value!;
                           },
                         ),
-                        Padding(padding: EdgeInsets.all(8)),
-                        TextFormField(
-                          onChanged: ((text) => _staffAddingForm.email = text),
-                          keyboardType: TextInputType.emailAddress,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: "email@eamil.com",
-                            contentPadding: const EdgeInsets.fromLTRB(
-                                20.0, 15.0, 20.0, 15.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0)),
-                          ),
-                          validator: FormValidator(context).validateEmail,
-                          onSaved: (String? value) {
-                            _staffAddingForm.email = value!;
-                          },
-                        ),
-                        Padding(padding: EdgeInsets.all(8)),
-                        TextFormField(
-                          onChanged: ((text) =>
-                              _staffAddingForm.password = text),
-                          keyboardType: TextInputType.visiblePassword,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            hintText: "123@",
-                            contentPadding: const EdgeInsets.fromLTRB(
-                                20.0, 15.0, 20.0, 15.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0)),
-                          ),
-                          validator: FormValidator(context).validatePassword,
-                          onSaved: (String? value) {
-                            _staffAddingForm.password = value!;
-                          },
-                        ),
+                        // Padding(padding: EdgeInsets.all(8)),
+                        // TextFormField(
+                        //   onChanged: ((text) => _staffAddingForm.email = text),
+                        //   keyboardType: TextInputType.emailAddress,
+                        //   autofocus: false,
+                        //   decoration: InputDecoration(
+                        //     hintText: "email@eamil.com",
+                        //     contentPadding: const EdgeInsets.fromLTRB(
+                        //         20.0, 15.0, 20.0, 15.0),
+                        //     border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.circular(32.0)),
+                        //   ),
+                        //   validator: FormValidator(context).validateEmail,
+                        //   onSaved: (String? value) {
+                        //     _staffAddingForm.email = value!;
+                        //   },
+                        // ),
+                        // Padding(padding: EdgeInsets.all(8)),
+                        // TextFormField(
+                        //   onChanged: ((text) =>
+                        //       _staffAddingForm.password = text),
+                        //   keyboardType: TextInputType.visiblePassword,
+                        //   autofocus: false,
+                        //   decoration: InputDecoration(
+                        //     hintText: "123@",
+                        //     contentPadding: const EdgeInsets.fromLTRB(
+                        //         20.0, 15.0, 20.0, 15.0),
+                        //     border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.circular(32.0)),
+                        //   ),
+                        //   validator: FormValidator(context).validatePassword,
+                        //   onSaved: (String? value) {
+                        //     _staffAddingForm.password = value!;
+                        //   },
+                        // ),
                         Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
                           onChanged: ((text) =>
@@ -192,15 +192,15 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             _staffAddingForm.phoneNumber = value!;
                           },
                         ),
-                        Padding(padding: EdgeInsets.all(8)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            addRadioButton(0, 'Admin'),
-                            addRadioButton(1, 'Staff'),
-                            addRadioButton(2, 'Parent'),
-                          ],
-                        ),
+                        // Padding(padding: EdgeInsets.all(8)),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: <Widget>[
+                        //     addRadioButton(0, 'Admin'),
+                        //     addRadioButton(1, 'Staff'),
+                        //     addRadioButton(2, 'Parent'),
+                        //   ],
+                        // ),
                         Padding(
                             padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
                             child: ElevatedButton(
@@ -280,7 +280,9 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           type: DialogType.loading,
           title: "Adding Child",
           message: "pleas wait until process complete..",
-          onCompleted: () {},
+          onCompleted: () {
+            _viewModel.addingStaffResponse=ApiResponse.non();
+          },
         ));
         break;
       case Status.COMPLETED:
@@ -291,6 +293,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           title: "Competed",
           message: "child ${_viewModel.addingStaffResponse.data?.name}",
           onCompleted: () {
+            _viewModel.addingStaffResponse=ApiResponse.non();
             Navigator.pop(context);
           },
         ));
@@ -302,7 +305,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           type: DialogType.error,
           title: "error",
           message: _viewModel.addingStaffResponse.message.toString(),
-          onCompleted: () {},
+          onCompleted: () {
+            _viewModel.addingStaffResponse=ApiResponse.non();
+
+          },
         ));
         break;
       default:

@@ -17,11 +17,11 @@ class FormValidator {
     // String patttern = r'(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$)';
     RegExp regExp =  RegExp(patttern);
     if (value!.isEmpty) {
-      return StringResources.of(context)?.getText("password_required") ?? "Error";
+      return "password is required";
     } else if (value.length < 3) {
-      return StringResources.of(context)?.getText("password_min") ?? "Error";
+      return "password mus be ar least 3 character";
     } else if (!regExp.hasMatch(value)) {
-      return StringResources.of(context)?.getText("password_form") ?? "Error";
+      return "invalid format ";
     }
     return null;
   }
@@ -31,9 +31,9 @@ class FormValidator {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
-      return StringResources.of(context)?.getText("email_required") ?? "Error";
+      return "email is required";
     } else if (!regExp.hasMatch(value)) {
-      return StringResources.of(context)?.getText("email_form") ?? "Error";
+      return "email format is invalid";
     } else {
       return null;
     }
@@ -46,9 +46,9 @@ class FormValidator {
         r'7[3-9][0-9]{8}';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
-      return StringResources.of(context)?.getText("phone_required") ?? "Error";
+      return "phone number is required";
     } else if (!regExp.hasMatch(value)) {
-      return StringResources.of(context)?.getText("phone_form") ?? "Error";
+      return "invalid phone number";
     } else {
       return null;
     }
@@ -58,7 +58,7 @@ class FormValidator {
         r'/^$|\s+/';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
-      return StringResources.of(context)?.getText("txt_required") ?? "Error";
+      return "filed required.!!";
     }  else {
       return null;
     }

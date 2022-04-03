@@ -22,6 +22,11 @@ class StaffViewModel extends ChangeNotifier {
     notifyListeners();
   }
   void setAddingStaffResponseApi(ApiResponse response) {
+
+    if(response.data!=null) {
+
+      setStaffListResponse(appendNewItems([response.data!]));
+    }
     addingStaffResponse = response;
     notifyListeners();
   }
@@ -34,8 +39,9 @@ class StaffViewModel extends ChangeNotifier {
   Future<void> addStaff({required StaffAddingForm staffAddingForm}) async {
     setAddingStaffResponseApi(ApiResponse.loading());
     _repository
-        .adduser(staffAddingForm: staffAddingForm)
+        .addStaff(staffAddingForm: staffAddingForm)
         .then((value) {
+      childListResponse.data ??= [];
           setAddingStaffResponseApi(ApiResponse.completed(value));
     })
         .onError((error, stackTrace) {setAddingStaffResponseApi(ApiResponse.error(error.toString()));});

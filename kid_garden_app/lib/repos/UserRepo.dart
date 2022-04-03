@@ -13,14 +13,15 @@ import '../domain/Child.dart';
 class UserRepository {
   final BaseApiService _apiService = NetworkApiService();
 
-  Future<UserModel> adduser({required StaffAddingForm staffAddingForm}) async {
+  Future<UserModel> addStaff({required StaffAddingForm staffAddingForm}) async {
     try {
       Map<String, String> jsonBody = Map();
       jsonBody.addAll({
         "Name": staffAddingForm.name.toString(),
         "Password": staffAddingForm.password.toString(),
         "Email": staffAddingForm.email.toString(),
-        "Role": 'staff',
+        "Role": '1',
+        "Phone": staffAddingForm.phoneNumber!
       });
       List<AssetEntity>? assest;
       if (staffAddingForm.image != null) {

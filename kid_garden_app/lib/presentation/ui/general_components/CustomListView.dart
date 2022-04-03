@@ -6,30 +6,41 @@ class CustomListView<T> extends StatelessWidget {
   List<T> items = [];
   ScrollController scrollController;
   bool loadNext = false;
-
+  Widget? header;
   final ItemWidgetBuilder<T> itemBuilder;
 
-  Axis direction=Axis.vertical;
+  Axis direction = Axis.vertical;
 
-  CustomListView({
-    Key? key,
-    required this.scrollController,
-    required this.items,
-    required this.loadNext,
-    required this.itemBuilder,
-    required this.direction
-  }) : super(key: key);
+  CustomListView(
+      {Key? key,
+      required this.scrollController,
+      required this.items,
+      required this.loadNext,
+      required this.itemBuilder,
+      required this.direction,
+        this.header})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(
         child: ListView.builder(
-          controller: scrollController,
-           itemCount: items.length,
-          scrollDirection: direction,
 
+          controller: scrollController,
+          itemCount: items == null ? 1 : items.length + 1,
+
+          // itemCount: items.length,
+          scrollDirection: direction,
           itemBuilder: (BuildContext context, int index) {
+            if (index == 0  ) {
+              // return the header
+              if(header!=null) {
+                return header!;
+              }
+              return Container();
+            }
+            index -= 1;
             return itemBuilder(context, items[index]);
 
             // return InkWell(child: ChildInfoRow(child: items[index] as dynamic));
