@@ -12,10 +12,10 @@ import '../../../domain/ChildAction.dart';
 import '../AssingScreen/AssginScreen.dart';
 import '../general_components/ActionDialog.dart';
 import '../general_components/ActionGroup.dart';
-import '../general_components/ChildActionRow.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';
 import '../general_components/loading.dart';
+import '../general_components/units/cards.dart';
 import 'AddChildActionDialog.dart';
 
 class ChildActions extends ConsumerStatefulWidget {
@@ -172,8 +172,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           items: _viewModel.childActionResponse.data!,
           loadNext: false,
           itemBuilder: (BuildContext context, ChildAction item) {
-            return ChildActionRow(childAction: item);
-          },
+            return action4ImgCard(ScrollController(),item);          },
           direction: Axis.vertical,
         );
       case Status.ERROR:
@@ -189,8 +188,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           items: _viewModel.childActionResponse.data!,
           loadNext: true,
           itemBuilder: (BuildContext context, ChildAction item) {
-            return ChildActionRow(childAction: item);
-          },
+            return action4ImgCard(ScrollController(),item);          },
           direction: Axis.vertical,
         );
       case Status.NON:

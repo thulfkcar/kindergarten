@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
+import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
@@ -126,9 +127,14 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                         TextFormField(
                           onChanged: ((text) => _staffAddingForm.name = text),
                           keyboardType: TextInputType.name,
-                          autofocus: false,
+                          autofocus: true,
+                          cursorColor: ColorStyle.female1,
+
                           decoration: InputDecoration(
-                            hintText: "ahmed adnan",
+                            hintText: "Enter Staff Name",
+                            focusColor: ColorStyle.male1,
+                            fillColor: ColorStyle.male1,
+                            hoverColor: ColorStyle.male1,
                             contentPadding: const EdgeInsets.fromLTRB(
                                 20.0, 15.0, 20.0, 15.0),
                             border: OutlineInputBorder(
@@ -180,8 +186,12 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                               _staffAddingForm.phoneNumber = text),
                           keyboardType: TextInputType.phone,
                           autofocus: false,
+                          cursorColor: ColorStyle.female1,
                           decoration: InputDecoration(
-                            hintText: "07803497103",
+                            hintText: "Enter Password",
+                            focusColor: ColorStyle.male1,
+                            fillColor: ColorStyle.male1,
+                            hoverColor: ColorStyle.male1,
                             contentPadding: const EdgeInsets.fromLTRB(
                                 20.0, 15.0, 20.0, 15.0),
                             border: OutlineInputBorder(
@@ -202,7 +212,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                         //   ],
                         // ),
                         Padding(
-                            padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: ElevatedButton(
                               onPressed: () async {
                                 await _sendToServer();
@@ -210,15 +220,18 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                               },
                               style: ButtonStyle(
                                   elevation: MaterialStateProperty.all(0.0),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.transparent),
+                                  backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
                                   shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(18.0),
-                                          side: BorderSide()))),
-                              child: Text("Add"),
+                                              BorderRadius.circular(10.0),
+                                          // side: BorderSide()
+                                    ))),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                child: Text("Add",style: TextStyle(color: ColorStyle.white),),
+                              ),
                             )),
                       ],
                     ),

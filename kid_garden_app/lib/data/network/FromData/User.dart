@@ -22,3 +22,9 @@ class LoginForm{
 
 
 }
+class SignUpForm{
+  String? phoneNumber;
+  String? fullName;
+
+
+}

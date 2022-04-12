@@ -1,5 +1,6 @@
 
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:kid_garden_app/domain/HomeModel.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../data/network/BaseApiService.dart';
@@ -71,6 +72,39 @@ class ActionRepository {
     }
   }
 
+
+  Future<Tuple2<List<ChildAction>, bool>> getAllChildActions(
+      { required int page}) async {
+    try {
+      dynamic response =
+      await _apiService.getResponse("Kindergarten/getAllChildActions/$page");
+
+      bool isLastPage = false;
+      List<ChildAction> childActions = [];
+      var mainResponse =
+      MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          childActions =
+              (jsonList as List).map((i) => ChildAction.fromJson(i)).toList();
+          return childActions;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await childActions.isNotEmpty) {
+        return Tuple2(await childActions, isLastPage);
+      } else {
+        throw "no Data Available";
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
   Future<ChildAction> postChildAction(
       {required ChildAction childAction, List<AssetEntity>? assets}) async {
     try {
@@ -100,4 +134,20 @@ class ActionRepository {
       rethrow;
     }
   }
+
+ Future<HomeModel> getHome() async{
+
+    try {
+      dynamic response = await _apiService.getResponse("Kindergarten/getHome");
+      var data;
+      SingleResponse<HomeModel>.fromJson(await response, (json) {
+        data= HomeModel.fromJson(json as Map<String,dynamic>);
+        return data;
+      });
+      return await data;
+    }
+    catch (e){
+      rethrow;
+    }
+ }
 }

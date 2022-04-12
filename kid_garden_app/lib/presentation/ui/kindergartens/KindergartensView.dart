@@ -5,29 +5,27 @@ import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/kindergartens/requestDialog.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/KindergratenCard.dart';
 import '../general_components/loading.dart';
-import 'KindergartensView.dart';
-import 'LoginDialog.dart';
 
-class KindergartenScreen extends ConsumerStatefulWidget {
-  const KindergartenScreen({
+class KindergartensView extends ConsumerStatefulWidget {
+  const KindergartensView({
     Key? key,
   }) : super(key: key);
 
   @override
-  ConsumerState createState() => _KindergartenScreenState();
+  ConsumerState createState() => _KindergartensViewState();
 }
 
-class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
+class _KindergartensViewState extends ConsumerState<KindergartensView> {
   late KindergartenViewModel _viewModel;
-  late LoginPageViewModel loginViewModel;
   late ScrollController _scrollController;
   TextEditingController editingController = TextEditingController();
 
@@ -40,44 +38,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(kindergartenViewModelProvider);
-    loginViewModel = ref.watch(LoginPageViewModelProvider);
 
-    return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(title: const Text("kindergarten")),
-      bottomSheet: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
-                elevation: MaterialStateProperty.all(0),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginOrSignUpScreen()));
-
-                // await showLoginDialog(
-                //     longinDialog: LoginDialog(
-                //       loggedIn: (bool isLoggedIn) {},
-                //     ),
-                //     context: context);
-              },
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [head(), const Expanded(child: KindergartensView())],
-      ),
-    ));
+    return body();
   }
 
   Widget head() {
@@ -114,6 +76,39 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
               return KindergartenCard(kindergraten: item);
             },
             direction: Axis.vertical);
+        Column(
+          children: [
+            Container(
+              height: 40,
+              color: ColorStyle.female2,
+              width: 40,
+            ),
+            radioChildCard(),
+            kindergartensCard(),
+            floatingActionButtonAdd22(onClicked: () {}),
+            ElevatedButton(
+              onPressed: () async {
+                await showRequestDialog(
+                    context: context, requestDialog: RequestDialog());
+              },
+              style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(0.0),
+                  backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    // side: BorderSide()
+                  ))),
+              child: Text(
+                "Join request",
+                style: TextStyle(color: ColorStyle.white),
+              ),
+            ),
+            Container(
+              height: 300,
+            ),
+          ],
+        );
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.kindergartenApiResponse.message ?? "Error");

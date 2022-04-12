@@ -1,16 +1,20 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
 
 import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart';
+import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
+import 'package:tuple/tuple.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';
+import '../general_components/InfoCard.dart';
 import '../general_components/loading.dart';
+import '../general_components/units/cards.dart';
+import '../general_components/units/floating_action_button.dart';
 import 'addStaff.dart';
 
 class StaffUI extends ConsumerStatefulWidget {
@@ -37,14 +41,19 @@ class _StaffUIState extends ConsumerState<StaffUI> {
     _viewModel = ref.watch(staffViewModelProvider);
 
     return Scaffold(
-      body: body(),
-
-      floatingActionButton: FloatingActionButton(child:const FaIcon(
-        FontAwesomeIcons.plus,
-      ) ,onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> StaffAdding()));
-
-      },),
+      body: Column(
+        children: [
+          InfoCard(
+              homeData: Tuple2("Staff Count", "999"),
+              startColor: Color(0xFF00962A),
+              endColor: Color(0xFFF2A384)),
+          Expanded(child: body()),
+        ],
+      ),
+      floatingActionButton: floatingActionButtonAdd22(onClicked: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => StaffAdding()));
+      }),
     );
   }
 
@@ -60,12 +69,15 @@ class _StaffUIState extends ConsumerState<StaffUI> {
           items: _viewModel.childListResponse.data!,
           loadNext: false,
           itemBuilder: (BuildContext context, UserModel item) {
-            return StaffCard(
-              user: item,
-              boarder: true,
-              onClicked: () {},
-              roundBy: 30,
-            );
+            return staffCard(item, (user) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfile(
+                            userType: item.role,
+                            userId: item.id!,
+                          )));
+            });
           },
           direction: Axis.vertical,
         );
@@ -79,12 +91,15 @@ class _StaffUIState extends ConsumerState<StaffUI> {
           items: _viewModel.childListResponse.data!,
           loadNext: true,
           itemBuilder: (BuildContext context, UserModel item) {
-            return StaffCard(
-              user: item,
-              boarder: true,
-              onClicked: () {},
-              roundBy: 30,
-            );
+            return staffCard(item, (user) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfile(
+                            userType: item.role,
+                            userId: item.id!,
+                          )));
+            });
           },
           direction: Axis.vertical,
         );

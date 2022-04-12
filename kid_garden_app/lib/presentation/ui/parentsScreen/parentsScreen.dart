@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dar
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../general_components/loading.dart';
+import '../general_components/units/floating_action_button.dart';
 
 class ParentsScreen extends ConsumerStatefulWidget {
   const ParentsScreen({
@@ -40,7 +41,12 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
 
         body: Column(
           children: [head(), Expanded(child: body())],
-        ));
+        ),
+
+        floatingActionButton: floatingActionButtonAdd22(onClicked: () {  }),
+    );
+
+
   }
 
   Widget head() {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
@@ -13,21 +14,24 @@ class LoginPageViewModel extends ChangeNotifier {
 
   ApiResponse<UserModel> userApiResponse = ApiResponse.non();
 
-  void setUserApiResponse(ApiResponse<UserModel> apiResponse) {
+  void setUserApiResponse(ApiResponse<UserModel> apiResponse) async {
     userApiResponse = apiResponse;
+    await Future.delayed(Duration(milliseconds: 1)); // use await
+
     notifyListeners();
   }
 
   UserModel? currentUser = null;
 
-  Future<void> getUserChanges() async {
+  Future<UserModel?> getUserChanges() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       var userJson = prefs.getString("User");
       if (userJson != null && userJson != 'null') {
         Map<String, dynamic> userMap = jsonDecode(userJson);
         currentUser = UserModel.fromJson(userMap);
-         notifyListeners();
+        notifyListeners();
+        return currentUser;
       }
     } catch (e) {
       rethrow;
@@ -48,11 +52,26 @@ class LoginPageViewModel extends ChangeNotifier {
     }).whenComplete(() => {});
   }
 
-  void logOut() {
-    setUser(null);
-    currentUser = null;
+  Future<void> logOut() async {
+   await setUser(null);
+   currentUser = null;
     notifyListeners();
   }
+
+  setUser(UserModel? user) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (user == null) {
+        prefs.setString("User", 'null');
+      } else {
+        prefs.setString("User", user.toString());
+        print(prefs.getString("User"));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   authByPhone({required LoginForm loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
@@ -65,4 +84,6 @@ class LoginPageViewModel extends ChangeNotifier {
       ApiResponse.error(error.toString());
     }).whenComplete(() => {});
   }
+
+  SginUp({required SignUpForm form}) {}
 }

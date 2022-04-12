@@ -7,18 +7,18 @@ part of 'UserModel.dart';
 // **************************************************************************
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
-      json['id'] as String?,
-      json['name'] as String?,
-      json['email'] as String?,
-      $enumDecode(_$RoleEnumMap, json['role']),
-      json['token'] as String?,
-      json['refresh_expire'] as int?,
-      json['token_expire'] as int?,
-      json['string_role'] as String?,
-    )
-      ..image = json['image'] as String?
-      ..childrenCount = json['children_count'] as int?
-      ..actionsCount = json['actions_count'] as int?;
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      role: $enumDecode(_$RoleEnumMap, json['role']),
+      token: json['token'] as String?,
+      refreshExpire: json['refreshExpire'] as int?,
+      tokenExpire: json['tokenExpire'] as int?,
+      stringRole: json['stringRole'] as String?,
+      phone: json['phone'] as String?,
+      childrenCount: json['childrenCount'] as int?,
+      actionsCount: json['actionsCount'] as int?,
+    )..image = json['image'] as String?;
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'id': instance.id,
@@ -26,12 +26,13 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'email': instance.email,
       'role': _$RoleEnumMap[instance.role],
       'token': instance.token,
-      'token_expire': instance.tokenExpire,
-      'refresh_expire': instance.refreshExpire,
+      'tokenExpire': instance.tokenExpire,
+      'refreshExpire': instance.refreshExpire,
       'image': instance.image,
-      'string_role': instance.stringRole,
-      'children_count': instance.childrenCount,
-      'actions_count': instance.actionsCount,
+      'stringRole': instance.stringRole,
+      'phone': instance.phone,
+      'childrenCount': instance.childrenCount,
+      'actionsCount': instance.actionsCount,
     };
 
 const _$RoleEnumMap = {

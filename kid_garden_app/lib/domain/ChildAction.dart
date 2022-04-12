@@ -12,6 +12,7 @@ class ChildAction {
   @JsonKey(name: 'actionName')
   String? actionGroupName;
   String value;
+  String? childName;
   String userId;
   String? userName;
   Audience audience;
@@ -21,7 +22,7 @@ class ChildAction {
   List<Media>? medias;
 
   ChildAction(
-      {required this.id,
+      {required this.id, this.childName,
       required this.childId,
       required this.actionGroupId,
       required this.value,

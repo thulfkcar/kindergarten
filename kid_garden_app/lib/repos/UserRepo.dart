@@ -44,25 +44,24 @@ class UserRepository {
     }
   }
 
-
-
-
-  Future<Tuple2<List<UserModel>, bool>> getMyStaffList({required int page}) async {
+  Future<Tuple2<List<UserModel>, bool>> getMyStaffList(
+      {required int page}) async {
     try {
       dynamic response = await _apiService.getResponse("User/getAll/$page/1");
       bool isLastPage = false;
 
       var staffs;
       var mainResponse =
-      MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
+          MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
-          staffs = (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
+          staffs =
+              (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
           return staffs;
         } else {
           throw "no Data Available";
         }
       });
-      var nextPageTotal = (page) * 20;
+      var nextPageTotal = (page)  * 20;
       if (nextPageTotal >= (mainResponse.count)) {
         isLastPage = true;
       }
@@ -77,16 +76,20 @@ class UserRepository {
     } catch (e) {
       rethrow;
     }
-  }  Future<Tuple2<List<UserModel>, bool>> getMyParentsList({required int page, required String? searchKey}) async {
+  }
+
+  Future<Tuple2<List<UserModel>, bool>> getMyParentsList(
+      {required int page, required String? searchKey}) async {
     try {
       dynamic response = await _apiService.getResponse("User/getAll/$page/2");
       bool isLastPage = false;
 
       var staffs;
       var mainResponse =
-      MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
+          MultiResponse<List<UserModel>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
-          staffs = (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
+          staffs =
+              (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
           return staffs;
         } else {
           throw "no Data Available";
@@ -109,5 +112,17 @@ class UserRepository {
     }
   }
 
-
+  Future<UserModel> getUser({required String id}) async {
+    try {
+      var response = await _apiService.getResponse("User/GetUser/$id");
+      var user;
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
+        return user;
+      });
+      return await user;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

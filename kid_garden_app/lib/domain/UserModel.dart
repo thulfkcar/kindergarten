@@ -5,7 +5,7 @@ import 'Child.dart';
 
 part 'UserModel.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.none)
 class UserModel {
   String? id;
   String? name;
@@ -16,13 +16,14 @@ class UserModel {
   int? refreshExpire;
   String? image;
   String? stringRole;
+  String? phone;
 
   int? childrenCount;
 
   int? actionsCount;
 
-  UserModel(this.id, this.name, this.email, this.role, this.token,
-      this.refreshExpire, this.tokenExpire,this.stringRole);
+  UserModel({this.id, this.name, this.email, required this.role, this.token,
+      this.refreshExpire, this.tokenExpire,this.stringRole,this.phone, required this.childrenCount, required this.actionsCount});
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 

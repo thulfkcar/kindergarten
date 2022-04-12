@@ -46,7 +46,7 @@ class NetworkApiService extends BaseApiService {
         final response = await http.post(Uri.parse(baseUrl + url),
             body: JsonBody,
             headers: {
-              'Content-Type': 'multipart/form-data',
+              // 'Content-Type': 'multipart/form-data',
               'Authorization': "Bearer ${user.token}"
             },
             encoding: Encoding.getByName("utf-8"));

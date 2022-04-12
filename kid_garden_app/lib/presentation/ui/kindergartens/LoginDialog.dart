@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginByPhone.dart';
@@ -20,11 +19,11 @@ class _LoginDialogState extends State<LoginDialog> {
     return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius:BorderRadius.all(Radius.circular(20))),
           content: LoginByPhoneNumber(
             loggedIn: (bool value) {
               widget.loggedIn(value);
               if (value) {
-
                   Future.delayed(Duration.zero, () async {
                     Navigator.pushReplacementNamed(context, HomeScreenRoute);
                   });

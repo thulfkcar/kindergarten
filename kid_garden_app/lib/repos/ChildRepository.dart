@@ -18,13 +18,21 @@ class ChildRepository {
 
   final BaseApiService _apiService = NetworkApiService();
 
-  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page, String? searchKey}) async {
+  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page, String? searchKey,String? subUserId}) async {
     try {
+      Map<String, String> jsonBody = Map();
+
       var url="Child/getAll/$page";
-      if(searchKey!=null && searchKey.trim().isNotEmpty) {
-        url+="?childName=$searchKey";
+      if(subUserId!=null){
+        jsonBody.addAll({"UserId":subUserId});
+
       }
-      dynamic response = await _apiService.getResponse(url);
+      if(searchKey!=null && searchKey.trim().isNotEmpty) {
+        jsonBody.addAll({"ChildName":searchKey});
+        // url+="?childName=$searchKey";
+      }
+
+      dynamic response = await _apiService.postResponse(url,jsonBody);
 
       bool isLastPage = false;
 

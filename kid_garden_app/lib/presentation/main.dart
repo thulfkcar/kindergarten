@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
+import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
@@ -14,13 +18,16 @@ import '../di/Modules.dart';
 import '../firebase_options.dart';
 import 'ui/childActions/ChildActions.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 const HomeScreenRoute = '/Home';
 const ChildrenExplorerRoute = '/ChildrenExplorer';
 const ChildActionsGroupsRoute = '/ChildActionsGroups';
 const ChildActionsRoute = '/ChildActions';
 const Login_Page = '/';
 const StaffUI_Route = '/Staff';
+late LoginPageViewModel viewModel;
 
+UserModel? user;
 // void main() {
 //   runApp(ProviderScope(child: MyApp()));
 // }
@@ -30,25 +37,30 @@ Future<void> main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends ConsumerState<MyApp> {
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      return MaterialApp(
-        locale: Locale("en"),
-        // switch between en and ru to see effect
-        localizationsDelegates: const [DemoLocalizationsDelegate()],
-        supportedLocales: const [Locale('en', ''), Locale('ar', '')],
-        onGenerateRoute: _routes(),
-        title: StringResources.of(context)?.getText("text2") ?? "Error",
-        theme: KidThem.lightTheme,
-        darkTheme: KidThem.darkTheme,
-      );
-    });
+    viewModel = ref.watch(LoginPageViewModelProvider);
+    user = viewModel.currentUser;
+    return MaterialApp(
+      locale: Locale("en"),
+      // switch between en and ru to see effect
+      localizationsDelegates: const [DemoLocalizationsDelegate()],
+      supportedLocales: const [Locale('en', ''), Locale('ar', '')],
+      onGenerateRoute: _routes(),
+      title: StringResources.of(context)?.getText("text2") ?? "Error",
+      theme: KidThem.lightTheme,
+      darkTheme: KidThem.darkTheme,
+    );
   }
 
   RouteFactory _routes() {
@@ -57,13 +69,15 @@ class MyApp extends StatelessWidget {
       Widget screen;
       switch (settings.name) {
         case HomeScreenRoute:
-          screen = MyHomePage(title: "KinderGarten");
+          screen = NavigationScreen(title: "KinderGarten");
           break;
         case ChildActionsRoute:
           screen = ChildActions();
           break;
         case Login_Page:
-          screen = KindergartenScreen();
+          screen = viewModel.currentUser == null
+              ? KindergartenScreen()
+              : NavigationScreen(title: "kinderGarten");
           break;
         case StaffUI_Route:
           screen = StaffUI();
@@ -73,110 +87,5 @@ class MyApp extends StatelessWidget {
       }
       return MaterialPageRoute(builder: (BuildContext context) => screen);
     };
-  }
-
-
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-  static final List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    ChildrenExplorer(),
-    ParentsScreen(),
-    StaffUI(),
-    ProfileUI(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget get bottomNavigationBar {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(40),
-        topLeft: Radius.circular(40),
-      ),
-      child: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Children',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Parents',
-          ),  BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Staff',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-      ), //,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.transparent),
-                    elevation: MaterialStateProperty.all(0)),
-                onPressed: () async {
-                  var provide = ProviderContainer().read(LoginPageViewModelProvider);
-                 await provide.getUserChanges();
-                  var user = provide.currentUser;
-                  showAlertDialog(
-                      context: context,
-                      messageDialog: ActionDialog(
-                          type: DialogType.qr,
-                          qr: user!.id,
-                          title: "your QR Identity",
-                          message: "Scan To Make Opration"));
-                },
-                child: const Icon(Icons.qr_code))
-          ],
-          automaticallyImplyLeading: true,
-
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          // Here we take the value from the MyHomePage object that was created by
-          // the app.build method, and use it to set our appbar title.
-          title: Text(
-            widget.title,
-            style: TextStyle(color: KidThem.textTitleColor),
-          ),
-        ),
-        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-        bottomNavigationBar: bottomNavigationBar);
   }
 }

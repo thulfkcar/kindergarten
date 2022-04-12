@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/data/network/BaseApiService.dart';
+import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import '../../../domain/Child.dart';
 import '../childActions/ChildActions.dart';
 
 childRow(
     {required BuildContext context,
     required Child child,
-    double roundBy = 30,
+    double roundBy = 10,
     bool boarder = true}) {
   return Container(
-      margin: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+      margin: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4),
       decoration: BoxDecoration(
-          border:
-              boarder ? Border.all(color: Colors.black12, width: 0.5) : null,
-          color: Colors.white70,
+          color: ColorStyle.text4,
           borderRadius: BorderRadius.circular(roundBy)),
-      width: double.infinity,
-      height: 100,
+      // width: double.infinity,
+      // height: 100,
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -32,7 +31,7 @@ childRow(
           child: Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClipOval(
                 child: SizedBox.fromSize(
@@ -47,10 +46,10 @@ childRow(
               // Image.network(children[index].image),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -62,25 +61,48 @@ childRow(
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                        child: Text(
-                          child.age.toString(),
-                          style: const TextStyle(
-                            fontFamily: 'Lexend Deca',
-                            color: Color(0xFF57636C),
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
+                      Row(
+                        children: [
+                        child.gender==Gender.Female?  Icon(
+                            Icons.female,
+                            // if child is female gender
+                            // Icons.male,
+                            color: ColorStyle.female1,
+                            // color: ColorStyle.male1,
+                            size: 20,
+                          ): Icon(
+                          Icons.male,
+                          // if child is female gender
+                          // Icons.male,
+                          color: ColorStyle.male1,
+                          // color: ColorStyle.male1,
+                          size: 20,
+                        ),
+                          Text(
+                            child.age.toString(),
+                            style: const TextStyle(
+                              fontFamily: 'Lexend Deca',
+                              color: Color(0xFF57636C),
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
+                        ],
+                      ),
+                      Text(
+                      "Taking care by: " + child.staffName.toString(),
+                        style: const TextStyle(
+                          fontFamily: 'Lexend Deca',
+                          color: Color(0xFF57636C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 4),
+              const Center(
                 child: Icon(
                   Icons.chevron_right_rounded,
                   color: Color(0xFF57636C),

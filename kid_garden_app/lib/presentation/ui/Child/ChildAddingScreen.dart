@@ -36,7 +36,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _viewModel = ref.watch(childViewModelProvider);
+    _viewModel = ref.watch(childViewModelProvider(null));
     Future.delayed(Duration.zero, () async {
       postingChildResponse();
     });

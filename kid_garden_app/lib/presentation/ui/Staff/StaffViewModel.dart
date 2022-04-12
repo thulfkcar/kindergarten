@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
@@ -21,31 +22,29 @@ class StaffViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
   void setAddingStaffResponseApi(ApiResponse response) {
-
-    if(response.data!=null) {
-
+    if (response.data != null) {
       setStaffListResponse(appendNewItems([response.data!]));
     }
     addingStaffResponse = response;
     notifyListeners();
   }
 
-
-  StaffViewModel():super(){
+  StaffViewModel() : super() {
     fetchStaff();
   }
 
   Future<void> addStaff({required StaffAddingForm staffAddingForm}) async {
     setAddingStaffResponseApi(ApiResponse.loading());
-    _repository
-        .addStaff(staffAddingForm: staffAddingForm)
-        .then((value) {
+    _repository.addStaff(staffAddingForm: staffAddingForm).then((value) {
       childListResponse.data ??= [];
-          setAddingStaffResponseApi(ApiResponse.completed(value));
-    })
-        .onError((error, stackTrace) {setAddingStaffResponseApi(ApiResponse.error(error.toString()));});
+      setAddingStaffResponseApi(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setAddingStaffResponseApi(ApiResponse.error(error.toString()));
+    });
   }
+
 
 
 

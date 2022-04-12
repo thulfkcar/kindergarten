@@ -15,6 +15,7 @@ class Child {
   List<ChildAction>? childActions;
   UserModel? user;
   String? mediaId;
+  String? staffName;
   Child(
       {required this.name,
       required this.id,
