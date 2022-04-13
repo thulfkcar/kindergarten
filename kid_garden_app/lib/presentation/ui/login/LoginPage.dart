@@ -24,7 +24,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   bool isCompleted = false;
   UserModel? user;
-  var form =LoginFormData();
+  var form = LoginFormData();
   LoginPageViewModel viewModel = LoginPageViewModel();
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
@@ -95,8 +95,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
         const SizedBox(height: 50.0),
         TextFormField(
-          onChanged: ((text)=>form.email=text),
-
+          onChanged: ((text) => form.email = text),
           keyboardType: TextInputType.emailAddress,
           autofocus: false,
           decoration: InputDecoration(
@@ -112,7 +111,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
         const SizedBox(height: 20.0),
         TextFormField(
-          onChanged: ((text)=>form.password=text),
+            onChanged: ((text) => form.password = text),
             autofocus: false,
             obscureText: _obscureText,
             keyboardType: TextInputType.text,
@@ -165,6 +164,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future _sendToServer() async {
     if (_key.currentState!.validate()) {
       await viewModel.auth(loginRequestData: form);
+
       /// No any error in validation
       _key.currentState!.save();
     } else {

@@ -69,7 +69,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
               type: DialogType.loading,
               title: "Assigning Child",
               message: "pleas wait until process complete..",
-              onCompleted: () {},
+              onCompleted: (s) {},
             ));
         break;
       case Status.COMPLETED:
@@ -80,7 +80,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
               type: DialogType.completed,
               title: "Competed",
               message: "assign completed.",
-              onCompleted: () {
+              onCompleted: (s) {
                 _viewModelAssignChild
                     .setAssigningChildResponse(ApiResponse.non());
                 Navigator.pop(context);
@@ -96,7 +96,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
               title: "error",
               message: _viewModelAssignChild.assigningChildResponse.message
                   .toString(),
-              onCompleted: () {
+              onCompleted: (s) {
                 Navigator.pop(context);
               },
             ));

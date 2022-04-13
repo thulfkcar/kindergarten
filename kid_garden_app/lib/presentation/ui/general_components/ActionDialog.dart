@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../AssingScreen/QRReader.dart';
+
 class ActionDialog extends StatefulWidget {
   String message;
   String title;
   DialogType type;
   int? delay;
-  Function? onCompleted;
+  Function(String?)? onCompleted;
   bool dismissed = false;
   String? qr;
 
@@ -29,13 +31,13 @@ class ActionDialog extends StatefulWidget {
 class _ActionDialogState extends State<ActionDialog> {
   @override
   Widget build(BuildContext context) {
-    if (widget.type != DialogType.loading && widget.type != DialogType.qr) {
+    if (widget.type != DialogType.loading && widget.type != DialogType.qr && widget.type!=DialogType.scanner) {
       if (widget.delay != null) {
         Future.delayed(Duration(milliseconds: widget.delay!), () async {
           if (widget.dismissed == false) {
             Navigator.pop(context);
             if (widget.onCompleted != null) {
-              widget.onCompleted!();
+              widget.onCompleted!(null);
             }
           }
         });
@@ -71,7 +73,7 @@ class _ActionDialogState extends State<ActionDialog> {
                         if (widget.type == DialogType.completed ||
                             widget.type == DialogType.warning) {
                           if (widget.onCompleted != null) {
-                            widget.onCompleted!();
+                            widget.onCompleted!(null);
                           }
                         }
                       });
@@ -112,6 +114,15 @@ class _ActionDialogState extends State<ActionDialog> {
               version: QrVersions.auto,
               size: 200.0,
             ));
+      case DialogType.scanner:
+       return Container (height:400,child:  QRReader(
+         barcodeResult: (Barcode) async {
+           if (Barcode.code != null) {
+             widget.onCompleted!(Barcode.code);
+
+           }
+         },
+       ));
     }
   }
 }
@@ -128,4 +139,4 @@ Future<void> showAlertDialog(
   );
 }
 
-enum DialogType { error, loading, warning, completed, qr }
+enum DialogType { error, loading, warning, completed, qr ,scanner}

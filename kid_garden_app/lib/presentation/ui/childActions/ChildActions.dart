@@ -209,7 +209,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               type: DialogType.loading,
               title: "Adding Child",
               message: "pleas wait until process complete..",
-              onCompleted: () {},
+              onCompleted: (s) {},
             ));
         break;
       case Status.COMPLETED:
@@ -221,7 +221,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               title: "Competed",
               message:
                   "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
-              onCompleted: () {
+              onCompleted: (s) {
                 _viewModel.setChildActionPostResponse(ApiResponse.non());
               },
             ));
@@ -234,7 +234,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               type: DialogType.error,
               title: "error",
               message: _viewModel.childActionPostResponse.message.toString(),
-              onCompleted: () {},
+              onCompleted: (s) {},
             ));
         break;
       default:

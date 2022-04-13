@@ -6,9 +6,15 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class PinCodeVerificationScreen extends StatefulWidget {
   final String? phoneNumber;
 
-   Function(String) onVerify;
-   Function() onResendCode;
-  PinCodeVerificationScreen({Key? key, required this.phoneNumber,required this.onVerify, required this.onResendCode}) : super(key: key);
+  Function(String) onVerify;
+  Function() onResendCode;
+
+  PinCodeVerificationScreen(
+      {Key? key,
+      required this.phoneNumber,
+      required this.onVerify,
+      required this.onResendCode})
+      : super(key: key);
 
   @override
   _PinCodeVerificationScreenState createState() =>
@@ -57,22 +63,13 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
       body: GestureDetector(
         onTap: () {},
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           child: ListView(
             children: <Widget>[
               const SizedBox(height: 30),
               SizedBox(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height / 3,
+                height: MediaQuery.of(context).size.height / 3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Image.asset("res/images/logo_kindergarten.png"),
@@ -89,7 +86,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
                 child: RichText(
                   text: TextSpan(
                       text: "Enter the code sent to ",
@@ -101,7 +98,8 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15)),
                       ],
-                      style: const TextStyle(color: Colors.black54, fontSize: 15)),
+                      style:
+                          const TextStyle(color: Colors.black54, fontSize: 15)),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -114,7 +112,6 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 30),
                     child: PinCodeTextField(
-
                       appContext: context,
                       pastedTextStyle: TextStyle(
                         color: Colors.green.shade600,
@@ -198,7 +195,8 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                   TextButton(
                       onPressed: () {
                         widget.onResendCode();
-                        snackBar("pincode will be resented");},
+                        snackBar("pincode will be resented");
+                      },
                       child: const Text(
                         "RESEND",
                         style: TextStyle(
@@ -213,7 +211,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               ),
               Container(
                 margin:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
                 child: ButtonTheme(
                   height: 50,
                   child: TextButton(
@@ -226,7 +224,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                         setState(() => hasError = true);
                       } else {
                         setState(
-                              () {
+                          () {
                             hasError = false;
                             snackBar("verification code send, please wait");
                             widget.onVerify(currentText);
@@ -236,12 +234,12 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     },
                     child: Center(
                         child: Text(
-                          "VERIFY".toUpperCase(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        )),
+                      "VERIFY".toUpperCase(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    )),
                   ),
                 ),
                 decoration: BoxDecoration(
@@ -266,21 +264,21 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                 children: <Widget>[
                   Flexible(
                       child: TextButton(
-                        child: const Text("Clear"),
-                        onPressed: () {
-                          textEditingController.clear();
-                        },
-                      )),
+                    child: const Text("Clear"),
+                    onPressed: () {
+                      textEditingController.clear();
+                    },
+                  )),
                   Flexible(
                       child: TextButton(
-                        child: const Text("Set Text"),
-                        onPressed: () {
-                          setState(() {
-                            //testing ...
-                            textEditingController.text = "123456";
-                          });
-                        },
-                      )),
+                    child: const Text("Set Text"),
+                    onPressed: () {
+                      setState(() {
+                        //testing ...
+                        textEditingController.text = "123456";
+                      });
+                    },
+                  )),
                 ],
               )
             ],

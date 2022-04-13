@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/login/SignUpScreen.dart';
+import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionScreen.dart';
 
 import '../../main.dart';
 import '../general_components/units/texts.dart';
@@ -67,8 +69,14 @@ class LoginOrSignUpScreen extends StatelessWidget {
                                         if (isLoggedIn) {
                                           Future.delayed(Duration.zero,
                                               () async {
-                                            Navigator.pushReplacementNamed(
-                                                context, HomeScreenRoute);
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
+
+                                                // if (user?.role == Role.Parents) {
+                                            //   Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
+                                            // } else {
+                                            //   Navigator.pushReplacementNamed(
+                                            //       context, HomeScreenRoute);
+                                            // }
                                           });
                                         }
                                       },

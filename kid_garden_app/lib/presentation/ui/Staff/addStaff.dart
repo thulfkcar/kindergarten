@@ -293,7 +293,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           type: DialogType.loading,
           title: "Adding Child",
           message: "pleas wait until process complete..",
-          onCompleted: () {
+          onCompleted: (s) {
             _viewModel.addingStaffResponse=ApiResponse.non();
           },
         ));
@@ -305,7 +305,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           type: DialogType.completed,
           title: "Competed",
           message: "child ${_viewModel.addingStaffResponse.data?.name}",
-          onCompleted: () {
+          onCompleted: (s) {
             _viewModel.addingStaffResponse=ApiResponse.non();
             Navigator.pop(context);
           },
@@ -318,7 +318,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           type: DialogType.error,
           title: "error",
           message: _viewModel.addingStaffResponse.message.toString(),
-          onCompleted: () {
+          onCompleted: (s) {
             _viewModel.addingStaffResponse=ApiResponse.non();
 
           },

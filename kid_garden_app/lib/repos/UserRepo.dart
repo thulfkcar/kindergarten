@@ -1,4 +1,5 @@
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
+import 'package:kid_garden_app/domain/Redeem.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -124,5 +125,20 @@ class UserRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+ Future<Redeem> subscribe(String subscription) async {
+    try {
+      var response = await _apiService.getResponse("Subscription/subscribe/$subscription");
+      var result;
+      SingleResponse<Redeem>.fromJson(await response, (json) {
+        result = Redeem.fromJson(json as Map<String, dynamic>);
+        return result;
+      });
+      return await result;
+    } catch (e) {
+      rethrow;
+    }
+
   }
 }

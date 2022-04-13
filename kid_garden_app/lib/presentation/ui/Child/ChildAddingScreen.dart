@@ -177,7 +177,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                                   title: 'Input Validation',
                                   message: result.item2,
                                   delay: 4000,
-                                  onCompleted: () {},
+                                  onCompleted: (s) {},
                                 ));
                               });
                             }
@@ -263,7 +263,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           type: DialogType.loading,
           title: "Adding Child",
           message: "pleas wait until process complete..",
-          onCompleted: () {},
+          onCompleted: (s) {},
         ));
         break;
       case Status.COMPLETED:
@@ -273,7 +273,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           type: DialogType.completed,
           title: "Competed",
           message: "child ${_viewModel.addingChildResponse.data?.name}",
-          onCompleted: () {
+          onCompleted: (s) {
             Navigator.pop(context);
           },
         ));
@@ -285,7 +285,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           type: DialogType.error,
           title: "error",
           message: _viewModel.addingChildResponse.message.toString(),
-          onCompleted: () {},
+          onCompleted: (s) {},
         ));
         break;
       default:

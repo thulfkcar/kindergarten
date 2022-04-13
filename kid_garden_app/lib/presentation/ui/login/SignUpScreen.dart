@@ -107,7 +107,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             onSaved: (value) {
               form.fullName = value!;
             }),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         customTextForm(
             icon: Icon(
               FontAwesomeIcons.phone,
