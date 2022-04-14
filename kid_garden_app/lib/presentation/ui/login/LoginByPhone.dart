@@ -48,53 +48,14 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
     viewModel = ref.watch(LoginPageViewModelProvider);
     user = viewModel.currentUser;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorStyle.male1,
-        elevation: 0,
+    return Container(
+      child: Center(
+        child: Form(
+          key: _key,
+          autovalidateMode: _validate,
+          child: _getFormUI(),
+        ),
       ),
-      body: Stack(children: [
-        Container(
-          height: (MediaQuery.of(context).size.height * 0.5),
-          decoration: BoxDecoration(
-              color: ColorStyle.male1,
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20))),
-        ),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset(
-                "res/images/logo_kindergarten.png",
-                height: (MediaQuery.of(context).size.width * 0.4),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                    left: 40,
-                    right: 40,
-                    top: (MediaQuery.of(context).size.height * 0.1),
-                    bottom: (MediaQuery.of(context).size.height * 0.3)),
-                decoration: BoxDecoration(
-                    color: ColorStyle.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-                child: Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Container(
-                    child: Center(
-                      child: Form(
-                        key: _key,
-                        autovalidateMode: _validate,
-                        child: _getFormUI(),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ]),
     );
   }
 
@@ -217,14 +178,21 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
         break;
       case Status.ERROR:
         {
-           Future.delayed(Duration(milliseconds: 0),(){
-             showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.warning,message: viewModel.userApiResponse.message!,onCompleted: (s){
-               viewModel.setUserApiResponse(ApiResponse.non());
-             }, title: 'Login Failure',delay: 100000,));
-           });
+          Future.delayed(Duration(milliseconds: 0), () {
+            showAlertDialog(
+                context: context,
+                messageDialog: ActionDialog(
+                  type: DialogType.warning,
+                  message: viewModel.userApiResponse.message!,
+                  onCompleted: (s) {
+                    viewModel.setUserApiResponse(ApiResponse.non());
+                  },
+                  title: 'Login Failure',
+                  delay: 100000,
+                ));
+          });
 
           return login;
-
         }
       case Status.NON:
         return login;
