@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
@@ -38,53 +39,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
     user = viewModel.currentUser;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorStyle.male1,
-        elevation: 0,
-      ),
-      body: Stack(children: [
-        Container(
-          height: (MediaQuery.of(context).size.height * 0.5),
-          decoration: BoxDecoration(
-              color: ColorStyle.male1,
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20))),
+    return EntrySharedScreen(body:  Container(
+      child: Center(
+        child: Form(
+          key: _key,
+          autovalidateMode: _validate,
+          child: _getFormUI(),
         ),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset(
-                "res/images/logo_kindergarten.png",
-                height: (MediaQuery.of(context).size.width * 0.4),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                    left: 40,
-                    right: 40,
-                    top: (MediaQuery.of(context).size.height * 0.1),
-                    bottom: (MediaQuery.of(context).size.height * 0.3)),
-                decoration: BoxDecoration(
-                    color: ColorStyle.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-                child: Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Container(
-                    child: Center(
-                      child: Form(
-                        key: _key,
-                        autovalidateMode: _validate,
-                        child: _getFormUI(),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ]),
+      ),),
     );
   }
 

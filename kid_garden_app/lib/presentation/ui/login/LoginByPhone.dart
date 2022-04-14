@@ -34,16 +34,6 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   final LoginForm _loginData = LoginForm();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
     user = viewModel.currentUser;
