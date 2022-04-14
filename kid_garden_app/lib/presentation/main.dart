@@ -9,6 +9,7 @@ import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenParent.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
@@ -27,10 +28,6 @@ const Login_Page = '/';
 const StaffUI_Route = '/Staff';
 late LoginPageViewModel viewModel;
 
-UserModel? user;
-// void main() {
-//   runApp(ProviderScope(child: MyApp()));
-// }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -45,12 +42,10 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
-    user = viewModel.currentUser;
     return MaterialApp(
       locale: Locale("en"),
       // switch between en and ru to see effect
@@ -75,9 +70,14 @@ class _MyAppState extends ConsumerState<MyApp> {
           screen = ChildActions();
           break;
         case Login_Page:
-          screen = viewModel.currentUser == null
-              ? KindergartenScreen()
-              : NavigationScreen(title: "kinderGarten");
+          viewModel.currentUser == null
+              ? screen = KindergartenScreen()
+              : (viewModel.currentUser!.role == Role.admin ||
+                      viewModel.currentUser!.role == Role.superAdmin)
+                  ? screen = NavigationScreen(title: "kinderGarten")
+                  : (viewModel.currentUser!.role == Role.Staff)
+                      ? screen = Container()
+                      : screen = NavigationScreenParent(title: viewModel.currentUser!.name.toString());
           break;
         case StaffUI_Route:
           screen = StaffUI();

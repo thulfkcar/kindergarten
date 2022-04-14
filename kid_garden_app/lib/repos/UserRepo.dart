@@ -129,7 +129,7 @@ class UserRepository {
 
  Future<Redeem> subscribe(String subscription) async {
     try {
-      var response = await _apiService.getResponse("Subscription/subscribe/$subscription");
+      var response = await _apiService.postResponse("Subscription/subscribe/$subscription",Map());
       var result;
       SingleResponse<Redeem>.fromJson(await response, (json) {
         result = Redeem.fromJson(json as Map<String, dynamic>);

@@ -7,6 +7,8 @@ import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionSc
 
 import '../../main.dart';
 import '../general_components/units/texts.dart';
+import '../navigationScreen/NavigationScreenParent.dart';
+import '../navigationScreen/NavigationsScreen.dart';
 import 'LoginByPhone.dart';
 
 class LoginOrSignUpScreen extends StatelessWidget {
@@ -69,9 +71,27 @@ class LoginOrSignUpScreen extends StatelessWidget {
                                         if (isLoggedIn) {
                                           Future.delayed(Duration.zero,
                                               () async {
-                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
+                                           var user=await viewModel.getUserChanges();
+                                            Widget screen;
+                                            (user!.role ==
+                                                        Role.admin ||
+                                                user.role ==
+                                                        Role.superAdmin)
+                                                ? screen =
+                                                    const NavigationScreen(
+                                                        title: "kinderGarten")
+                                                : (user.role ==
+                                                        Role.Staff)
+                                                    ? screen = Container()
+                                                    : screen =
+                                                        const SubscriptionScreen();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        screen));
 
-                                                // if (user?.role == Role.Parents) {
+                                            // if (user?.role == Role.Parents) {
                                             //   Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionScreen()));
                                             // } else {
                                             //   Navigator.pushReplacementNamed(
