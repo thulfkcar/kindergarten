@@ -91,7 +91,7 @@ class NetworkApiService extends BaseApiService {
           }
         }
 
-        request.fields.addAll(jsonBody );
+        request.fields.addAll(jsonBody);
         request.headers.addAll(headers);
         http.StreamedResponse response = await request.send();
 
@@ -102,8 +102,10 @@ class NetworkApiService extends BaseApiService {
     }
     return responseJson;
   }
+
   @override
-  Future multiPartPostResponseNoFiles(String url, Map<String, String> jsonBody) async {
+  Future multiPartPostResponseNoFiles(
+      String url, Map<String, String> jsonBody) async {
     dynamic responseJson;
     try {
       var provide = ProviderContainer().read(LoginPageViewModelProvider);
@@ -115,7 +117,7 @@ class NetworkApiService extends BaseApiService {
           'Authorization': "Bearer ${user.token}"
         };
         var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
-        request.fields.addAll(jsonBody );
+        request.fields.addAll(jsonBody);
         request.headers.addAll(headers);
         http.StreamedResponse response = await request.send();
 
@@ -126,6 +128,7 @@ class NetworkApiService extends BaseApiService {
     }
     return responseJson;
   }
+
   @override
   Future postResponseJsonBody(String url, String JsonBody) async {
     dynamic responseJson;
@@ -136,7 +139,7 @@ class NetworkApiService extends BaseApiService {
       var user = provide.currentUser;
 
       if (user != null) {
-        jsonHeaders.addAll({'Authorization':"Bearer ${user.token}"});
+        jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
       }
 
       final response = await http.post(Uri.parse(baseUrl + url),
@@ -148,9 +151,6 @@ class NetworkApiService extends BaseApiService {
     return responseJson;
   }
 
-
-
-
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
@@ -160,7 +160,8 @@ class NetworkApiService extends BaseApiService {
         throw ErrorResponse.fromJson(jsonDecode(response.body));
       case 401:
       case 403:
-        throw UnauthorisedException(response.body.toString());
+      case 402:
+        throw response.body.toString();
       case 404:
         throw UrlNotFoundException(response.body.toString());
       case 415:

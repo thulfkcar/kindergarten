@@ -67,7 +67,7 @@ class ChildRepository {
       {required int page}) async {
     try {
       dynamic response = await _apiService
-          .getResponse("Child/getLastActions/${page}?actionsCount=4");
+          .getResponse("Child/getLastActions/$page?actionsCount=4");
       bool isLastPage = false;
 
       var childes;
@@ -97,38 +97,10 @@ class ChildRepository {
     }
   }
 
-  Future<UserModel?> auth(
-      {required String userName, required String password}) async {
-    try {
-      dynamic response = await _apiService.postResponseJsonBody(
-          "User/login", "{email: '$userName', password: '$password'}");
-      var user;
-      SingleResponse<UserModel>.fromJson(await response, (json) {
-        user = UserModel.fromJson(json as Map<String, dynamic>);
-        return user;
-      });
-      return await user;
-    } catch (e) {
-      rethrow;
-    }
-  }
 
 
-  Future<UserModel?> authByPhone(
-      {required LoginForm loginForm}) async {
-    try {
-      dynamic response = await _apiService.postResponseJsonBody(
-          "User/loginByPhone", "{phone: '${loginForm.phoneNumber}'}");
-      var user;
-      SingleResponse<UserModel>.fromJson(await response, (json) {
-        user = UserModel.fromJson(json as Map<String, dynamic>);
-        return user;
-      });
-      return await user;
-    } catch (e) {
-      rethrow;
-    }
-  }
+
+
   Future<Child> addChild(ChildForm childForm) async {
     try {
       Map<String, String> jsonBody = Map();

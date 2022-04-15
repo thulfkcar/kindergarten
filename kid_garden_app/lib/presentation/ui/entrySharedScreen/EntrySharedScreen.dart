@@ -24,6 +24,7 @@ class _EntrySharedScreenState extends ConsumerState<EntrySharedScreen> {
         backgroundColor: ColorStyle.male1,
         elevation: 0,
       ),
+      backgroundColor: ColorStyle.text6,
       body: Stack(children: [
         Container(
           height: (MediaQuery.of(context).size.height * 0.5),

@@ -26,7 +26,6 @@ const ChildActionsGroupsRoute = '/ChildActionsGroups';
 const ChildActionsRoute = '/ChildActions';
 const Login_Page = '/';
 const StaffUI_Route = '/Staff';
-late LoginPageViewModel viewModel;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +34,7 @@ Future<void> main() async {
 }
 
 class MyApp extends ConsumerStatefulWidget {
+
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -42,6 +42,8 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  late LoginPageViewModel viewModel;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

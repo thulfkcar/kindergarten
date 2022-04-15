@@ -1,4 +1,5 @@
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
+import 'package:kid_garden_app/data/network/FromData/User.dart';
 import 'package:kid_garden_app/domain/Redeem.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:tuple/tuple.dart';
@@ -62,7 +63,7 @@ class UserRepository {
           throw "no Data Available";
         }
       });
-      var nextPageTotal = (page)  * 20;
+      var nextPageTotal = (page) * 20;
       if (nextPageTotal >= (mainResponse.count)) {
         isLastPage = true;
       }
@@ -127,9 +128,10 @@ class UserRepository {
     }
   }
 
- Future<Redeem> subscribe(String subscription) async {
+  Future<Redeem> subscribe(String subscription) async {
     try {
-      var response = await _apiService.postResponse("Subscription/subscribe/$subscription",Map());
+      var response = await _apiService.postResponse(
+          "Subscription/subscribe/$subscription", Map());
       var result;
       SingleResponse<Redeem>.fromJson(await response, (json) {
         result = Redeem.fromJson(json as Map<String, dynamic>);
@@ -139,6 +141,71 @@ class UserRepository {
     } catch (e) {
       rethrow;
     }
+  }
 
+  Future<String> checkSubscription() async {
+    try {
+      var response =
+          await _apiService.getResponse("Subscription/CheckSubscription");
+      var result;
+      SingleResponse<String>.fromJson(await response, (json) {
+        result = json.toString();
+        return result;
+      });
+      return await result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<UserModel?> auth(
+      {required String userName, required String password}) async {
+    try {
+      dynamic response = await _apiService.postResponseJsonBody(
+          "User/login", "{email: '$userName', password: '$password'}");
+      var user;
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
+        return user;
+      });
+      return await user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<UserModel?> authByPhone(
+      {required LoginForm loginForm}) async {
+    try {
+      dynamic response = await _apiService.postResponseJsonBody(
+          "User/loginByPhone", "{phone: '${loginForm.phoneNumber}'}");
+      var user;
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
+        return user;
+      });
+      return await user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<UserModel> signUp(SignUpForm form) async {
+    try {
+      String jsonBody =
+          '{"phone": "${form.phoneNumber}","name": "${form.fullName}"}';
+      var response =
+          await _apiService.postResponseJsonBody("User/Register", jsonBody);
+
+      var user;
+      SingleResponse<UserModel>.fromJson(await response, (json) {
+        user = UserModel.fromJson(json as Map<String, dynamic>);
+        return user;
+      });
+      return await user;
+
+
+    } catch (e) {
+      rethrow;
+    }
   }
 }

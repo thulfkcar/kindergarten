@@ -16,6 +16,7 @@ class ColorStyle {
   static Color text3 = const Color(0xffB3BEC2);
   static Color text4 = const Color(0xffdfdfdf);
   static Color text5 = const Color(0xffe5e5e5);
+  static Color text6 = const Color(0xfff1f1f1);
   static Color error = const Color(0xffC92929);
   static Color active = const Color(0xff32BE23);
   static Color white = const Color(0xffffffff);

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/presentation/ui/SignUp/SignUpViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 
 import '../../../data/network/ApiResponse.dart';
@@ -15,7 +16,7 @@ import '../../utile/LangUtiles.dart';
 import '../general_components/ActionDialog.dart';
 import '../general_components/units/buttons.dart';
 import '../general_components/units/texts.dart';
-import 'LoginPageViewModel.dart';
+import '../login/LoginPageViewModel.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   SignUpScreen({
@@ -29,16 +30,14 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  UserModel? user;
   SignUpForm form = SignUpForm();
-  late LoginPageViewModel viewModel;
+  late SignUpViewModel viewModel;
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
-    viewModel = ref.watch(LoginPageViewModelProvider);
-    user = viewModel.currentUser;
+    viewModel = ref.watch(signUpViewModelProvider);
     return EntrySharedScreen(body:  Container(
       child: Center(
         child: Form(
@@ -138,12 +137,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       //       );
       //////////////////////////////
 
-      await viewModel.SginUp(form: form);
-
-      /// No any error in validation
-      ///
-      ///
-      ///
+      await viewModel.signUp(form);
 
       _key.currentState!.save();
     } else {
@@ -156,7 +150,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   Widget body() {
     var login = loginButton();
-    switch (viewModel.userApiResponse.status) {
+    switch (viewModel.signUpApiResponse.status) {
       case Status.LOADING:
         {
           return const CircularProgressIndicator();
@@ -164,7 +158,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       case Status.COMPLETED:
         {
           widget.signedUp(true);
-          viewModel.setUserApiResponse(ApiResponse.non());
+          viewModel.setSignUpApiResponse(ApiResponse.non());
         }
         break;
       case Status.ERROR:
@@ -199,7 +193,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             title: "Verification",
             message: "please waite until verification process complete"));
     await auth.signInWithCredential(credential).then((value) async {
-      await viewModel.SginUp(form: form);
+      await viewModel.signUp(form);
       Navigator.pop(context);
     }).onError((error, stackTrace) {
       Navigator.pop(context);

@@ -12,11 +12,10 @@ import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
 
 class LoginPageViewModel extends ChangeNotifier {
-  var _childRepo = ChildRepository();
-  var userRepo=UserRepository();
+  var userRepo = UserRepository();
 
   ApiResponse<UserModel> userApiResponse = ApiResponse.non();
-  ApiResponse<Redeem> userSubScribeApiResponse = ApiResponse.non();
+
 
   void setUserApiResponse(ApiResponse<UserModel> apiResponse) async {
     userApiResponse = apiResponse;
@@ -24,12 +23,8 @@ class LoginPageViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
-  void setSubscribeApiResponse(ApiResponse<Redeem> apiResponse) async {
-    userSubScribeApiResponse = apiResponse;
-    await Future.delayed(Duration(milliseconds: 1)); // use await
 
-    notifyListeners();
-  }
+
 
   UserModel? currentUser = null;
 
@@ -50,10 +45,10 @@ class LoginPageViewModel extends ChangeNotifier {
 
   Future<void> auth({required LoginFormData loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
-    await _childRepo
+    await userRepo
         .auth(
-            userName: loginRequestData.email,
-            password: loginRequestData.password)
+        userName: loginRequestData.email,
+        password: loginRequestData.password)
         .then((value) async {
       await setUser(value);
       setUserApiResponse(ApiResponse.completed(value));
@@ -61,18 +56,7 @@ class LoginPageViewModel extends ChangeNotifier {
       ApiResponse.error(error.toString());
     }).whenComplete(() => {});
   }
-  Future<void> subscribe({required String subscription}) async {
-    setSubscribeApiResponse(ApiResponse.loading());
-    await userRepo
-        .subscribe(subscription)
-        .then((value) async {
 
-      setSubscribeApiResponse(ApiResponse.completed(value));
-    }).onError((error, stackTrace) {
-
-      setSubscribeApiResponse(ApiResponse.error(error.toString()));
-    });
-  }
 
   Future<void> logOut() async {
     await setUser(null);
@@ -96,19 +80,18 @@ class LoginPageViewModel extends ChangeNotifier {
 
   authByPhone({required LoginForm loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
-    await _childRepo
+    await userRepo
         .authByPhone(loginForm: loginRequestData)
         .then((value) async {
       await setUser(value);
       setUserApiResponse(ApiResponse.completed(value));
+
     }).onError((error, stackTrace) {
       setUserApiResponse(ApiResponse.error(error.toString()));
-
-
     });
   }
 
-  SginUp({required SignUpForm form}) {}
+
 
 
 }

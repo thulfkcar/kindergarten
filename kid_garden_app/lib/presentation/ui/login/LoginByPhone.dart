@@ -17,7 +17,6 @@ class LoginByPhoneNumber extends ConsumerStatefulWidget {
   static String tag = 'login-by-phone';
 
   Function(bool isLoggedIn) loggedIn;
-
   LoginByPhoneNumber({Key? key, required this.loggedIn}) : super(key: key);
 
   @override

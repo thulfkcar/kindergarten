@@ -3,10 +3,12 @@ import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
+import '../presentation/ui/SignUp/SignUpViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/AssignChildViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
 import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
+import '../presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
 import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 
 final childViewModelProvider =
@@ -32,6 +34,8 @@ final kindergartenViewModelProvider =
 
 final staffViewModelProvider =
     ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
+final subscriptionViewModelProvider =
+    ChangeNotifierProvider<SubscriptionViewModel>((ref) => SubscriptionViewModel());
 
 final assignChildViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<AssignChildViewModel, String>(
@@ -41,5 +45,13 @@ final LoginPageViewModelProvider =
     ChangeNotifierProvider.autoDispose<LoginPageViewModel>((ref) {
   var provider = LoginPageViewModel();
   provider.getUserChanges();
+  return provider;
+});
+
+
+
+final signUpViewModelProvider =
+    ChangeNotifierProvider.autoDispose<SignUpViewModel>((ref) {
+  var provider = SignUpViewModel();
   return provider;
 });
