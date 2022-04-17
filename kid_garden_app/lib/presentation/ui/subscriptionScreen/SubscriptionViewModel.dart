@@ -6,6 +6,14 @@ import '../../../repos/UserRepo.dart';
 
 class SubscriptionViewModel extends ChangeNotifier {
   var userRepo = UserRepository();
+var check=false;
+
+  SubscriptionViewModel(this.check):super(){
+
+    if(check){
+      checkParentSubscription();
+    }
+  }
 
   ApiResponse<Redeem> userSubScribeApiResponse = ApiResponse.non();
   ApiResponse<String> userSubscriptionStatusResponse = ApiResponse.non();

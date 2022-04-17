@@ -44,6 +44,7 @@ dependencies:
   firebase_auth: ^3.3.11
   geolocator: ^8.2.0
   pin_code_fields: ^7.3.0
+  restart_app: ^1.1.0
 
 
 dev_dependencies:

@@ -33,7 +33,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    viewModel = ref.watch(subscriptionViewModelProvider);
+    viewModel = ref.watch(subscriptionViewModelProvider(false));
     login_viewModel = ref.read(LoginPageViewModelProvider);
     Future.delayed(Duration.zero, () async {
       checkParentSubscription();
@@ -61,24 +61,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                               // widget.loggedIn(value);
                               if (isLoggedIn) {
                                 Future.delayed(Duration.zero, () async {
-                                  var user =
-                                      await login_viewModel.getUserChanges();
-                                  (user!.role == Role.admin ||
-                                          user.role == Role.superAdmin)
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const NavigationScreen(
-                                                      title: "kindergarten")))
-                                      : (user.role == Role.Staff)
-                                          ? Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Container()))
-                                          : await viewModel
-                                              .checkParentSubscription();
+                                   navigateToDest();
                                 });
                               }
                             },
@@ -109,8 +92,9 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                             // widget.loggedIn(value);
                             if (isLoggedIn) {
                               Future.delayed(Duration.zero, () async {
-                                Navigator.pushReplacementNamed(
-                                    context, HomeScreenRoute);
+                                navigateToDest();
+
+
                               });
                             }
                           },
@@ -148,37 +132,27 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
         break;
       case Status.COMPLETED:
         viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
-        //    Navigator.pop(context);
-        //   showAlertDialog(
-        //       context: context,
-        //       messageDialog: ActionDialog(
-        //         type: DialogType.completed,
-        //         title: "Subscription Check",
-        //         message: viewModel.userSubscriptionStatusResponse.data!,
-        //         onCompleted: (s) {
-        //           Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) =>
-        //                       NavigationScreenParent(title: user.name!)));
-        //          viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
-        //
-        //         },
-        //       ));
-
         Navigator.pop(context);
         showAlertDialog(
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.completed,
               title: "Subscription Check",
-              message: "please wait until your Subscription Checked",
+              message: viewModel.userSubscriptionStatusResponse
+                  .message !=
+                  null
+                  ? viewModel
+                  .userSubscriptionStatusResponse.message!
+                  : "corrupted",
               onCompleted: (s) {
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NavigationScreenParent(title: "Parent App",)));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                       NavigationScreenParent(title: 'Parent App')),
+                      (Route<dynamic> route) => false,
+                );
 
               },
             ));
@@ -193,18 +167,18 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
               message: "please wait until your Subscription Checked",
               onCompleted: (s) {
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubscriptionScreen(
-                              message: viewModel.userSubscriptionStatusResponse
-                                          .message !=
-                                      null
-                                  ? viewModel
-                                      .userSubscriptionStatusResponse.message!
-                                  : "corrupted",
-                            )));
-                // viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => SubscriptionScreen(
+                    message: viewModel.userSubscriptionStatusResponse
+                        .message !=
+                        null
+                        ? viewModel
+                        .userSubscriptionStatusResponse.message!
+                        : "corrupted",
+                  )),
+                      (Route<dynamic> route) => false,
+                );
 
               },
             ));
@@ -213,5 +187,27 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
 
       default:
     }
+  }
+
+  void navigateToDest() async {
+    var user =
+        await login_viewModel.getUserChanges();
+    (user!.role == Role.admin ||
+        user.role == Role.superAdmin)
+        ? Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const NavigationScreen(title: 'kindergarten Name')),
+            (Route<dynamic> route) => false,
+          )
+        : (user.role == Role.Staff)
+        ? Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                Container()))
+        : await viewModel
+        .checkParentSubscription();
   }
 }

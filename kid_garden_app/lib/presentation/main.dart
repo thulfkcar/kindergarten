@@ -2,18 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
-import 'package:kid_garden_app/presentation/styles/colors_style.dart';
-import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
-import 'package:kid_garden_app/presentation/ui/Home/HomeUI.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenParent.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationsScreen.dart';
-import 'package:kid_garden_app/presentation/ui/parentsScreen/parentsScreen.dart';
-import 'package:kid_garden_app/presentation/ui/profile/ProfileUI.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:kid_garden_app/presentation/utile/RestartApp.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../di/Modules.dart';
 import '../firebase_options.dart';
@@ -30,7 +25,9 @@ const StaffUI_Route = '/Staff';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: RestartWidget(
+      child:  MyApp()
+  ), ));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -54,7 +51,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       localizationsDelegates: const [DemoLocalizationsDelegate()],
       supportedLocales: const [Locale('en', ''), Locale('ar', '')],
       onGenerateRoute: _routes(),
-      title: StringResources.of(context)?.getText("text2") ?? "Error",
+      // title: StringResources.of(context)?.getText("text2") ?? "Error",
       theme: KidThem.lightTheme,
       darkTheme: KidThem.darkTheme,
     );
@@ -87,7 +84,11 @@ class _MyAppState extends ConsumerState<MyApp> {
         default:
           return null;
       }
+
+
       return MaterialPageRoute(builder: (BuildContext context) => screen);
     };
   }
+
+
 }

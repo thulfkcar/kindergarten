@@ -10,7 +10,6 @@ import '../data/network/NetworkApiService.dart';
 import '../data/network/models/ErrorResponse.dart';
 import '../data/network/models/MultiResponse.dart';
 import '../data/network/models/SingleResponse.dart';
-import '../domain/Child.dart';
 
 class UserRepository {
   final BaseApiService _apiService = NetworkApiService();

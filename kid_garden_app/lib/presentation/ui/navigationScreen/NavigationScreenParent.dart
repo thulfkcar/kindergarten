@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../them/DentalThem.dart';
 import '../../styles/colors_style.dart';
@@ -11,16 +12,19 @@ import '../Staff/StaffUI.dart';
 import '../general_components/ActionDialog.dart';
 import '../parentsScreen/parentsScreen.dart';
 import '../profile/ProfileUI.dart';
+import '../subscriptionScreen/SubscriptionScreen.dart';
+import '../subscriptionScreen/SubscriptionViewModel.dart';
 
-class NavigationScreenParent extends StatefulWidget {
+class NavigationScreenParent extends ConsumerStatefulWidget {
    NavigationScreenParent({Key? key,required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<NavigationScreenParent> createState() => _NavigationScreenParentState();
+  ConsumerState<NavigationScreenParent> createState() => _NavigationScreenParentState();
 }
 
-class _NavigationScreenParentState extends State<NavigationScreenParent> {
+class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent> {
+  late SubscriptionViewModel viewModel;
 
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
@@ -59,6 +63,10 @@ class _NavigationScreenParentState extends State<NavigationScreenParent> {
   }
   @override
   Widget build(BuildContext context) {
+    viewModel = ref.watch(subscriptionViewModelProvider(true));
+    Future.delayed(Duration.zero, () async {
+      checkParentSubscription();
+    });
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -97,4 +105,75 @@ class _NavigationScreenParentState extends State<NavigationScreenParent> {
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: bottomNavigationBar);
   }
+
+
+  checkParentSubscription() async {
+    var status = viewModel.userSubscriptionStatusResponse.status;
+
+    switch (status) {
+      case Status.LOADING:
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+                type: DialogType.loading,
+                title: "Subscription Check",
+                message: "please wait until your Subscription Checked"));
+        break;
+      case Status.COMPLETED:
+        viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
+        Navigator.pop(context);
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+              type: DialogType.completed,
+              title: "Subscription Check",
+              message: "please wait until your Subscription Checked",
+              onCompleted: (s) {
+
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationScreenParent(title: "Parent App",)));
+
+              },
+            ));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+              type: DialogType.error,
+              title: "Subscription Check",
+              message: viewModel.userSubscriptionStatusResponse
+                  .message !=
+                  null
+                  ? viewModel
+                  .userSubscriptionStatusResponse.message!
+                  : "corrupted",
+              onCompleted: (s) {
+
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => SubscriptionScreen(
+                    message: viewModel.userSubscriptionStatusResponse
+                        .message !=
+                        null
+                        ? viewModel
+                        .userSubscriptionStatusResponse.message!
+                        : "corrupted",
+                  )),
+                      (Route<dynamic> route) => false,
+                );
+
+
+              },
+            ));
+
+        break;
+
+      default:
+    }
+  }
+
 }

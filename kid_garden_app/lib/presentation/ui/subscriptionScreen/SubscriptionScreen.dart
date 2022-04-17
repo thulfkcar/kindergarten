@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/di/Modules.dart';
+import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../styles/colors_style.dart';
+import '../../utile/RestartApp.dart';
 import '../general_components/units/texts.dart';
 import 'SubscriptionViewModel.dart';
 
@@ -23,9 +25,11 @@ class SubscriptionScreen extends ConsumerStatefulWidget {
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   late SubscriptionViewModel viewModel ;
+  late LoginPageViewModel    loginViewModel;
   @override
   Widget build(BuildContext context) {
-    viewModel=ref.watch(subscriptionViewModelProvider);
+    viewModel=ref.watch(subscriptionViewModelProvider(false));
+    loginViewModel=ref.watch(LoginPageViewModelProvider);
     return EntrySharedScreen(
       body: Column(
         children: [
@@ -65,6 +69,35 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                           MaterialStateProperty.all(ColorStyle.white),
                       side: MaterialStateProperty.all(
                           BorderSide(width: 1, color: ColorStyle.male1)),
+                      elevation: MaterialStateProperty.all(0)),
+                ),
+              )
+            ],
+          ),
+
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Future.delayed(Duration.zero, () async {
+
+                      await loginViewModel.logOut();
+
+                      // Navigator.pushAndRemoveUntil(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
+                      //       (Route<dynamic> route) => false,
+                      // );
+                      RestartWidget.restartApp(context);
+                    });
+                  },
+                  child: descriptionText("Sign Out", ColorStyle.female1),
+                  style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all(ColorStyle.white),
+                      side: MaterialStateProperty.all(
+                          BorderSide(width: 1, color: ColorStyle.female1)),
                       elevation: MaterialStateProperty.all(0)),
                 ),
               )
