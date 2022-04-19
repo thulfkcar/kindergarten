@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/User.dart';
@@ -109,7 +111,7 @@ class ChildRepository {
         "Gender": childForm.gender.toString(),
         "BirthDate": childForm.birthDate.toString()
       });
-      List<AssetEntity>? assest = null;
+      List<File>? assest = null;
       assest = [childForm.imageFile];
       dynamic response = await _apiService.multiPartPostResponse(
           "Child/add", jsonBody, assest);

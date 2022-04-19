@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
@@ -14,11 +16,12 @@ import '../general_components/loading.dart';
 import '../general_components/units/floating_action_button.dart';
 
 class ChildrenExplorer extends ConsumerStatefulWidget {
- bool fromProfile;
- String? subUserId;
-   ChildrenExplorer({
-   required this.fromProfile,
-     this.subUserId,
+  bool fromProfile;
+  String? subUserId;
+
+  ChildrenExplorer({
+    required this.fromProfile,
+    this.subUserId,
     Key? key,
   }) : super(key: key);
 
@@ -29,7 +32,9 @@ class ChildrenExplorer extends ConsumerStatefulWidget {
 class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   late ScrollController _scrollController;
   late ChildViewModel _viewModel;
+  late LoginPageViewModel _viewModel_login;
   TextEditingController editingController = TextEditingController();
+  bool isParent=false;
 
   @override
   void didChangeDependencies() {
@@ -40,14 +45,29 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(childViewModelProvider(widget.subUserId));
+    _viewModel_login = ref.watch(LoginPageViewModelProvider);
+    _viewModel_login.getUserChanges().then((value) {
+      setState(() {
+        value?.role==Role.Parents?isParent=true:isParent=false;
 
+      });
+    });
     return Scaffold(
       body: Column(
-        children: [widget.fromProfile?head():Container(), Expanded(child: body())],
+        children: [
+          isParent!=true?
+          (widget.fromProfile ? head() :
+          Container()):
+          Container(),
+          Expanded(child: body())
+        ],
       ),
-
-         floatingActionButton:widget.fromProfile? floatingActionButtonAdd22(onClicked: () {   Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ChildAddingScreen())); }):null,
+      floatingActionButton: widget.fromProfile
+          ? floatingActionButtonAdd22(onClicked: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ChildAddingScreen()));
+            })
+          : null,
     );
   }
 

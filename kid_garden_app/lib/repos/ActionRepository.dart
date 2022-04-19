@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:kid_garden_app/domain/HomeModel.dart';
@@ -35,15 +36,15 @@ class ActionRepository {
         throw "no Data Available";
       }
     } catch (e) {
-       rethrow;
+      rethrow;
     }
   }
 
   Future<Tuple2<List<ChildAction>, bool>> getChildActions(
       {required String? childId, required int page}) async {
     try {
-      dynamic response =
-          await _apiService.getResponse("ChildAction/getAll/$page?ChildId=$childId");
+      dynamic response = await _apiService
+          .getResponse("ChildAction/getAll/$page?ChildId=$childId");
 
       bool isLastPage = false;
       List<ChildAction> childActions = [];
@@ -72,17 +73,16 @@ class ActionRepository {
     }
   }
 
-
   Future<Tuple2<List<ChildAction>, bool>> getAllChildActions(
-      { required int page}) async {
+      {required int page}) async {
     try {
-      dynamic response =
-      await _apiService.getResponse("Kindergarten/getAllChildActions/$page");
+      dynamic response = await _apiService
+          .getResponse("Kindergarten/getAllChildActions/$page");
 
       bool isLastPage = false;
       List<ChildAction> childActions = [];
       var mainResponse =
-      MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
+          MultiResponse<List<ChildAction>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
           childActions =
               (jsonList as List).map((i) => ChildAction.fromJson(i)).toList();
@@ -105,8 +105,9 @@ class ActionRepository {
       rethrow;
     }
   }
+
   Future<ChildAction> postChildAction(
-      {required ChildAction childAction, List<AssetEntity>? assets}) async {
+      {required ChildAction childAction, List<File>? assets}) async {
     try {
       Map<String, String> jsonBody = {};
       jsonBody.addAll({
@@ -116,8 +117,8 @@ class ActionRepository {
         "Audience": childAction.audience.index.toString()
       });
 
-      dynamic response =
-          await _apiService.multiPartPostResponse("ChildAction/add",  jsonBody, assets);
+      dynamic response = await _apiService.multiPartPostResponse(
+          "ChildAction/add", jsonBody, assets);
       var data;
 
       SingleResponse<ChildAction>.fromJson(await response, (json) {
@@ -135,19 +136,17 @@ class ActionRepository {
     }
   }
 
- Future<HomeModel> getHome() async{
-
+  Future<HomeModel> getHome() async {
     try {
       dynamic response = await _apiService.getResponse("Kindergarten/getHome");
       var data;
       SingleResponse<HomeModel>.fromJson(await response, (json) {
-        data= HomeModel.fromJson(json as Map<String,dynamic>);
+        data = HomeModel.fromJson(json as Map<String, dynamic>);
         return data;
       });
       return await data;
-    }
-    catch (e){
+    } catch (e) {
       rethrow;
     }
- }
+  }
 }

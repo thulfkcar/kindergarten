@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/ActionGroup.dart';
@@ -19,9 +22,9 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   bool isAddingAction = false;
   String childId;
   Function(bool) onDismiss;
-  Function(ChildAction,List<AssetEntity>?) addChild;
+  Function(ChildAction,List<File>?) addChild;
 
-  List<AssetEntity>? medias;
+  List<File>? medias;
 
   AddChildActionDialog(
       {required this.addChild,
@@ -137,8 +140,15 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
   }
 
   Future<void> picImage() async {
-    final List<AssetEntity>? assets = await AssetPicker.pickAssets(context);
-    widget.medias=assets;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+      widget.medias=files;
+    } else {
+      // User canceled the picker
+    }
+
 
   }
 }

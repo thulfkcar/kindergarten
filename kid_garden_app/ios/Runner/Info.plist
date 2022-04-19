@@ -63,5 +63,7 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Explain why your app uses photo library</string>
 </dict>
 </plist>

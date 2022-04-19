@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
@@ -67,7 +69,7 @@ class ChildActionViewModel extends ChangeNotifier {
   }
 
   Future<void> addChildAction(
-      {required ChildAction childAction, List<AssetEntity>? assets}) async {
+      {required ChildAction childAction, List<File>? assets}) async {
     setChildActionPostResponse(ApiResponse.loading());
 
     _repository

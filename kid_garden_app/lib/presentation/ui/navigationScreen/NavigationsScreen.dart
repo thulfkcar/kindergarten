@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
 
 import '../../../di/Modules.dart';
+import '../../../domain/UserModel.dart';
 import '../../../them/DentalThem.dart';
 import '../../styles/colors_style.dart';
 import '../Child/Childs.dart';
@@ -29,7 +31,7 @@ class _NavigationScreen extends State<NavigationScreen> {
     ),
     ParentsScreen(),
     StaffUI(),
-    ProfileUI(),
+    UserProfile(userType: Role.admin, userId: null),
   ];
 
   void _onItemTapped(int index) {

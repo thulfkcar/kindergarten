@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
+import '../../../domain/UserModel.dart';
 import '../../../them/DentalThem.dart';
 import '../../styles/colors_style.dart';
 import '../Child/Childs.dart';
@@ -14,56 +16,65 @@ import '../parentsScreen/parentsScreen.dart';
 import '../profile/ProfileUI.dart';
 import '../subscriptionScreen/SubscriptionScreen.dart';
 import '../subscriptionScreen/SubscriptionViewModel.dart';
+import '../userProfile/UserProfile.dart';
 
 class NavigationScreenParent extends ConsumerStatefulWidget {
-   NavigationScreenParent({Key? key,required this.title}) : super(key: key);
+  NavigationScreenParent({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  ConsumerState<NavigationScreenParent> createState() => _NavigationScreenParentState();
+  ConsumerState<NavigationScreenParent> createState() =>
+      _NavigationScreenParentState();
 }
 
-class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent> {
+class _NavigationScreenParentState
+    extends ConsumerState<NavigationScreenParent> {
   late SubscriptionViewModel viewModel;
+  late LoginPageViewModel viewModelLogin;
 
-  int _selectedIndex = 0;
-  static final List<Widget> _widgetOptions = <Widget>[
+  // int _selectedIndex = 0;
+  // static final List<Widget> _widgetOptions = <Widget>[
+  //   ChildrenExplorer(
+  //     fromProfile: true,
+  //   ),
+  //   UserProfile(
+  //     userType: Role.Parents,
+  //     userId: null,
+  //   ),
+  // ];
+  //
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
-    ChildrenExplorer(
-      fromProfile: true,
-    ),
+  // Widget get bottomNavigationBar {
+  //   return BottomNavigationBar(
+  //     backgroundColor: ColorStyle.second,
+  //     items: const <BottomNavigationBarItem>[
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.sentiment_satisfied_alt_sharp),
+  //         label: 'Children',
+  //       ),
+  //       /**/
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.account_circle),
+  //         label: 'Profile',
+  //       ),
+  //     ],
+  //     currentIndex: _selectedIndex,
+  //     selectedItemColor: ColorStyle.main,
+  //     unselectedItemColor: ColorStyle.text3,
+  //     onTap: _onItemTapped,
+  //   );
+  // }
 
-    ProfileUI(),
-  ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget get bottomNavigationBar {
-    return BottomNavigationBar(
-      backgroundColor: ColorStyle.second,
-      items: const <BottomNavigationBarItem>[
-
-        BottomNavigationBarItem(
-          icon: Icon(Icons.sentiment_satisfied_alt_sharp),
-          label: 'Children',
-        ),/**/
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: ColorStyle.main,
-      unselectedItemColor: ColorStyle.text3,
-      onTap: _onItemTapped,
-    );
-  }
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(subscriptionViewModelProvider(true));
+    viewModelLogin = ref.watch(LoginPageViewModelProvider);
+
     Future.delayed(Duration.zero, () async {
       checkParentSubscription();
     });
@@ -73,11 +84,11 @@ class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent>
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Colors.transparent),
+                        MaterialStateProperty.all(Colors.transparent),
                     elevation: MaterialStateProperty.all(0)),
                 onPressed: () async {
                   var provide =
-                  ProviderContainer().read(LoginPageViewModelProvider);
+                      ProviderContainer().read(LoginPageViewModelProvider);
                   await provide.getUserChanges();
                   var user = provide.currentUser;
                   showAlertDialog(
@@ -88,24 +99,39 @@ class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent>
                           title: "your QR Identity",
                           message: "Scan To Make Opration"));
                 },
-                child: const Icon(Icons.qr_code))
+                child: const Icon(Icons.qr_code)),
           ],
+          leading: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  elevation: MaterialStateProperty.all(0)),
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserProfile(
+                              userType: Role.Parents,
+                              userId: null,
+                            )));
+              },
+              child: const Icon(Icons.person)),
           automaticallyImplyLeading: true,
-
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
-          // Here we take the value from the MyHomePage object that was created by
-          // the app.build method, and use it to set our appbar title.
           title: Text(
             widget.title,
             style: TextStyle(color: KidThem.textTitleColor),
           ),
         ),
-        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-        bottomNavigationBar: bottomNavigationBar);
+        body: Center(child: ChildrenExplorer(
+          fromProfile: true,
+        ),),
+        // body: Center(child: _widgetOptions.elementAt(_selectedIndex))
+        // bottomNavigationBar: bottomNavigationBar
+        );
   }
-
 
   checkParentSubscription() async {
     var status = viewModel.userSubscriptionStatusResponse.status;
@@ -129,12 +155,15 @@ class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent>
               title: "Subscription Check",
               message: "please wait until your Subscription Checked",
               onCompleted: (s) {
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NavigationScreenParent(title: "Parent App",)));
-
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavigationScreenParent(
+                            title: "Parent App",
+                          )),
+                  (Route<dynamic> route) => false,
+                );
+                /**/
               },
             ));
         break;
@@ -145,28 +174,23 @@ class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent>
             messageDialog: ActionDialog(
               type: DialogType.error,
               title: "Subscription Check",
-              message: viewModel.userSubscriptionStatusResponse
-                  .message !=
-                  null
-                  ? viewModel
-                  .userSubscriptionStatusResponse.message!
+              message: viewModel.userSubscriptionStatusResponse.message != null
+                  ? viewModel.userSubscriptionStatusResponse.message!
                   : "corrupted",
               onCompleted: (s) {
-
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => SubscriptionScreen(
-                    message: viewModel.userSubscriptionStatusResponse
-                        .message !=
-                        null
-                        ? viewModel
-                        .userSubscriptionStatusResponse.message!
-                        : "corrupted",
-                  )),
-                      (Route<dynamic> route) => false,
+                  MaterialPageRoute(
+                      builder: (context) => SubscriptionScreen(
+                            message: viewModel.userSubscriptionStatusResponse
+                                        .message !=
+                                    null
+                                ? viewModel
+                                    .userSubscriptionStatusResponse.message!
+                                : "corrupted",
+                          )),
+                  (Route<dynamic> route) => false,
                 );
-
-
               },
             ));
 
@@ -175,5 +199,4 @@ class _NavigationScreenParentState extends ConsumerState<NavigationScreenParent>
       default:
     }
   }
-
 }

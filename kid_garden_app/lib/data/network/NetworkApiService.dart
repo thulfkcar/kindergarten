@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../di/Modules.dart';
+import '../../domain/Media.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
 
@@ -60,7 +63,7 @@ class NetworkApiService extends BaseApiService {
 
   @override
   Future multiPartPostResponse(String url, Map<String, String> jsonBody,
-      List<AssetEntity>? assets) async {
+      List<File>? assets) async {
     dynamic responseJson;
     try {
       var provide = ProviderContainer().read(LoginPageViewModelProvider);
@@ -75,18 +78,15 @@ class NetworkApiService extends BaseApiService {
 
         if (assets != null) {
           if (assets.length == 1) {
+
             request.files.add(await http.MultipartFile.fromPath(
                 'file',
-                assets.first.relativePath.toString() +
-                    "/" +
-                    await assets.first.titleAsync));
+               assets.first.path));
           } else {
             for (var element in assets) {
               request.files.add(await http.MultipartFile.fromPath(
                   'files',
-                  element.relativePath.toString() +
-                      "/" +
-                      await element.titleAsync));
+                   element.path));
             }
           }
         }
@@ -173,4 +173,6 @@ class NetworkApiService extends BaseApiService {
                 ' with status code : ${response.statusCode}');
     }
   }
+
+
 }

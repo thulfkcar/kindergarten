@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/data/network/FromData/User.dart';
 import 'package:kid_garden_app/domain/Redeem.dart';
@@ -24,7 +26,7 @@ class UserRepository {
         "Role": '1',
         "Phone": staffAddingForm.phoneNumber!
       });
-      List<AssetEntity>? assest;
+      List<File>? assest;
       if (staffAddingForm.image != null) {
         assest = [staffAddingForm.image!];
       }
@@ -173,8 +175,7 @@ class UserRepository {
     }
   }
 
-  Future<UserModel?> authByPhone(
-      {required LoginForm loginForm}) async {
+  Future<UserModel?> authByPhone({required LoginForm loginForm}) async {
     try {
       dynamic response = await _apiService.postResponseJsonBody(
           "User/loginByPhone", "{phone: '${loginForm.phoneNumber}'}");
@@ -188,6 +189,7 @@ class UserRepository {
       rethrow;
     }
   }
+
   Future<UserModel> signUp(SignUpForm form) async {
     try {
       String jsonBody =
@@ -201,8 +203,6 @@ class UserRepository {
         return user;
       });
       return await user;
-
-
     } catch (e) {
       rethrow;
     }
