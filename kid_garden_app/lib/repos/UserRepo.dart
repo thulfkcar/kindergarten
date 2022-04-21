@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/data/network/FromData/User.dart';
 import 'package:kid_garden_app/domain/Redeem.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:tuple/tuple.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
 import '../data/network/models/ErrorResponse.dart';
@@ -77,7 +74,7 @@ class UserRepository {
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
     } catch (e) {
-      rethrow;
+       rethrow;
     }
   }
 

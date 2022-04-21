@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:kid_garden_app/data/network/BaseApiService.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
@@ -15,8 +14,6 @@ class ChildViewModel extends ChangeNotifier {
 
   ChildViewModel({required this.subUserId}) : super() {
     fetchChildren();
-
-
   }
 
   ApiResponse<List<Child>> childListResponse = ApiResponse.loading();
@@ -26,26 +23,26 @@ class ChildViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
-  ChildPostingViewModel() {
-    //tst();
-  }
   ApiResponse<Child> addingChildResponse = ApiResponse.non();
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
-    if (apiResponse.data != null && childListResponse.data != null && childListResponse.status != ApiResponse.loading()) {
+    if (apiResponse.data != null ) {
       setChildListResponse(appendNewItems([apiResponse.data!]));
     }
-    notifyListeners();
+
+      notifyListeners();
   }
+
 
   Future<void> addChild({required ChildForm childForm}) async {
     setAddingChildResponse(ApiResponse.loading());
-    _repository
-        .addChild(childForm)
-        .then((value) => setAddingChildResponse(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            setAddingChildResponse(ApiResponse.error(error.toString())));
+    _repository.addChild( childForm).then((value) {
+      childListResponse.data ??= [];
+      setAddingChildResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setAddingChildResponse(ApiResponse.error(error.toString()));
+    });
   }
 
 

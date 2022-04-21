@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/ActionGroup.dart';
 import '../../../domain/ChildAction.dart';
 import '../general_components/MultiSelectChip.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class AddChildActionDialog extends ConsumerStatefulWidget {
   List<Audience> audienceList = [

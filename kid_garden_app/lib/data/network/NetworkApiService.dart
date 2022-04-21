@@ -1,13 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../di/Modules.dart';
-import '../../domain/Media.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
 

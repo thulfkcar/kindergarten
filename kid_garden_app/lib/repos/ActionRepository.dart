@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:kid_garden_app/domain/HomeModel.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';

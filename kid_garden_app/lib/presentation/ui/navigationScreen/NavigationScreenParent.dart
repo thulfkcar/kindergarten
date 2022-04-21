@@ -2,18 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../../../them/DentalThem.dart';
-import '../../styles/colors_style.dart';
 import '../Child/Childs.dart';
-import '../Home/HomeUI.dart';
-import '../Staff/StaffUI.dart';
 import '../general_components/ActionDialog.dart';
-import '../parentsScreen/parentsScreen.dart';
-import '../profile/ProfileUI.dart';
 import '../subscriptionScreen/SubscriptionScreen.dart';
 import '../subscriptionScreen/SubscriptionViewModel.dart';
 import '../userProfile/UserProfile.dart';
@@ -138,62 +132,26 @@ class _NavigationScreenParentState
 
     switch (status) {
       case Status.LOADING:
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-                type: DialogType.loading,
-                title: "Subscription Check",
-                message: "please wait until your Subscription Checked"));
+
         break;
       case Status.COMPLETED:
         viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
-        Navigator.pop(context);
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-              type: DialogType.completed,
-              title: "Subscription Check",
-              message: "please wait until your Subscription Checked",
-              onCompleted: (s) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NavigationScreenParent(
-                            title: "Parent App",
-                          )),
-                  (Route<dynamic> route) => false,
-                );
-                /**/
-              },
-            ));
         break;
       case Status.ERROR:
-        Navigator.pop(context);
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-              type: DialogType.error,
-              title: "Subscription Check",
-              message: viewModel.userSubscriptionStatusResponse.message != null
-                  ? viewModel.userSubscriptionStatusResponse.message!
-                  : "corrupted",
-              onCompleted: (s) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SubscriptionScreen(
-                            message: viewModel.userSubscriptionStatusResponse
-                                        .message !=
-                                    null
-                                ? viewModel
-                                    .userSubscriptionStatusResponse.message!
-                                : "corrupted",
-                          )),
-                  (Route<dynamic> route) => false,
-                );
-              },
-            ));
-
+        viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SubscriptionScreen(
+                message: viewModel.userSubscriptionStatusResponse
+                    .message !=
+                    null
+                    ? viewModel
+                    .userSubscriptionStatusResponse.message!
+                    : "corrupted",
+              )),
+              (Route<dynamic> route) => false,
+        );
         break;
 
       default:

@@ -5,7 +5,6 @@ import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/User.dart';
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import 'package:tuple/tuple.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../data/network/models/MultiResponse.dart';
 import 'package:kid_garden_app/data/network/models/SingleResponse.dart';
@@ -107,12 +106,12 @@ class ChildRepository {
     try {
       Map<String, String> jsonBody = Map();
       jsonBody.addAll({
-        "Name": childForm.childName,
+        "Name": childForm.childName!,
         "Gender": childForm.gender.toString(),
         "BirthDate": childForm.birthDate.toString()
       });
       List<File>? assest = null;
-      assest = [childForm.imageFile];
+      assest = [childForm.imageFile!];
       dynamic response = await _apiService.multiPartPostResponse(
           "Child/add", jsonBody, assest);
 

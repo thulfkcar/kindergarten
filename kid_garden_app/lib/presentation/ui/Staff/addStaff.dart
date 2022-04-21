@@ -1,28 +1,25 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
-import 'package:tuple/tuple.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../data/network/ApiResponse.dart';
-import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/Child.dart';
 import '../../../domain/UserModel.dart';
 import '../../utile/FormValidator.dart';
 import '../general_components/ActionDialog.dart';
-import '../general_components/ComboBoxDental2.dart';
 import 'StaffViewModel.dart';
 
 class StaffAdding extends ConsumerStatefulWidget {
   StaffAdding({
     Key? key,
   }) : super(key: key);
-  AssetEntity? imagePath;
+  File? imagePath;
 
   @override
   ConsumerState createState() => _ChildAddingScreenState();
@@ -77,14 +74,21 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  var entity = (await AssetPicker.pickAssets(
-                                      context,
-                                      pickerConfig: AssetPickerConfig()));
-                                  if (entity != null) {
+
+
+                                  FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+                                  if (result != null) {
+                                    File file = File(result.files.single.path!);
+
                                     setState(() {
-                                      widget.imagePath = entity[0];
+                                      widget.imagePath = file;
+
                                     });
+                                  } else {
+                                    // User canceled the picker
                                   }
+
                                 },
                                 child: widget.imagePath != null
                                     ? Container(
@@ -96,9 +100,8 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                                             width: 1,
                                           ),
                                           image: DecorationImage(
-                                            image: AssetEntityImageProvider(
-                                                widget.imagePath!,
-                                                isOriginal: false),
+                                            image: FileImage(
+                                                widget.imagePath!,),
                                             fit: BoxFit.fill,
                                           ),
                                           shape: BoxShape.circle,

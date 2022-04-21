@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../repos/ActionRepository.dart';
 

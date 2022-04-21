@@ -35,7 +35,8 @@ class _ActionDialogState extends State<ActionDialog> {
       if (widget.delay != null) {
         Future.delayed(Duration(milliseconds: widget.delay!), () async {
           if (widget.dismissed == false) {
-            Navigator.pop(context);
+              Navigator.pop(context);
+
             if (widget.onCompleted != null) {
               widget.onCompleted!(null);
             }
