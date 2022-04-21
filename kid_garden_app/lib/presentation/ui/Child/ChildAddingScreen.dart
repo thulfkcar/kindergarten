@@ -255,15 +255,17 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
 
     switch (status) {
       case Status.LOADING:
+        print("loading");
+
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.loading,
           title: "Adding Child",
           message: "pleas wait until process complete..",
           onCompleted: (s) {
-            _viewModel.addingChildResponse = ApiResponse.non();
           },
         ));
+        _viewModel.addingChildResponse = ApiResponse.non();
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
@@ -273,10 +275,10 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           title: "Competed",
           message: "child ${_viewModel.addingChildResponse.data?.name}",
           onCompleted: (s) {
-            _viewModel.addingChildResponse = ApiResponse.non();
             Navigator.pop(context);
           },
         ));
+        _viewModel.addingChildResponse = ApiResponse.non();
         break;
       case Status.ERROR:
         Navigator.pop(context);
@@ -286,9 +288,11 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           title: "error",
           message: _viewModel.addingChildResponse.message.toString(),
           onCompleted: (s) {
-            _viewModel.addingChildResponse = ApiResponse.non();
+            // _viewModel.addingChildResponse = ApiResponse.non();
           },
         ));
+        _viewModel.addingChildResponse = ApiResponse.non();
+
         break;
       default:
     }
