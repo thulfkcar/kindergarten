@@ -211,6 +211,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               message: "pleas wait until process complete..",
               onCompleted: (s) {},
             ));
+        _viewModel.setChildActionPostResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
@@ -225,6 +226,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                 _viewModel.setChildActionPostResponse(ApiResponse.non());
               },
             ));
+        _viewModel.setChildActionPostResponse(ApiResponse.non());
         break;
       case Status.ERROR:
         Navigator.pop(context);
@@ -236,6 +238,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
               message: _viewModel.childActionPostResponse.message.toString(),
               onCompleted: (s) {},
             ));
+        _viewModel.setChildActionPostResponse(ApiResponse.non());
         break;
       default:
     }

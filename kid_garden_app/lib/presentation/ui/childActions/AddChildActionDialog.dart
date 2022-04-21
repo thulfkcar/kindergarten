@@ -16,8 +16,6 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   ];
   ActionGroup selectedActionGroup;
 
-  List<Audience> selectedAudienceList = [];
-  Audience? selectedAudience;
   bool isAddingAction = false;
   String childId;
   Function(bool) onDismiss;
@@ -28,7 +26,6 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   AddChildActionDialog(
       {required this.addChild,
       required  this.selectedActionGroup,
-      this.selectedAudience,
       required this.onDismiss,
      required this.childId,
       Key? key})
@@ -37,16 +34,14 @@ class AddChildActionDialog extends ConsumerStatefulWidget {
   @override
   ConsumerState createState() => _AddChildActionDialogState();
 
-
 }
 
 class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
   TextEditingController textFieldController = TextEditingController();
+  Audience? selectedAudience;
 
   @override
   Widget build(BuildContext context) {
-
-
     return Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
         child: AlertDialog(
@@ -86,7 +81,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                     onSelectionChanged: (selectedList) {
                       setState(
                         () {
-                          widget.selectedAudience = selectedList.first;
+                          selectedAudience = selectedList.first;
                         },
                       );
                     },
@@ -110,7 +105,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
               onPressed: () {
                 setState(() {
                   widget.onDismiss(false);
-                  widget.isAddingAction = false;
+                  widget.isAddingAction = false;/**/
                 });
               },
               child: const Text("Cancel"),
@@ -123,7 +118,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                 var childAction = ChildAction(
                     id: "",
                     actionGroupId: widget.selectedActionGroup.id,
-                    audience: widget.selectedAudience!,
+                    audience: selectedAudience!,
                     value: textFieldController.text,
                     childId: widget.childId,
                     userId: '',

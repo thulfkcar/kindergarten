@@ -37,7 +37,6 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
   String message = "";
   ChildForm form = ChildForm();
 
-
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(childViewModelProvider(null));
@@ -262,8 +261,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           type: DialogType.loading,
           title: "Adding Child",
           message: "pleas wait until process complete..",
-          onCompleted: (s) {
-          },
+          onCompleted: (s) {},
         ));
         _viewModel.addingChildResponse = ApiResponse.non();
         break;
@@ -298,4 +296,3 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
     }
   }
 }
-
