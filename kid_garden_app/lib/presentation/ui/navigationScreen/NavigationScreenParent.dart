@@ -68,63 +68,63 @@ class _NavigationScreenParentState
   Widget build(BuildContext context) {
     viewModel = ref.watch(subscriptionViewModelProvider(true));
     viewModelLogin = ref.watch(LoginPageViewModelProvider);
-
     Future.delayed(Duration.zero, () async {
       checkParentSubscription();
     });
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.transparent),
-                    elevation: MaterialStateProperty.all(0)),
-                onPressed: () async {
-                  var provide =
-                      ProviderContainer().read(LoginPageViewModelProvider);
-                  await provide.getUserChanges();
-                  var user = provide.currentUser;
-                  showAlertDialog(
-                      context: context,
-                      messageDialog: ActionDialog(
-                          type: DialogType.qr,
-                          qr: user!.id,
-                          title: "your QR Identity",
-                          message: "Scan To Make Opration"));
-                },
-                child: const Icon(Icons.qr_code)),
-          ],
-          leading: ElevatedButton(
+      appBar: AppBar(
+        actions: [
+          ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserProfile(
-                              userType: Role.Parents,
-                              userId: null,
-                            )));
+                var provide =
+                    ProviderContainer().read(LoginPageViewModelProvider);
+                await provide.getUserChanges();
+                var user = provide.currentUser;
+                showAlertDialog(
+                    context: context,
+                    messageDialog: ActionDialog(
+                        type: DialogType.qr,
+                        qr: user!.id,
+                        title: "your QR Identity",
+                        message: "Scan To Make Opration"));
               },
-              child: const Icon(Icons.person)),
-          automaticallyImplyLeading: true,
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            widget.title,
-            style: TextStyle(color: KidThem.textTitleColor),
-          ),
+              child: const Icon(Icons.qr_code)),
+        ],
+        leading: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                elevation: MaterialStateProperty.all(0)),
+            onPressed: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfile(
+                            userType: Role.Parents,
+                            userId: null,
+                          )));
+            },
+            child: const Icon(Icons.person)),
+        automaticallyImplyLeading: true,
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          widget.title,
+          style: TextStyle(color: KidThem.textTitleColor),
         ),
-        body: Center(child: ChildrenExplorer(
+      ),
+      body: Center(
+        child: ChildrenExplorer(
           fromProfile: true,
-        ),),
-        // body: Center(child: _widgetOptions.elementAt(_selectedIndex))
-        // bottomNavigationBar: bottomNavigationBar
-        );
+        ),
+      ),
+      // body: Center(child: _widgetOptions.elementAt(_selectedIndex))
+      // bottomNavigationBar: bottomNavigationBar
+    );
   }
 
   checkParentSubscription() async {
@@ -132,26 +132,47 @@ class _NavigationScreenParentState
 
     switch (status) {
       case Status.LOADING:
+        // showAlertDialog(
+        //     context: context,
+        //     messageDialog: ActionDialog(
+        //         type: DialogType.loading,
+        //         title: "Subscription Check",
+        //         message: "please wait until your Subscription Checked"));
 
         break;
       case Status.COMPLETED:
-        viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
+        await viewModel
+            .setUserSubscriptionStatusResponse(ApiResponse.non())
+            .then((value) async {
+          await Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    NavigationScreenParent(title: 'Parent App')),
+            (Route<dynamic> route) => false,
+          );
+        });
+
         break;
       case Status.ERROR:
-        viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => SubscriptionScreen(
-                message: viewModel.userSubscriptionStatusResponse
-                    .message !=
-                    null
-                    ? viewModel
-                    .userSubscriptionStatusResponse.message!
-                    : "corrupted",
-              )),
-              (Route<dynamic> route) => false,
-        );
+        var errorMessage=viewModel
+            .userSubscriptionStatusResponse.message !=
+            null
+            ? viewModel.userSubscriptionStatusResponse.message!
+            : "corrupted";
+        await viewModel
+            .setUserSubscriptionStatusResponse(ApiResponse.non())
+            .then((value) async {
+          await Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SubscriptionScreen(
+                      message:errorMessage
+                    )),
+            (Route<dynamic> route) => true,
+          );
+        });
+
         break;
 
       default:

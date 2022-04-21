@@ -7,6 +7,8 @@ import 'package:tuple/tuple.dart';
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
 import '../data/network/models/MultiResponse.dart';
+import '../data/network/models/SingleResponse.dart';
+import '../domain/HomeModel.dart';
 import '../presentation/ui/general_components/KindergratenCard.dart';
 
 class KindergartenRepository{
@@ -18,9 +20,9 @@ class KindergartenRepository{
     try {
 
       var url="Kindergarten/getAll/$page";
-      // if(searchKey!=null && searchKey.trim().isNotEmpty) {
-      //   url+="?key=$searchKey";
-      // }
+      if(searchKey!=null && searchKey.trim().isNotEmpty) {
+        url+="?query=$searchKey";
+      }
       if(position!=null){
         url+="?longitude=${position.longitude}&latitude=${position.latitude}";
 
@@ -56,5 +58,17 @@ class KindergartenRepository{
       rethrow;
     }
   }
-
+  Future<HomeModel> getHome() async {
+    try {
+      dynamic response = await _apiService.getResponse("Kindergarten/getHome");
+      var data;
+      SingleResponse<HomeModel>.fromJson(await response, (json) {
+        data = HomeModel.fromJson(json as Map<String, dynamic>);
+        return data;
+      });
+      return await data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

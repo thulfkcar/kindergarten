@@ -25,7 +25,7 @@ var check=false;
     notifyListeners();
   }
 
-  setUserSubscriptionStatusResponse(ApiResponse<String> apiResponse) async {
+ Future<void> setUserSubscriptionStatusResponse(ApiResponse<String> apiResponse) async {
     userSubscriptionStatusResponse = apiResponse;
     await Future.delayed(Duration(milliseconds: 1)); // use await
 

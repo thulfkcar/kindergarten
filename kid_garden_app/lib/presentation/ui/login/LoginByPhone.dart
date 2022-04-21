@@ -157,7 +157,9 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
     switch (viewModel.userApiResponse.status) {
       case Status.LOADING:
         {
+
           return const CircularProgressIndicator();
+
         }
       case Status.COMPLETED:
         {

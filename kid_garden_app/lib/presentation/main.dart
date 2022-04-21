@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,13 +26,52 @@ const StaffUI_Route = '/Staff';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(ProviderScope(child: RestartWidget(
-      child:  MyApp()
-  ), ));
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  String? token = await messaging.getToken(
+    vapidKey: "BGpdLRs......",
+  );
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('User granted permission: ${settings.authorizationStatus}');
+
+//Foreground messages#
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+//background message
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    await Firebase.initializeApp();
+
+    print("Handling a background message: ${message.messageId}");
+  }
+
+  void main() {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    runApp(MyApp());
+  }
+
+  runApp(ProviderScope(
+    child: RestartWidget(child: MyApp()),
+  ));
 }
 
 class MyApp extends ConsumerStatefulWidget {
-
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -76,7 +116,8 @@ class _MyAppState extends ConsumerState<MyApp> {
                   ? screen = NavigationScreen(title: "kinderGarten")
                   : (viewModel.currentUser!.role == Role.Staff)
                       ? screen = Container()
-                      : screen = NavigationScreenParent(title: viewModel.currentUser!.name.toString());
+                      : screen = NavigationScreenParent(
+                          title: viewModel.currentUser!.name.toString());
           break;
         case StaffUI_Route:
           screen = StaffUI();
@@ -85,10 +126,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           return null;
       }
 
-
       return MaterialPageRoute(builder: (BuildContext context) => screen);
     };
   }
-
-
 }

@@ -153,7 +153,7 @@ class NetworkApiService extends BaseApiService {
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
-        throw ErrorResponse.fromJson(jsonDecode(response.body));
+        throw response.body.toString();
       case 401:
       case 403:
       case 402:

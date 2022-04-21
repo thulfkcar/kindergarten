@@ -40,12 +40,13 @@ dependencies:
   tuple: ^2.0.0
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.7.0
-  firebase_auth: ^3.3.11
+  firebase_auth: ^3.3.14
   geolocator: ^8.2.0
   pin_code_fields: ^7.3.0
   restart_app: ^1.1.0
   path_provider: ^2.0.9
   file_picker: ^4.5.1
+  firebase_messaging: ^11.2.14
 
 
 dev_dependencies:

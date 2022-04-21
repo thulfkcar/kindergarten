@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
+import 'package:kid_garden_app/repos/KindergartenRepository.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../../data/network/ApiResponse.dart';
@@ -11,6 +12,7 @@ import '../../../repos/ActionRepository.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final _repository = ActionRepository();
+  final kindergartenRepository = KindergartenRepository();
   String? selectedActionGroupId;
   int pageChildAction = 1;
 
@@ -37,7 +39,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> fetchHomeInfo() async {
     setHomeInfoApiResponse(ApiResponse.loading());
-    _repository.getHome().then((value) {
+    kindergartenRepository.getHome().then((value) {
       List<Tuple2<String, String>> list = [
         Tuple2("Total Actions", value.todayActions.toString()),
         Tuple2("Staff Count", value.staffCount.toString()),

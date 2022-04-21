@@ -135,17 +135,5 @@ class ActionRepository {
     }
   }
 
-  Future<HomeModel> getHome() async {
-    try {
-      dynamic response = await _apiService.getResponse("Kindergarten/getHome");
-      var data;
-      SingleResponse<HomeModel>.fromJson(await response, (json) {
-        data = HomeModel.fromJson(json as Map<String, dynamic>);
-        return data;
-      });
-      return await data;
-    } catch (e) {
-      rethrow;
-    }
-  }
+
 }

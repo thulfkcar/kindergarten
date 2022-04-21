@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/di/Modules.dart';
-import 'package:kid_garden_app/presentation/main.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
@@ -74,7 +73,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               )
             ],
           ),
-
           Row(
             children: [
               Expanded(
