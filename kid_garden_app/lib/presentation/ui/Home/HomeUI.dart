@@ -2,15 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/Child.dart';
-
 import '../general_components/CustomListView.dart';
-import '../general_components/ChildInfoRow.dart';
 import '../general_components/Error.dart';
 import '../general_components/loading.dart';
 import '../general_components/units/cards.dart';

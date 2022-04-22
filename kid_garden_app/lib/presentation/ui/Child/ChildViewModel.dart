@@ -33,8 +33,6 @@ class ChildViewModel extends ChangeNotifier {
 
       notifyListeners();
   }
-
-
   Future<void> addChild({required ChildForm childForm}) async {
     setAddingChildResponse(ApiResponse.loading());
     _repository.addChild( childForm).then((value) {
@@ -44,8 +42,6 @@ class ChildViewModel extends ChangeNotifier {
       setAddingChildResponse(ApiResponse.error(error.toString()));
     });
   }
-
-
 
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());

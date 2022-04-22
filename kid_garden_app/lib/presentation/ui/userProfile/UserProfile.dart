@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
+import 'package:kid_garden_app/domain/Media.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
@@ -59,7 +60,10 @@ class _UserProfileState extends ConsumerState<UserProfile> {
               style: TextStyle(color: Colors.black),
             ):Container(),
           ),
-          body: body(),
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: body(),
+          ),
           bottomSheet: (widget.userId!=null)?Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -127,6 +131,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   }
 
   Widget body() {
+
     var state = viewModel.staffProfileResult.status;
     switch (state) {
       case Status.LOADING:
@@ -175,9 +180,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                   ],
                 )),
                 imageRectangleWithoutShadow(
-                    user.image != null
-                        ? domain + user.image!
-                        : "https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png",
+                    domain + user.image!,
                     90),
               ],
             ),
@@ -222,7 +225,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                         longitudes: 4545,
                         phone: "phone",
                         ditance: "5454",
-                        media: null))
+                        media: Media("id", "Resources/kinder.jpg", MediaType.image)))
                 : Container(),
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 

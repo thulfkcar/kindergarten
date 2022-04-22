@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
-import 'package:kid_garden_app/domain/HomeModel.dart';
-
 import '../data/network/BaseApiService.dart';
 import '../data/network/NetworkApiService.dart';
 import '../data/network/models/MultiResponse.dart';

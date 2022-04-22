@@ -27,12 +27,11 @@ color:ColorStyle.text4 ,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(50.0),
-              child:kindergraten.media !=null ? Image.network(
+              child: Image.network(
                domain+ kindergraten.media!.url,
-                width: 10,
-                height: 10,
-              ):Image.asset("res/images/default_action_group.png",width: 70,
-                height: 70,),
+                width: 70,
+                height: 70,
+              )
             ),
             const SizedBox(width: 10,),
             Expanded(

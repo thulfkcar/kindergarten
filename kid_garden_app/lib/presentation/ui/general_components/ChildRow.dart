@@ -36,14 +36,9 @@ childRow(
               ClipOval(
                 child: SizedBox.fromSize(
                   size: const Size.fromRadius(30),
-                  // Image radius
-                  // child: Image.network('https://192.168.1.108:5126/StaticFiles/images/img.png',
-                  child: child.image != null
-                      ? Image.network(domain + child.image!, fit: BoxFit.cover)
-                      : null,
+                  child:  Image.network('$domain${child.image!}', fit: BoxFit.cover)
                 ),
               ),
-              // Image.network(children[index].image),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),

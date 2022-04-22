@@ -16,6 +16,7 @@ class Child {
   UserModel? user;
   String? mediaId;
   String? staffName;
+  String? kindergartenId;
   Child(
       {required this.name,
       required this.id,

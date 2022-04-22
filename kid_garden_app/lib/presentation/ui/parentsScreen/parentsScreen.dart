@@ -6,7 +6,9 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/CustomListView.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
@@ -30,7 +32,8 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController = ScrollController()..addListener(getNext);
+    _scrollController = ScrollController()
+      ..addListener(getNext);
   }
 
   @override
@@ -38,15 +41,11 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
     _viewModel = ref.watch(parentViewModelProvider);
 
     return Scaffold(
-
-        body: Column(
-          children: [head(), Expanded(child: body())],
-        ),
-
-        floatingActionButton: floatingActionButtonAdd22(onClicked: () {  }),
+      body: Column(
+        children: [head(), Expanded(child: body())],
+      ),
+      // floatingActionButton: floatingActionButtonAdd22(onClicked: () {  }),
     );
-
-
   }
 
   Widget head() {
@@ -80,8 +79,10 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             items: _viewModel.parentListResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, UserModel item) {
-              return StaffCard(
-                  user: item, roundBy: 30, boarder: true, onClicked: () {});
+              return staffCard(item, (user) {
+                Navigator.push(
+                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(userType: Role.Parents, userId: user.id) ));
+              });
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -94,8 +95,10 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             items: _viewModel.parentListResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, UserModel item) {
-              return StaffCard(
-                  user: item, onClicked: () {}, boarder: true, roundBy: 30);
+              return staffCard(item, (user) {
+                Navigator.push(
+                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(userType: Role.Parents, userId: user.id) ));
+              });
             },
             direction: Axis.vertical);
 

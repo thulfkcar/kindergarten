@@ -23,7 +23,7 @@ class AssignChildViewModel extends ChangeNotifier {
             setAssigningChildResponse(ApiResponse.error(error.toString())));
   }
 
-  void setAssigningChildResponse(ApiResponse<dynamic> apiResponse) {
+  Future<void> setAssigningChildResponse(ApiResponse<dynamic> apiResponse) async {
     assigningChildResponse = apiResponse;
 
     notifyListeners();

@@ -58,7 +58,7 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
     );
   }
 
-  void assignChildResponse() {
+  Future<void> assignChildResponse() async {
     var status = _viewModelAssignChild.assigningChildResponse.status;
 
     switch (status) {
@@ -71,35 +71,45 @@ class _AssingScreenState extends ConsumerState<AssignScreen> {
               message: "pleas wait until process complete..",
               onCompleted: (s) {},
             ));
+        await _viewModelAssignChild
+            .setAssigningChildResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-              type: DialogType.completed,
-              title: "Competed",
-              message: "assign completed.",
-              onCompleted: (s) {
-                _viewModelAssignChild
-                    .setAssigningChildResponse(ApiResponse.non());
-                Navigator.pop(context);
-              },
-            ));
+        await _viewModelAssignChild
+            .setAssigningChildResponse(ApiResponse.non())
+            .then((value) {
+          showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                type: DialogType.completed,
+                title: "Competed",
+                message: "assign completed.",
+                onCompleted: (s) {},
+              ));
+        });
+
         break;
       case Status.ERROR:
+
+
         Navigator.pop(context);
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-              type: DialogType.error,
-              title: "error",
-              message: _viewModelAssignChild.assigningChildResponse.message
-                  .toString(),
-              onCompleted: (s) {
-                Navigator.pop(context);
-              },
-            ));
+        var message=_viewModelAssignChild.assigningChildResponse.message;
+        await _viewModelAssignChild
+            .setAssigningChildResponse(ApiResponse.non())
+            .then((value) {
+          showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                type: DialogType.error,
+                title: "error",
+                message: message
+                    .toString(),
+                onCompleted: (s) {
+                },
+              ));
+        });
+
         break;
       default:
     }

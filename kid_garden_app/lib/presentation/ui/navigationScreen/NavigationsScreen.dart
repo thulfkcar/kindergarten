@@ -12,7 +12,6 @@ import '../Home/HomeUI.dart';
 import '../Staff/StaffUI.dart';
 import '../general_components/ActionDialog.dart';
 import '../parentsScreen/parentsScreen.dart';
-import '../profile/ProfileUI.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key, required this.title}) : super(key: key);

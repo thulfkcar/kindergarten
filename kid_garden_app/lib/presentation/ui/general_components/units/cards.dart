@@ -91,11 +91,7 @@ Widget staffCard(UserModel user, Function(UserModel) onClicked) {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            imageCircleWithoutShadow(
-                user.image != null
-                    ? "domain${user.image}"
-                    : "https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png",
-                50),
+            imageCircleWithoutShadow('$domain${user.image!}', 50),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -139,7 +135,7 @@ Widget kindergartensCard() {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             imageCircleWithoutShadow(
-                "https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png",
+                "Resources/kinder.jpg",
                 50),
             const SizedBox(width: 10),
             Expanded(
@@ -262,10 +258,7 @@ Widget action4ImgCard(var scrollController, ChildAction childAction) {
                                   i < childAction.medias!.length;
                                   i++)
                                 imageRectangleWithoutShadow(
-                                    childAction.medias![i].url != null
-                                        ? "$domain${childAction.medias![i].url}"
-                                        : "https://freepikpsd.com/file/2019/10/default-user-image-png-4-Transparent-Images.png",
-                                    50)
+                                    '$domain${childAction.medias![i].url}', 50)
                             ],
                           )
                         : Container(),
@@ -294,7 +287,10 @@ Widget roundedClickableWithIcon(
       shape: BoxShape.rectangle,
     ),
     child: MaterialButton(
-      child: Padding(child:Center(child: icon),padding: const EdgeInsets.all(2),),
+      child: Padding(
+        child: Center(child: icon),
+        padding: const EdgeInsets.all(2),
+      ),
       elevation: 0,
       disabledElevation: 0,
       focusElevation: 0,

@@ -76,39 +76,6 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
               return KindergartenCard(kindergraten: item);
             },
             direction: Axis.vertical);
-        Column(
-          children: [
-            Container(
-              height: 40,
-              color: ColorStyle.female2,
-              width: 40,
-            ),
-            radioChildCard(),
-            kindergartensCard(),
-            floatingActionButtonAdd22(onClicked: () {}),
-            ElevatedButton(
-              onPressed: () async {
-                await showRequestDialog(
-                    context: context, requestDialog: RequestDialog());
-              },
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0.0),
-                  backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    // side: BorderSide()
-                  ))),
-              child: Text(
-                "Join request",
-                style: TextStyle(color: ColorStyle.white),
-              ),
-            ),
-            Container(
-              height: 300,
-            ),
-          ],
-        );
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.kindergartenApiResponse.message ?? "Error");

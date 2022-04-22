@@ -163,6 +163,9 @@ class _NavigationScreenParentState
         await viewModel
             .setUserSubscriptionStatusResponse(ApiResponse.non())
             .then((value) async {
+
+          Navigator.pop(context);
+
           await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/di/Modules.dart';
+import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
@@ -13,22 +14,22 @@ import 'SubscriptionViewModel.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {
   String message;
-   SubscriptionScreen({
-    Key? key,
-     required this.message
-  }) : super(key: key);
+
+  SubscriptionScreen({Key? key, required this.message}) : super(key: key);
 
   @override
   ConsumerState createState() => _SubscriptionScreenState();
 }
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
-  late SubscriptionViewModel viewModel ;
-  late LoginPageViewModel    loginViewModel;
+  late SubscriptionViewModel viewModel;
+
+  late LoginPageViewModel loginViewModel;
+
   @override
   Widget build(BuildContext context) {
-    viewModel=ref.watch(subscriptionViewModelProvider(false));
-    loginViewModel=ref.watch(LoginPageViewModelProvider);
+    viewModel = ref.watch(subscriptionViewModelProvider(false));
+    loginViewModel = ref.watch(LoginPageViewModelProvider);
     return EntrySharedScreen(
       body: Column(
         children: [
@@ -62,7 +63,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                           ));
                     });
                   },
-                  child: descriptionText("Scan Subscription QR", ColorStyle.male1),
+                  child:
+                      descriptionText("Scan Subscription QR", ColorStyle.male1),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
@@ -78,8 +80,38 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                                  appBar: AppBar(
+                                    centerTitle: true,
+                                    title: Text("your children",style: TextStyle(color: Colors.black),),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                  ),
+                                  body: ChildrenExplorer(
+                                    fromProfile: true,
+                                  ),
+                                )));
+                  },
+                  child: descriptionText("your Children", ColorStyle.main),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(ColorStyle.white),
+                      side: MaterialStateProperty.all(
+                          BorderSide(width: 1, color: ColorStyle.main)),
+                      elevation: MaterialStateProperty.all(0)),
+                ),
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
                     Future.delayed(Duration.zero, () async {
-
                       await loginViewModel.logOut();
 
                       // Navigator.pushAndRemoveUntil(
@@ -93,7 +125,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                   child: descriptionText("Sign Out", ColorStyle.female1),
                   style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(ColorStyle.white),
+                          MaterialStateProperty.all(ColorStyle.white),
                       side: MaterialStateProperty.all(
                           BorderSide(width: 1, color: ColorStyle.female1)),
                       elevation: MaterialStateProperty.all(0)),
