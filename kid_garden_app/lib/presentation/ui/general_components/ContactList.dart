@@ -13,9 +13,7 @@ import '../../styles/colors_style.dart';
 
 class ContactList extends StatelessWidget {
   Contact contact;
-
   ContactList({Key? key, required this.contact}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
