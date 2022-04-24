@@ -259,7 +259,7 @@ Widget KindergartenButton(
     onPressed: () {
       onKindergartenClicked(kinder.id);
     },
-    child: KindergartenCard(kindergraten: kinder, addRequestEnable: false,),
+    child: KindergartenCard(kindergraten: kinder, addRequestEnable: false, onAddRequestClicked: (String ) {  },),
     style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(ColorStyle.text4),
         elevation: MaterialStateProperty.all(0),

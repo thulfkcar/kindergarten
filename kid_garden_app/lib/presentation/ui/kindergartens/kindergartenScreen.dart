@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/ConfirmationDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/kindergartens/requestDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 
@@ -45,8 +48,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     _viewModel = ref.watch(kindergartenViewModelProvider);
     loginViewModel = ref.watch(LoginPageViewModelProvider);
 
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(title: const Text("kindergarten")),
       bottomSheet: widget.childId == null
           ? Row(
@@ -90,7 +92,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
           Expanded(child: KindergartensView(childId: widget.childId))
         ],
       ),
-    ));
+    );
   }
 
   Widget head() {
@@ -162,6 +164,9 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     return KindergartenCard(
       kindergraten: item,
       addRequestEnable: widget.childId != null ? true : false,
+      onAddRequestClicked: (id) {
+
+      },
     );
   }
 }

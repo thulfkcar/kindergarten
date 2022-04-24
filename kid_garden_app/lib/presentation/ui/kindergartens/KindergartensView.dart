@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewMod
 import 'package:kid_garden_app/presentation/ui/kindergartens/requestDialog.dart';
 
 import '../../../data/network/ApiResponse.dart';
+import '../general_components/ConfirmationDialog.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/KindergratenCard.dart';
 import '../general_components/loading.dart';
@@ -76,7 +77,15 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,);
+              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,
+                onAddRequestClicked: (String ) {
+                  showDialogGeneric(
+                      context: context,
+                      dialog: ConfirmationDialog(
+                          title: "join Kindergarten",
+                          message: "do you want to join this kindergarten",
+                          confirmed: () {}));
+              },);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -89,7 +98,10 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,);
+              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,
+                onAddRequestClicked: (String ) {
+
+              },);
             },
             direction: Axis.vertical);
 

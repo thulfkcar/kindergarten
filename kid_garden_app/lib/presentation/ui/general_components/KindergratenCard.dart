@@ -9,14 +9,14 @@ import '../../../data/network/BaseApiService.dart';
 
 class KindergartenCard extends StatelessWidget {
   Kindergraten kindergraten;
-  Function(String)? onAddRequestClicked;
+  Function(String) onAddRequestClicked;
   bool addRequestEnable = false;
 
   KindergartenCard(
       {Key? key,
       required this.kindergraten,
       required this.addRequestEnable,
-      this.onAddRequestClicked})
+    required  this.onAddRequestClicked})
       : super(key: key);
 
   @override
@@ -71,9 +71,8 @@ class KindergartenCard extends StatelessWidget {
             addRequestEnable == true
                 ? ElevatedButton(
                     onPressed: () {
-                      if(onAddRequestClicked !=null) {
-                        onAddRequestClicked!(kindergraten.id);
-                      }
+                        onAddRequestClicked(kindergraten.id);
+
                     },
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0.0),
