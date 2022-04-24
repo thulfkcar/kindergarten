@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../styles/colors_style.dart';
 
@@ -19,7 +23,7 @@ class ContactList extends StatelessWidget {
         Row(
           children: [
             descriptionText("Name :", ColorStyle.text1),
-            descriptionText(contact.name+" :: ", ColorStyle.text2),
+            descriptionText(contact.name + " :: ", ColorStyle.text2),
             descriptionText(contact.userType, ColorStyle.text2),
             Expanded(child: Container())
           ],
@@ -31,38 +35,71 @@ class ContactList extends StatelessWidget {
             Expanded(child: Container())
           ],
         ),
-      contact.email!=null?  Row(
-          children: [
-            descriptionText("Email :", ColorStyle.text1),
-            descriptionText(contact.email!, ColorStyle.text2),
-            Expanded(child: Container())
-          ],
-        ):Container(),
+        contact.email != null
+            ? Row(
+                children: [
+                  descriptionText("Email :", ColorStyle.text1),
+                  descriptionText(contact.email!, ColorStyle.text2),
+                  Expanded(child: Container())
+                ],
+              )
+            : Container(),
         const SizedBox(
           height: 4,
         ),
         Row(
           children: [
             roundedClickableWithIcon(
-                size: 30, icon: const Icon(FontAwesomeIcons.sms), onClicked: () {}),
-            roundedClickableWithIcon(
-                size: 30, icon: const Icon(FontAwesomeIcons.phone), onClicked: () {}),
-         contact.email!=null?   roundedClickableWithIcon(
                 size: 30,
-                icon: const Icon(FontAwesomeIcons.solidEnvelope),
-                onClicked: () {}):Container(),
+                icon: const Icon(FontAwesomeIcons.sms),
+                onClicked: () async {
+
+
+                  var whatsappUrl ='sms:${contact.phone}';
+                  await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
+
+                }),
             roundedClickableWithIcon(
                 size: 30,
-                icon: Icon(FontAwesomeIcons.telegram,
-                    color: Colors.blue.shade800),
-                onClicked: () {}),
+                icon: const Icon(FontAwesomeIcons.phone),
+                onClicked: () async {
+                  final Uri launchUri = Uri(
+                    scheme: 'tel',
+                    path: contact.phone,
+                  );
+                  await launchUrl(launchUri);
+                }),
+            contact.email != null
+                ? roundedClickableWithIcon(
+                    size: 30,
+                    icon: const Icon(FontAwesomeIcons.solidEnvelope),
+                    onClicked: () async {
+                      final mailtoUri = Uri(
+                          scheme: 'mailto',
+                          path: contact.email,
+                          queryParameters: {'subject': 'Example'});
+                      await launchUrl(mailtoUri);
+                    })
+                : Container(),
+            // roundedClickableWithIcon(
+            //     size: 30,
+            //     icon: Icon(FontAwesomeIcons.telegram,
+            //         color: Colors.blue.shade800),
+            //     onClicked: () async {
+            //       var telegram ="https://telegram.me/${contact.phone}";
+            //       await canLaunch(telegram)? launch(telegram):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
+            //     }),
             roundedClickableWithIcon(
                 size: 30,
                 icon: const Icon(
                   FontAwesomeIcons.whatsapp,
                   color: Colors.green,
                 ),
-                onClicked: () {}),
+                onClicked: () async {
+
+                  var whatsappUrl ="https://wa.me/${contact.phone}?text=hello";
+                  await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
+                }),
           ],
         )
       ],
