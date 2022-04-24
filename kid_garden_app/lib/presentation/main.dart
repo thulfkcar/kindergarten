@@ -6,7 +6,7 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenParent.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/NavigationScreenParent.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenStaff.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationsScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';

@@ -10,8 +10,8 @@ class Contact{
   String name;
   String phone;
   String? email;
-   Role role;
-  Contact({required this.name,required this.phone, this.email,required this.role});
+  String userType;
+  Contact({required this.name,required this.phone, this.email,required this.userType});
   factory Contact.fromJson(Map<String, dynamic> json) =>
       _$ContactFromJson(json);
 

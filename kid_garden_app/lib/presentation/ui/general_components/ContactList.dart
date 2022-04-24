@@ -20,7 +20,7 @@ class ContactList extends StatelessWidget {
           children: [
             descriptionText("Name :", ColorStyle.text1),
             descriptionText(contact.name+" :: ", ColorStyle.text2),
-            descriptionText(contact.role.name, ColorStyle.text2),
+            descriptionText(contact.userType, ColorStyle.text2),
             Expanded(child: Container())
           ],
         ),

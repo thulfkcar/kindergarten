@@ -134,9 +134,7 @@ Widget kindergartensCard() {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            imageCircleWithoutShadow(
-                "Resources/kinder.jpg",
-                50),
+            imageCircleWithoutShadow("Resources/kinder.jpg", 50),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

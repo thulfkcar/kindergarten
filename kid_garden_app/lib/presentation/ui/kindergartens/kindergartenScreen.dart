@@ -17,7 +17,10 @@ import 'KindergartensView.dart';
 import 'LoginDialog.dart';
 
 class KindergartenScreen extends ConsumerStatefulWidget {
-  const KindergartenScreen({
+  String? childId;
+
+  KindergartenScreen({
+    this.childId,
     Key? key,
   }) : super(key: key);
 
@@ -45,37 +48,47 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(title: const Text("kindergarten")),
-      bottomSheet: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
-                elevation: MaterialStateProperty.all(0),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
+      bottomSheet: widget.childId == null
+          ? Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(ColorStyle.male1),
+                      elevation: MaterialStateProperty.all(0),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginOrSignUpScreen()));
 
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginOrSignUpScreen()));
-
-                // await showLoginDialog(
-                //     longinDialog: LoginDialog(
-                //       loggedIn: (bool isLoggedIn) {},
-                //     ),
-                //     context: context);
-              },
+                      // await showLoginDialog(
+                      //     longinDialog: LoginDialog(
+                      //       loggedIn: (bool isLoggedIn) {},
+                      //     ),
+                      //     context: context);
+                    },
+                  ),
+                ),
+              ],
+            )
+          : Container(
+              height: 1,
             ),
-          ),
-        ],
-      ),
       body: Column(
-        children: [head(), const Expanded(child: KindergartensView())],
+        children: [
+          head(),
+          Expanded(child: KindergartensView(childId: widget.childId))
+        ],
       ),
     ));
   }
@@ -111,7 +124,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item);
+              return kinderCard(item);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -124,7 +137,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item);
+              return kinderCard(item);
             },
             direction: Axis.vertical);
 
@@ -143,5 +156,12 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
         await _viewModel.fetchNextKindergarten();
       }
     }
+  }
+
+  Widget kinderCard(Kindergraten item) {
+    return KindergartenCard(
+      kindergraten: item,
+      addRequestEnable: widget.childId != null ? true : false,
+    );
   }
 }

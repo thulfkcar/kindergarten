@@ -16,7 +16,10 @@ import '../general_components/KindergratenCard.dart';
 import '../general_components/loading.dart';
 
 class KindergartensView extends ConsumerStatefulWidget {
-  const KindergartensView({
+  String?  childId;
+
+   KindergartensView({
+     required this.childId,
     Key? key,
   }) : super(key: key);
 
@@ -73,7 +76,7 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item);
+              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -86,7 +89,7 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item);
+              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,);
             },
             direction: Axis.vertical);
 

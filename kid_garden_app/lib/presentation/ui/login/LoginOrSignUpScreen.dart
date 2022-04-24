@@ -14,7 +14,7 @@ import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionVi
 import '../../../data/network/ApiResponse.dart';
 import '../../main.dart';
 import '../general_components/units/texts.dart';
-import '../navigationScreen/NavigationScreenParent.dart';
+import '../navigationScreen/parent/NavigationScreenParent.dart';
 import '../navigationScreen/NavigationsScreen.dart';
 import 'LoginByPhone.dart';
 

@@ -1,4 +1,5 @@
 import 'ChildAction.dart';
+import 'Contact.dart';
 import 'UserModel.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -17,6 +18,7 @@ class Child {
   String? mediaId;
   String? staffName;
   String? kindergartenId;
+  List<Contact>? contacts;
   Child(
       {required this.name,
       required this.id,
@@ -25,7 +27,7 @@ class Child {
       this.age,
       this.birthDate,
       this.childActions,
-      this.user});
+      this.user,this.contacts});
 
   factory Child.fromJson(Map<String, dynamic> json) => _$ChildFromJson(json);
 

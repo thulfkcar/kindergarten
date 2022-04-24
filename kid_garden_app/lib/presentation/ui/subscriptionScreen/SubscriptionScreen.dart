@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
 import '../general_components/units/texts.dart';
@@ -86,12 +87,18 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                             builder: (context) => Scaffold(
                                   appBar: AppBar(
                                     centerTitle: true,
-                                    title: Text("your children",style: TextStyle(color: Colors.black),),
+                                    title: const Text(
+                                      "your children",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                     backgroundColor: Colors.transparent,
                                     elevation: 0,
                                   ),
-                                  body: ChildrenExplorer(
+                                  body: ParentChildrenScreen(
                                     fromProfile: true,
+                                    isSubscriptionValid: false,
+                                    subscriptionMessage:
+                                        "your subscription invalid, please check your subscription status",
                                   ),
                                 )));
                   },

@@ -175,7 +175,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                           name: user.name!,
                           email: user.email,
                           phone: user.phone!,
-                          role: user.role),
+                          userType: user.role.name.toString()),
                     )
                   ],
                 )),
@@ -225,7 +225,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                         longitudes: 4545,
                         phone: "phone",
                         ditance: "5454",
-                        media: Media("id", "Resources/kinder.jpg", MediaType.image)))
+                        media: Media("id", "Resources/kinder.jpg", MediaType.image)), addRequestEnable: false,)
                 : Container(),
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 

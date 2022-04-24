@@ -8,12 +8,16 @@ import '../presentation/ui/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/AssignChildViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
 import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
+import '../presentation/ui/navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
 import '../presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
 import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 
 final childViewModelProvider =
     ChangeNotifierProvider.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
+
+final parentChildrenViewModelProvider =
+    ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>((ref) => ParentChildrenViewModel());
 
 final parentViewModelProvider =
     ChangeNotifierProvider<ParentViewModel>((ref) => ParentViewModel());
@@ -35,8 +39,9 @@ final kindergartenViewModelProvider =
 final staffViewModelProvider =
     ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
 
-final subscriptionViewModelProvider =
-    ChangeNotifierProvider.autoDispose.family<SubscriptionViewModel,bool>((ref,check) => SubscriptionViewModel(check));
+final subscriptionViewModelProvider = ChangeNotifierProvider.autoDispose
+    .family<SubscriptionViewModel, bool>(
+        (ref, check) => SubscriptionViewModel(check));
 
 final assignChildViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<AssignChildViewModel, String>(
@@ -48,8 +53,6 @@ final LoginPageViewModelProvider =
   provider.getUserChanges();
   return provider;
 });
-
-
 
 final signUpViewModelProvider =
     ChangeNotifierProvider.autoDispose<SignUpViewModel>((ref) {

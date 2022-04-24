@@ -17,13 +17,15 @@ Widget titleText(String text, Color color, {TextAlign? textAlign}) {
 
 Widget descriptionText(
   String text,
-  Color color,
+  Color color,{TextAlign? textAlign}
 ) {
   return Text(
     text,
+    textAlign: textAlign,
     style: TextStyle(
       color: color,
       fontSize: 16,
+
     ),
   );
 }
