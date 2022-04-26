@@ -1,8 +1,5 @@
-import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'Child.dart';
-
+import 'package:kid_garden_app/domain/AssignRequest.dart';
 part 'UserModel.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.none)
@@ -17,9 +14,7 @@ class UserModel {
   String? image;
   String? stringRole;
   String? phone;
-
   int? childrenCount;
-
   int? actionsCount;
 
   UserModel({this.id, this.name, this.email, required this.role, this.token,

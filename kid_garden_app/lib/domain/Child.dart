@@ -1,3 +1,5 @@
+import 'package:kid_garden_app/domain/AssignRequest.dart';
+
 import 'ChildAction.dart';
 import 'Contact.dart';
 import 'UserModel.dart';
@@ -19,6 +21,7 @@ class Child {
   String? staffName;
   String? kindergartenId;
   List<Contact>? contacts;
+  AssignRequest? assignRequest;
   Child(
       {required this.name,
       required this.id,
