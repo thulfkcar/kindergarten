@@ -49,7 +49,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
     _repository
-        .getMyChildList(page: pageChild, searchKey: searchKey, subUserId: null)
+        .getParentChildren(page: pageChild, searchKey: searchKey, subUserId: null)
         .then((value) {
       childLastPage = value.item2;
       setChildListResponse(ApiResponse.completed(value.item1));

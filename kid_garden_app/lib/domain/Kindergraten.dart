@@ -12,7 +12,7 @@ String location;
 double latitudes;
 double longitudes;
 String phone;
-String ditance;
+String? ditance;
 Media? media;
 
 Kindergraten({required this.id, required this.name, this.description, required this.location,

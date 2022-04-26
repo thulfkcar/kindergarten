@@ -64,6 +64,51 @@ class ChildRepository {
     }
   }
 
+
+  Future<Tuple2<List<Child>, bool>> getParentChildren({required int page, String? searchKey,String? subUserId}) async {
+    try {
+      Map<String, String> jsonBody = Map();
+
+      var url="Child/GetParentChildren";
+      if(subUserId!=null){
+        jsonBody.addAll({"UserId":subUserId});
+
+      }
+      if(searchKey!=null && searchKey.trim().isNotEmpty) {
+        jsonBody.addAll({"ChildName":searchKey});
+        // url+="?childName=$searchKey";
+      }
+
+      dynamic response = await _apiService.postResponse(url,jsonBody);
+
+      bool isLastPage = false;
+
+      var childes;
+      var mainResponse =
+      MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          childes = (jsonList as List).map((i) => Child.fromJson(i)).toList();
+          return childes;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await childes.isNotEmpty) {
+        return Tuple2(await childes, isLastPage);
+      } else {
+        throw "no Data Available";
+      }
+      // var jsonObject = json.decode(object!) as List;
+      // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
   Future<Tuple2<List<Child>, bool>> getChildrenWithInfo(
       {required int page}) async {
     try {

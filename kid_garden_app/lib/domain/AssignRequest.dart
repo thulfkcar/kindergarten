@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Child.dart';
@@ -9,27 +8,45 @@ part 'AssignRequest.g.dart';
 
 @JsonSerializable()
 class AssignRequest {
-  String id;
-
-  AssignRequest(this.id, this.requestStatus, this.kindergarten, this.message,
-      this.admin, this.parent, this.date, this.reactDate, this.child);
-
-  RequestStatus requestStatus;
-  Kindergraten kindergarten;
   String? message;
-  UserModel? admin;
-  UserModel? parent;
   DateTime date;
   DateTime? reactDate;
-  Child? child;
+  int childAge;
+  String kindergartenName;
+  String? kindergartenId;
+  String kindergartenImage;
+  String adminName;
+  String? adminId;
+  String parentName;
+  String? parentId;
+  String childName;
+  String childId;
+  String childImage;
+  RequestStatus requestStatus;
+
+  AssignRequest({
+    required this.requestStatus,
+      this.message,
+      required this.date,
+      required this.childAge,
+      required this.kindergartenName,
+      this.kindergartenId,
+      required this.kindergartenImage,
+      required this.adminName,
+      this.adminId,
+      required this.parentName,
+      this.parentId,
+      required this.childName,
+      required this.childId,
+      required this.childImage});
 
   factory AssignRequest.fromJson(Map<String, dynamic> json) =>
       _$AssignRequestFromJson(json);
 
   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
   Map<String, dynamic> toJson() => _$AssignRequestToJson(this);
-
 }
+
 enum RequestStatus {
   @JsonValue(1)
   Pending,

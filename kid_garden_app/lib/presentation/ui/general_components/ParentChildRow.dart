@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/domain/Media.dart';
@@ -80,8 +81,12 @@ ParentchildRow(
             color: ColorStyle.text1,
             height: 1,
           ),
-          child.kindergartenId != null
-              ? KindergartenButton(child.kindergartenId, onKindergartenClicked)
+          child.assignRequest != null
+              ? child.assignRequest!.requestStatus == RequestStatus.Pending
+                  ? requestedToKindergartenCard(
+                      child.assignRequest!, onKindergartenClicked)
+                  : (KindergartenButton(
+                      child.kindergartenId, onKindergartenClicked))
               : joinKindergartenCard(child.id, onJoinKindergartenClicked),
         ],
       ),
@@ -89,31 +94,65 @@ ParentchildRow(
   );
 }
 
+Widget requestedToKindergartenCard(
+    AssignRequest assignRequest, Function(String) onKindergartenClicked) {
+  var status = assignRequest.requestStatus;
+  return Column(
+    children: [
+      Row(
+        children: [
+          Expanded(
+            child: status == RequestStatus.Pending
+                ? Container(
+                    color: ColorStyle.main,
+                    child: Center(
+                      child: titleText("Request Pending", ColorStyle.text1),
+                    ))
+                : status == RequestStatus.Rejected
+                    ? Container(
+                        color: ColorStyle.female1,
+                        child: Center(
+                            child: titleText(
+                                "Request Rejected due :${assignRequest.message}",
+                                ColorStyle.text1)),
+                      )
+                    : Container(),
+          )
+        ],
+      ),
+      assignRequest.kindergartenId != null
+          ? KindergartenButton(
+              assignRequest.kindergartenId, onKindergartenClicked)
+          : Container()
+    ],
+  );
+}
+
 Widget ContactCard(List<Contact>? contacts) {
+  return contacts != null
+      ? Container(
+          color: ColorStyle.text5,
+          padding: EdgeInsets.all(10),
+          child: ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            // Let the ListView know how many items it needs to build.
+            itemCount: contacts.length,
+            // Provide a builder function. This is where the magic happens.
+            // Convert each item into a widget based on the type of item it is.
+            itemBuilder: (context, index) {
+              final item = contacts[index];
 
-
-  return contacts!=null?  Container(
-    color: ColorStyle.text5,
-    padding: EdgeInsets.all(10),
-    child: ListView.separated(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      // Let the ListView know how many items it needs to build.
-      itemCount: contacts.length,
-      // Provide a builder function. This is where the magic happens.
-      // Convert each item into a widget based on the type of item it is.
-      itemBuilder: (context, index) {
-        final item = contacts[index];
-
-        return ContactList(
-          contact: item,
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return Container(height: 1, color: Colors.black);
-      },
-    ),
-  ):Container();
+              return ContactList(
+                contact: item,
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return Container(height: 1, color: Colors.black);
+            },
+          ),
+        )
+      : Container();
 }
 
 Widget joinKindergartenCard(String childId, Function(String) onJoinClicked) {
@@ -244,8 +283,7 @@ Widget childCard(Function(Child p1) onClicked, Child child) {
   );
 }
 
-Widget KindergartenButton(
-    String? id, Function(String) onKindergartenClicked) {
+Widget KindergartenButton(String? id, Function(String) onKindergartenClicked) {
   var kinder = Kindergraten(
       id: '',
       longitudes: 34545,
@@ -259,7 +297,11 @@ Widget KindergartenButton(
     onPressed: () {
       onKindergartenClicked(kinder.id);
     },
-    child: KindergartenCard(kindergraten: kinder, addRequestEnable: false, onAddRequestClicked: (String ) {  },),
+    child: KindergartenCard(
+      kindergraten: kinder,
+      addRequestEnable: false,
+      onAddRequestClicked: (String) {},
+    ),
     style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(ColorStyle.text4),
         elevation: MaterialStateProperty.all(0),
