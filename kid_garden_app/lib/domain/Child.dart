@@ -1,4 +1,5 @@
 import 'package:kid_garden_app/domain/AssignRequest.dart';
+import 'package:kid_garden_app/domain/Kindergraten.dart';
 
 import 'ChildAction.dart';
 import 'Contact.dart';
@@ -20,6 +21,7 @@ class Child {
   String? mediaId;
   String? staffName;
   String? kindergartenId;
+  Kindergraten? kindergraten;
   List<Contact>? contacts;
   AssignRequest? assignRequest;
   Child(

@@ -3,24 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
-import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/kindergartens/requestDialog.dart';
-
 import '../../../data/network/ApiResponse.dart';
 import '../general_components/ConfirmationDialog.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/KindergratenCard.dart';
 import '../general_components/loading.dart';
+import '../navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
 
 class KindergartensView extends ConsumerStatefulWidget {
-  String?  childId;
+  String? childId;
 
-   KindergartensView({
-     required this.childId,
+  KindergartensView({
+    required this.childId,
     Key? key,
   }) : super(key: key);
 
@@ -31,6 +27,7 @@ class KindergartensView extends ConsumerStatefulWidget {
 class _KindergartensViewState extends ConsumerState<KindergartensView> {
   late KindergartenViewModel _viewModel;
   late ScrollController _scrollController;
+  late ParentChildrenViewModel viewModelParentChildrenShared;
   TextEditingController editingController = TextEditingController();
 
   @override
@@ -42,26 +39,9 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(kindergartenViewModelProvider);
+    viewModelParentChildrenShared = ref.watch(parentChildrenViewModelProvider);
 
     return body();
-  }
-
-  Widget head() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        onChanged: (value) {
-          _viewModel.search(value);
-        },
-        controller: editingController,
-        decoration: const InputDecoration(
-            labelText: "Search",
-            hintText: "Search",
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25.0)))),
-      ),
-    );
   }
 
   Widget body() {
@@ -77,15 +57,7 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,
-                onAddRequestClicked: (String ) {
-                  showDialogGeneric(
-                      context: context,
-                      dialog: ConfirmationDialog(
-                          title: "join Kindergarten",
-                          message: "do you want to join this kindergarten",
-                          confirmed: () {}));
-              },);
+              return kinderCard(item,context);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -98,10 +70,7 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Kindergraten item) {
-              return KindergartenCard(kindergraten: item,addRequestEnable: widget.childId!=null?true:false,
-                onAddRequestClicked: (String ) {
-
-              },);
+              return kinderCard(item,context);
             },
             direction: Axis.vertical);
 
@@ -120,5 +89,26 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
         await _viewModel.fetchNextKindergarten();
       }
     }
+  }
+
+  Widget kinderCard(Kindergraten item,BuildContext context) {
+    return KindergartenCard(
+      kindergraten: item,
+      addRequestEnable: widget.childId != null ? true : false,
+      onAddRequestClicked: (id) {
+        showDialogGeneric(
+            context: context,
+            dialog: ConfirmationDialog(
+                title: "Joining Request",
+                message:
+                    "do you want to make your child joining this Kindergarten?",
+                confirmed: () {
+                  viewModelParentChildrenShared.setRequestedKindergartenId(item.id);
+                    Navigator.pop(context);
+
+
+                }));
+      },
+    );
   }
 }

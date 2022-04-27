@@ -86,7 +86,10 @@ ParentchildRow(
                   ? requestedToKindergartenCard(
                       child.assignRequest!, onKindergartenClicked)
                   : (KindergartenButton(
-                      child.kindergartenId, onKindergartenClicked))
+                      child.assignRequest!.kindergartenId,
+                      child.assignRequest!.kindergartenImage!,
+                      child.assignRequest!.kindergartenName!,
+                      onKindergartenClicked))
               : joinKindergartenCard(child.id, onJoinKindergartenClicked),
         ],
       ),
@@ -122,7 +125,10 @@ Widget requestedToKindergartenCard(
       ),
       assignRequest.kindergartenId != null
           ? KindergartenButton(
-              assignRequest.kindergartenId, onKindergartenClicked)
+              assignRequest.kindergartenId,
+              assignRequest.kindergartenImage!,
+              assignRequest.kindergartenName!,
+              onKindergartenClicked)
           : Container()
     ],
   );
@@ -283,16 +289,17 @@ Widget childCard(Function(Child p1) onClicked, Child child) {
   );
 }
 
-Widget KindergartenButton(String? id, Function(String) onKindergartenClicked) {
+Widget KindergartenButton(String? id, String image, String name,
+    Function(String) onKindergartenClicked) {
   var kinder = Kindergraten(
-      id: '',
+      id: id!,
       longitudes: 34545,
-      ditance: '50 meter',
+      ditance: '',
       latitudes: 3455,
-      location: 'najaf kufa',
-      phone: '4565656',
+      location: '',
+      phone: '',
       media: Media("sfdf", "Resources/kinder.jpg", MediaType.image),
-      name: '');
+      name: name);
   return ElevatedButton(
     onPressed: () {
       onKindergartenClicked(kinder.id);

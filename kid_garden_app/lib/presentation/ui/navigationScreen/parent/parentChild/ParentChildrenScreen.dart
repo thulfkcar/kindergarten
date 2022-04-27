@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,6 +42,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   TextEditingController editingController = TextEditingController();
   bool isParent = false;
 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -54,6 +57,9 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
       setState(() {
         value?.role == Role.Parents ? isParent = true : isParent = false;
       });
+    });
+    Future.delayed(Duration.zero, () async {
+      await addingRequestState();
     });
     return Scaffold(
       body: Column(
@@ -145,8 +151,16 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
           if (!widget.isSubscriptionValid) Navigator.pop(context);
         },
         onJoinKindergartenClicked: (childId) async {
-          await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => KindergartenScreen(childId: item.id)));
+          await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          KindergartenScreen(childId: item.id)))
+              .then((value) async {
+            await _viewModel.joinRequest(childId);
+          });
+
+          // request if result not null
         },
         onKindergartenClicked: (kindergartenId) {
           showAlertDialog(
@@ -160,5 +174,68 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
           if (!widget.isSubscriptionValid) Navigator.pop(context);
         },
         child: item);
+  }
+
+  Future<void> addingRequestState() async {
+    var status = _viewModel.joinKindergartenRequest.status;
+
+    switch (status) {
+      case Status.LOADING:
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+              type: DialogType.loading,
+              title: "Request Dialog",
+              message: "Requesting the Kindergarten for joining your child in",
+              onCompleted: (d) {},
+            ));
+        await _viewModel
+            .setJoinKindergartenRequest(ApiResponse.non());
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        await _viewModel
+            .setJoinKindergartenRequest(ApiResponse.non())
+            .then((value) async {
+          await showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                type: DialogType.completed,
+                title: "Request Dialog",
+                message:
+                    "Requesting the Kindergarten completed , your request in pending...",
+                onCompleted: (s) async {
+                  await _viewModel.fetchChildren();
+                  await _viewModel
+                      .setJoinKindergartenRequest(ApiResponse.non());
+                },
+              ));
+        });
+
+        break;
+      case Status.ERROR:
+        var message = _viewModel.joinKindergartenRequest.message;
+        Navigator.pop(context);
+        await _viewModel
+            .setJoinKindergartenRequest(ApiResponse.non())
+            .then((value) async {
+          await showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                type: DialogType.error,
+                title: "error while requesting",
+                message: message.toString(),
+                onCompleted: (s) async {
+                  await _viewModel.fetchChildren();
+                  await _viewModel
+                      .setJoinKindergartenRequest(ApiResponse.non());
+                },
+              ));
+        });
+
+        break;
+
+      default:
+    }
   }
 }

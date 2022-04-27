@@ -2,22 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
-import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ConfirmationDialog.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/kindergartens/requestDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-
 import '../../../data/network/ApiResponse.dart';
-import '../general_components/CustomListView.dart';
-import '../general_components/KindergratenCard.dart';
-import '../general_components/loading.dart';
 import 'KindergartensView.dart';
-import 'LoginDialog.dart';
 
 class KindergartenScreen extends ConsumerStatefulWidget {
   String? childId;
@@ -72,12 +62,6 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => LoginOrSignUpScreen()));
-
-                      // await showLoginDialog(
-                      //     longinDialog: LoginDialog(
-                      //       loggedIn: (bool isLoggedIn) {},
-                      //     ),
-                      //     context: context);
                     },
                   ),
                 ),
@@ -89,7 +73,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
       body: Column(
         children: [
           head(),
-          Expanded(child: KindergartensView(childId: widget.childId))
+           Expanded(child: KindergartensView(childId: widget.childId))
         ],
       ),
     );
@@ -113,42 +97,6 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     );
   }
 
-  Widget body() {
-    var status = _viewModel.kindergartenApiResponse.status;
-
-    switch (status) {
-      case Status.LOADING:
-        return LoadingWidget();
-
-      case Status.COMPLETED:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.kindergartenApiResponse.data!,
-            loadNext: false,
-            itemBuilder: (BuildContext context, Kindergraten item) {
-              return kinderCard(item);
-            },
-            direction: Axis.vertical);
-      case Status.ERROR:
-        return MyErrorWidget(
-            msg: _viewModel.kindergartenApiResponse.message ?? "Error");
-
-      case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.kindergartenApiResponse.data!,
-            loadNext: true,
-            itemBuilder: (BuildContext context, Kindergraten item) {
-              return kinderCard(item);
-            },
-            direction: Axis.vertical);
-
-      case Status.NON:
-        return Container();
-      default:
-    }
-    return Container();
-  }
 
   void getNext() async {
     var state = _viewModel.kindergartenApiResponse.status;
@@ -160,13 +108,4 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     }
   }
 
-  Widget kinderCard(Kindergraten item) {
-    return KindergartenCard(
-      kindergraten: item,
-      addRequestEnable: widget.childId != null ? true : false,
-      onAddRequestClicked: (id) {
-
-      },
-    );
-  }
 }

@@ -1,17 +1,21 @@
 import 'package:flutter/cupertino.dart';
+import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
+import 'package:kid_garden_app/repos/UserRepo.dart';
 
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../data/network/FromData/ChildForm.dart';
 
-
 class ParentChildrenViewModel extends ChangeNotifier {
   final _repository = ChildRepository();
+  final _userRepository = UserRepository();
   var childLastPage = false;
   int pageChild = 1;
 
   String? searchKey;
+
+  String? requestedKindergartenId;
 
   ParentChildrenViewModel() : super() {
     fetchChildren();
@@ -26,6 +30,13 @@ class ParentChildrenViewModel extends ChangeNotifier {
   }
 
   ApiResponse<Child> addingChildResponse = ApiResponse.non();
+  ApiResponse<AssignRequest> joinKindergartenRequest = ApiResponse.non();
+
+  Future<void> setJoinKindergartenRequest(
+      ApiResponse<AssignRequest> response) async {
+    joinKindergartenRequest = response;
+    notifyListeners();
+  }
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
@@ -49,7 +60,8 @@ class ParentChildrenViewModel extends ChangeNotifier {
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
     _repository
-        .getParentChildren(page: pageChild, searchKey: searchKey, subUserId: null)
+        .getParentChildren(
+            page: pageChild, searchKey: searchKey, subUserId: null)
         .then((value) {
       childLastPage = value.item2;
       setChildListResponse(ApiResponse.completed(value.item1));
@@ -90,5 +102,25 @@ class ParentChildrenViewModel extends ChangeNotifier {
   void search(String? value) {
     this.searchKey = value;
     fetchChildren();
+  }
+
+  Future<void> joinRequest(String childId) async {
+    //after request done
+    if (requestedKindergartenId != null) {
+      await setJoinKindergartenRequest(ApiResponse.loading());
+      await _userRepository
+          .requestToKindergarten(childId, requestedKindergartenId!)
+          .then((value) async {
+        await setJoinKindergartenRequest(ApiResponse.completed(value));
+        setRequestedKindergartenId(null);
+      }).onError((error, stackTrace) async {
+        await setJoinKindergartenRequest(ApiResponse.error(error.toString()));
+        setRequestedKindergartenId(null);
+      });
+    }
+  }
+
+  void setRequestedKindergartenId(String? id) {
+    requestedKindergartenId = id;
   }
 }

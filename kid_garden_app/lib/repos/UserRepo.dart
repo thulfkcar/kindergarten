@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/data/network/FromData/User.dart';
+import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Redeem.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:tuple/tuple.dart';
@@ -74,7 +75,7 @@ class UserRepository {
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
     } catch (e) {
-       rethrow;
+      rethrow;
     }
   }
 
@@ -200,6 +201,24 @@ class UserRepository {
         return user;
       });
       return await user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AssignRequest> requestToKindergarten(
+      String childId, String requestedKindergartenId) async {
+    try {
+      var response = await _apiService.postResponse(
+          'User/assignRequest?Child=$childId&KindergartenId=$requestedKindergartenId',
+          Map());
+      var result;
+      SingleResponse<AssignRequest>.fromJson(await response, (json) {
+        result = AssignRequest.fromJson(json as Map<String, dynamic>);
+        return result;
+      });
+      return await result;
+
     } catch (e) {
       rethrow;
     }

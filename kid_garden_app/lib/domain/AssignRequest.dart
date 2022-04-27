@@ -11,17 +11,17 @@ class AssignRequest {
   String? message;
   DateTime date;
   DateTime? reactDate;
-  int childAge;
-  String kindergartenName;
+  int? childAge;
+  String? kindergartenName;
   String? kindergartenId;
-  String kindergartenImage;
+  String? kindergartenImage;
   String adminName;
   String? adminId;
-  String parentName;
+  String? parentName;
   String? parentId;
-  String childName;
-  String childId;
-  String childImage;
+  String? childName;
+  String? childId;
+  String? childImage;
   RequestStatus requestStatus;
 
   AssignRequest({
