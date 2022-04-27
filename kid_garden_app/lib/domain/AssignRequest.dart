@@ -15,13 +15,14 @@ class AssignRequest {
   String? kindergartenName;
   String? kindergartenId;
   String? kindergartenImage;
-  String adminName;
+  String? adminName;
   String? adminId;
   String? parentName;
   String? parentId;
   String? childName;
   String? childId;
   String? childImage;
+  Gender? gender;
   RequestStatus requestStatus;
 
   AssignRequest({

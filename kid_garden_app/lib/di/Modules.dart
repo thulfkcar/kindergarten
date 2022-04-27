@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
@@ -38,6 +39,8 @@ final kindergartenViewModelProvider =
 
 final staffViewModelProvider =
     ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
+final adminRequestsViewModelProvider =
+    ChangeNotifierProvider<AdminRequestsViewModel>((ref) => AdminRequestsViewModel());
 
 final subscriptionViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<SubscriptionViewModel, bool>(

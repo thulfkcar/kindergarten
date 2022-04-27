@@ -6,6 +6,7 @@ import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/domain/Media.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
+import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestScreen.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/KindergratenCard.dart';
@@ -163,13 +164,13 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 Expanded(
                     child: Column(
                   children: [
-                    Row(
-                      children: [
-                        descriptionText("Adress:", ColorStyle.text1),
-                        descriptionText("Najaf, street 22.", ColorStyle.text2),
-                        Expanded(child: Container())
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     descriptionText("Adress:", ColorStyle.text1),
+                    //     descriptionText("Najaf, street 22.", ColorStyle.text2),
+                    //     Expanded(child: Container())
+                    //   ],
+                    // ),
                     ContactList(
                       contact: Contact(
                           name: user.name!,
@@ -215,25 +216,14 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 )
               ],
             ),
-            user.role == Role.Parents
-                ? KindergartenCard(
-                    kindergraten: Kindergraten(
-                        id: "id",
-                        name: "name",
-                        location: "location",
-                        latitudes: 54545,
-                        longitudes: 4545,
-                        phone: "phone",
-                        ditance: "5454",
-                        media: Media("id", "Resources/kinder.jpg", MediaType.image)), addRequestEnable: false, onAddRequestClicked: (String ) {  },)
-                : Container(),
+
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 
             Expanded(
-              child: ChildrenExplorer(
+              child: user.role==Role.Staff? ChildrenExplorer(
                 fromProfile: false,
                 subUserId: widget.userId,
-              ),
+              ):const AdminRequestsScreen(),
             ),
           ],
         ));

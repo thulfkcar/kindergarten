@@ -223,4 +223,40 @@ class UserRepository {
       rethrow;
     }
   }
+
+
+
+  Future<Tuple2<List<AssignRequest>, bool>> getAdminRequests(
+      {required int page}) async {
+    try {
+      dynamic response = await _apiService.getResponse("User/GetAdminRequest/$page");
+      bool isLastPage = false;
+
+      var request;
+      var mainResponse =
+      MultiResponse<List<AssignRequest>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          request =
+              (jsonList as List).map((i) => AssignRequest.fromJson(i)).toList();
+          return request;
+        } else {
+          throw "no Data Available";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await request.isNotEmpty) {
+        return Tuple2(await request, isLastPage);
+      } else {
+        throw "no Data Available";
+      }
+      // var jsonObject = json.decode(object!) as List;
+      // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
