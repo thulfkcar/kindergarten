@@ -218,23 +218,21 @@ class UserRepository {
         return result;
       });
       return await result;
-
     } catch (e) {
       rethrow;
     }
   }
 
-
-
   Future<Tuple2<List<AssignRequest>, bool>> getAdminRequests(
       {required int page}) async {
     try {
-      dynamic response = await _apiService.getResponse("User/GetAdminRequest/$page");
+      dynamic response =
+          await _apiService.getResponse("User/GetAdminRequest/$page");
       bool isLastPage = false;
 
       var request;
-      var mainResponse =
-      MultiResponse<List<AssignRequest>>.fromJson(await response, (jsonList) {
+      var mainResponse = MultiResponse<List<AssignRequest>>.fromJson(
+          await response, (jsonList) {
         if (jsonList != null) {
           request =
               (jsonList as List).map((i) => AssignRequest.fromJson(i)).toList();
@@ -259,4 +257,44 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<AssignRequest> rejectRequest(String id, String message) async {
+    try {
+      Map<String, String> jsonBody = Map();
+      jsonBody.addAll({
+        "message": message
+      });
+
+      dynamic response = await _apiService.postResponse(
+          "User/reject", jsonBody);
+
+      var request;
+      SingleResponse<AssignRequest>.fromJson(await response, (json) {
+        request = AssignRequest.fromJson(json as Map<String, dynamic>);
+        return request;
+      });
+      return await request;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+ Future<AssignRequest> acceptRequest(String id) async {
+   try {
+     Map<String, String> jsonBody = Map();
+
+
+     dynamic response = await _apiService.postResponse(
+         "User/accept", jsonBody);
+
+     var request;
+     SingleResponse<AssignRequest>.fromJson(await response, (json) {
+       request = AssignRequest.fromJson(json as Map<String, dynamic>);
+       return request;
+     });
+     return await request;
+   } catch (e) {
+     rethrow;
+   }
+ }
 }

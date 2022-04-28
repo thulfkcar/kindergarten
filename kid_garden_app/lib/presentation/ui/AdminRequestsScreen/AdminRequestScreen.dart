@@ -107,7 +107,7 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                         title: "Rejection Confirmation",
                         message: "do you want to reject this request?",
                         confirmed: () async {
-                          await _viewModel.reject(item.id);
+                          await _viewModel.reject(item.id,value);
                           // request api
                         }));
               },
@@ -159,7 +159,7 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             showAlertDialog(
                 context: context,
                 messageDialog: ActionDialog(
-                    type: DialogType.completed,
+                    type: DialogType.error,
                     title: 'Error',
                     message: message!)));
         break;
@@ -198,7 +198,7 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             showAlertDialog(
                 context: context,
                 messageDialog: ActionDialog(
-                    type: DialogType.completed,
+                    type: DialogType.error,
                     title: 'Error',
                     message: message!)));
         break;
