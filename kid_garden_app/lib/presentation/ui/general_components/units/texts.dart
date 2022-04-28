@@ -36,12 +36,14 @@ Widget customTextForm(
     required TextInputType textType,
     required Function(String) onChange,
     required String? Function(String?) validator,
-    required Function(String?) onSaved}) {
+    required Function(String?) onSaved, bool multiLines=false}) {
   return TextFormField(
     onChanged: ((text) => onChange(text)),
     keyboardType: textType,
     autofocus: true,
+    maxLines: multiLines==true?  4:1,
     decoration: InputDecoration(
+
       prefixIcon: icon,
       hintText: hint,
       contentPadding: const EdgeInsets.fromLTRB(4.0, 15.0, 4.0, 15.0),

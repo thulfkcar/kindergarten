@@ -4,13 +4,15 @@ import 'package:kid_garden_app/domain/AssignRequest.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../repos/UserRepo.dart';
 
-class AdminRequestsViewModel extends ChangeNotifier{
-
+class AdminRequestsViewModel extends ChangeNotifier {
   var staffLastPage = false;
   int pageStaff = 1;
 
   final UserRepository _repository = UserRepository();
-  ApiResponse<List<AssignRequest>> adminRequestsResponse = ApiResponse.loading();
+  ApiResponse<List<AssignRequest>> adminRequestsResponse =
+      ApiResponse.loading();
+  ApiResponse<AssignRequest> acceptResponse = ApiResponse.non();
+  ApiResponse<AssignRequest> rejectResponse = ApiResponse.non();
 
   void setAdminRequestsResponse(ApiResponse<List<AssignRequest>> response) {
     adminRequestsResponse = response;
@@ -18,15 +20,19 @@ class AdminRequestsViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> setAcceptResponse(ApiResponse<AssignRequest> response) async {
+    acceptResponse = response;
+    notifyListeners();
+  }
+
+  Future<void> setRejectResponse(ApiResponse<AssignRequest> response) async {
+    rejectResponse = response;
+    notifyListeners();
+  }
 
   AdminRequestsViewModel() : super() {
     fetchRequests();
   }
-
-
-
-
-
 
   Future<void> fetchRequests() async {
     setAdminRequestsResponse(ApiResponse.loading());
@@ -64,6 +70,14 @@ class AdminRequestsViewModel extends ChangeNotifier{
     return ApiResponse.completed(data);
   }
 
+  Future<void> reject(String id) async {
+  await  setRejectResponse(ApiResponse.loading()).then((value) async => await Future.delayed(Duration(seconds: 6)).then((value) async=>  setRejectResponse(ApiResponse.completed(null))));
+
+  }
+
+  Future<void> accept(String id) async {
+  await  setAcceptResponse(ApiResponse.loading()).then((value) async => await Future.delayed(Duration(seconds: 6)).then((value) async=>  setAcceptResponse(ApiResponse.completed(null))));
 
 
+  }
 }

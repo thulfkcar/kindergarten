@@ -8,6 +8,7 @@ part 'AssignRequest.g.dart';
 
 @JsonSerializable()
 class AssignRequest {
+  String id;
   String? message;
   DateTime date;
   DateTime? reactDate;
@@ -26,6 +27,7 @@ class AssignRequest {
   RequestStatus requestStatus;
 
   AssignRequest({
+    required this.id,
     required this.requestStatus,
       this.message,
       required this.date,

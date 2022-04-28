@@ -8,7 +8,15 @@ import '../../../domain/Child.dart';
 import '../../styles/colors_style.dart';
 
 class RequestCard extends StatefulWidget {
-  RequestCard({required this.assignRequest, Key? key}) : super(key: key);
+  Function() onConfirmClicked;
+  Function() onRejectClicked;
+
+  RequestCard(
+      {required this.onConfirmClicked,
+      required this.onRejectClicked,
+      required this.assignRequest,
+      Key? key})
+      : super(key: key);
   AssignRequest assignRequest;
 
   @override
@@ -83,7 +91,9 @@ class _RequestCardState extends State<RequestCard> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.transparent),
                             elevation: MaterialStateProperty.all(0)),
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.onConfirmClicked();
+                        },
                         child: Text(
                           "Accept",
                           style: TextStyle(color: ColorStyle.male1),
@@ -94,7 +104,9 @@ class _RequestCardState extends State<RequestCard> {
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.transparent),
                             elevation: MaterialStateProperty.all(0)),
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.onRejectClicked();
+                        },
                         child: Text(
                           "Reject",
                           style: TextStyle(color: ColorStyle.female1),

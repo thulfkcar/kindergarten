@@ -6,6 +6,7 @@ import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
+import '../dialogs/dialogs.dart';
 import '../general_components/ConfirmationDialog.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/KindergratenCard.dart';

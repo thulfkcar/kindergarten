@@ -1,24 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/RequestCard.dart';
 
-import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart';
-import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
-import 'package:tuple/tuple.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
-import '../../../domain/UserModel.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';
-import '../general_components/InfoCard.dart';
 import '../general_components/loading.dart';
-import '../general_components/units/cards.dart';
-import '../general_components/units/floating_action_button.dart';
 
 class AdminRequestsScreen extends ConsumerStatefulWidget {
   const AdminRequestsScreen({
@@ -42,14 +34,15 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(adminRequestsViewModelProvider);
+    Future.delayed(Duration.zero, () async {
+      await rejectState();
+    });
+    Future.delayed(Duration.zero, () async {
+      await acceptState();
+    });
 
-    return Scaffold(
-      body:
-       body());
 
-
-
-
+    return Scaffold(body: body());
   }
 
   Widget body() {
@@ -101,8 +94,116 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
   }
 
   Widget adminRequestCard(AssignRequest item) {
+    return RequestCard(
+      assignRequest: item,
+      onRejectClicked: () {
+        showDialogGeneric(
+            context: context,
+            dialog: InputMessageDialog(
+              confirmed: (value) async {
+                await showDialogGeneric(
+                    context: context,
+                    dialog: ConfirmationDialog(
+                        title: "Rejection Confirmation",
+                        message: "do you want to reject this request?",
+                        confirmed: () async {
+                          await _viewModel.reject(item.id);
+                          // request api
+                        }));
+              },
+              title: 'Reject Reason',
+            ));
+      },
+      onConfirmClicked: () {
+        showDialogGeneric(
+            context: context,
+            dialog: ConfirmationDialog(
+                title: 'Confirm Request',
+                message: "do you want to Confirm this Request",
+                confirmed: () async {
+                  await _viewModel.accept(item.id);
 
-    return RequestCard(assignRequest: item);
+                  // request api to confirm this request
+                }));
+      },
+    );
+  }
 
+  Future<void> acceptState() async {
+    var status = _viewModel.acceptResponse.status;
+    switch (status) {
+      case Status.LOADING:
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+                type: DialogType.loading,
+                title: 'accepting request',
+                message: "Request Pending Please waite"));
+        _viewModel.setAcceptResponse(ApiResponse.non());
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        await _viewModel.setAcceptResponse(ApiResponse.non()).then((value) =>
+            showAlertDialog(
+                context: context,
+                messageDialog: ActionDialog(
+                    type: DialogType.completed,
+                    title: 'accepting request',
+                    message: "Request Accepted")));
+
+        break;
+      case Status.ERROR:
+        var message = _viewModel.acceptResponse.message;
+        Navigator.pop(context);
+        await _viewModel.setAcceptResponse(ApiResponse.non()).then((value) =>
+            showAlertDialog(
+                context: context,
+                messageDialog: ActionDialog(
+                    type: DialogType.completed,
+                    title: 'Error',
+                    message: message!)));
+        break;
+
+      default:
+    }
+  }
+
+  Future<void> rejectState() async {
+    var status = _viewModel.rejectResponse.status;
+    switch (status) {
+      case Status.LOADING:
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+                type: DialogType.loading,
+                title: 'rejecting request',
+                message: "Request Pending Please waite"));
+        _viewModel.setRejectResponse(ApiResponse.non());
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        await _viewModel.setRejectResponse(ApiResponse.non()).then((value) =>
+            showAlertDialog(
+                context: context,
+                messageDialog: ActionDialog(
+                    type: DialogType.completed,
+                    title: 'rejecting request',
+                    message: "Request rejected")));
+
+        break;
+      case Status.ERROR:
+        var message = _viewModel.rejectResponse.message;
+        Navigator.pop(context);
+        await _viewModel.setRejectResponse(ApiResponse.non()).then((value) =>
+            showAlertDialog(
+                context: context,
+                messageDialog: ActionDialog(
+                    type: DialogType.completed,
+                    title: 'Error',
+                    message: message!)));
+        break;
+
+      default:
+    }
   }
 }
