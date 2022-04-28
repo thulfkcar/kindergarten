@@ -94,11 +94,12 @@ class AdminRequestsViewModel extends ChangeNotifier {
   Future<void> updateList(AssignRequest request) async {
     if (adminRequestsResponse.data != null) {
       int index = adminRequestsResponse.data!
-          .indexWhere((element) => element == request);
+          .indexWhere((element) => element.id == request.id);
       if (index >= 0) {
         adminRequestsResponse.data!.removeAt(index);
         adminRequestsResponse.data!.insert(index, request);
       }
     }
+    notifyListeners();
   }
 }

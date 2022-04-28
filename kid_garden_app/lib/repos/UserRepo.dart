@@ -260,13 +260,9 @@ class UserRepository {
 
   Future<AssignRequest> rejectRequest(String id, String message) async {
     try {
-      Map<String, String> jsonBody = Map();
-      jsonBody.addAll({
-        "message": message
-      });
 
       dynamic response = await _apiService.postResponse(
-          "User/reject", jsonBody);
+          "User/assignRequestReject/$id/$message",Map());
 
       var request;
       SingleResponse<AssignRequest>.fromJson(await response, (json) {
@@ -281,11 +277,10 @@ class UserRepository {
 
  Future<AssignRequest> acceptRequest(String id) async {
    try {
-     Map<String, String> jsonBody = Map();
 
 
      dynamic response = await _apiService.postResponse(
-         "User/accept", jsonBody);
+         "User/assignRequestAccept/$id", Map());
 
      var request;
      SingleResponse<AssignRequest>.fromJson(await response, (json) {

@@ -44,13 +44,21 @@ class _RequestCardState extends State<RequestCard> {
               children: [
                 Expanded(
                   child: Container(
+                    decoration: BoxDecoration( color: status == RequestStatus.Pending
+                        ? ColorStyle.second
+                        : status == RequestStatus.Joined
+                        ? ColorStyle.male1
+                        : status == RequestStatus.Rejected
+                        ? ColorStyle.female1:ColorStyle.error,borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)) ),
+
                     padding: const EdgeInsets.only(top: 2, bottom: 2),
                     child: Center(
-                        child: Text(status == 1
+                        child: Text(status == RequestStatus.Pending
                             ? "Pending"
-                            : status == 2
+                            : status == RequestStatus.Joined
                                 ? "Accepted"
-                                : "Rejected")),
+                                : status == RequestStatus.Rejected
+                            ? "Rejected":"")),
                   ),
                 ),
               ],
@@ -65,14 +73,17 @@ class _RequestCardState extends State<RequestCard> {
               color: Colors.black,
               height: 1,
             ),
-            request.message != null
+            ( request.message != null && request.requestStatus==RequestStatus.Rejected)
                 ? Column(
                     children: [
                       Row(
                         children: [
                           Expanded(
                               child: Container(
-                            child: Text(request.message!),
+                            child: Center(child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(request.message!,maxLines: 4,),
+                            )),
                           ))
                         ],
                       ),
