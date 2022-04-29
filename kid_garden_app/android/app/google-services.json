@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "517790856908",
+    "project_id": "kindergarten-2a1b9",
+    "storage_bucket": "kindergarten-2a1b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517790856908:android:96ae59173dae5c7dedf469",
+        "android_client_info": {
+          "package_name": "com.phoenix.kid_garden_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517790856908-esa04jh54sv4jjm991fef58mv4lld9eg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC08YR5mqPUokMFsGYaiqK8OVrWW4T5Gi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517790856908-esa04jh54sv4jjm991fef58mv4lld9eg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "517790856908-6lpdt91ebt6mqbtclfovrophvr0ca04s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.phoenix.kidGartenApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

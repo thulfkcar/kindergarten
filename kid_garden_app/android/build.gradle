@@ -6,7 +6,14 @@ buildscript {
     }
 
     dependencies {
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
         classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
+        // START: FlutterFire Configuration
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
+        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
+        // END: FlutterFire Configuration
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
