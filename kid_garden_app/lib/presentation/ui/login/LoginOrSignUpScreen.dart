@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -179,5 +180,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
             ? await Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Container()))
             : await viewModel.checkParentSubscription();
+    user != null ? FirebaseMessaging.instance
+        .subscribeToTopic("user.${user.id}"):null;
   }
 }

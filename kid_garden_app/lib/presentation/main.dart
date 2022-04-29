@@ -28,6 +28,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   String? token = await messaging.getToken(
     vapidKey: "BGpdLRs......",
   );
@@ -40,6 +41,7 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
+  await messaging.subscribeToTopic("all");
 
   print('User granted permission: ${settings.authorizationStatus}');
 
@@ -113,12 +115,15 @@ class _MyAppState extends ConsumerState<MyApp> {
           viewModel.currentUser == null
               ? screen = KindergartenScreen()
               : (viewModel.currentUser!.role == Role.admin ||
-                      viewModel.currentUser!.role == Role.superAdmin)
-                  ? screen = NavigationScreen(title: "kinderGarten")
-                  : (viewModel.currentUser!.role == Role.Staff)
-                      ? screen = NavigationScreenStaff(title: viewModel.currentUser!.name.toString())
-                      : screen = NavigationScreenParent(
-                          title: viewModel.currentUser!.name.toString());
+              viewModel.currentUser!.role == Role.superAdmin)
+              ? screen = NavigationScreen(title: "kinderGarten")
+              : (viewModel.currentUser!.role == Role.Staff)
+              ? screen = NavigationScreenStaff(
+              title: viewModel.currentUser!.name.toString())
+              : screen = NavigationScreenParent(
+              title: viewModel.currentUser!.name.toString());
+          viewModel.currentUser != null ? FirebaseMessaging.instance
+              .subscribeToTopic("user.${viewModel.currentUser?.id}"):null;
           break;
         case StaffUI_Route:
           screen = StaffUI();
