@@ -3,7 +3,6 @@ import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
-
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../data/network/FromData/ChildForm.dart';
 
@@ -41,7 +40,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
     if (apiResponse.data != null) {
-      setChildListResponse(appendNewItems([apiResponse.data!]));
+     appendNewItems([apiResponse.data!]);
     }
 
     notifyListeners();
@@ -81,7 +80,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
               page: pageChild, searchKey: searchKey, subUserId: null)
           .then((value) {
         childLastPage = value.item2;
-        setChildListResponse(appendNewItems(value.item1));
+        appendNewItems(value.item1);
       }).onError((error, stackTrace) {
         setChildListResponse(ApiResponse.error(error.toString()));
       });
@@ -93,10 +92,10 @@ class ParentChildrenViewModel extends ChangeNotifier {
     pageChild += 1;
   }
 
-  ApiResponse<List<Child>> appendNewItems(List<Child> value) {
+  void appendNewItems(List<Child> value) {
     var data = childListResponse.data;
     data?.addAll(value);
-    return ApiResponse.completed(data);
+    setChildListResponse(ApiResponse.completed(data));
   }
 
   void search(String? value) {

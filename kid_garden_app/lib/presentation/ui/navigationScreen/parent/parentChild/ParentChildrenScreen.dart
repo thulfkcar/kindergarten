@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
@@ -36,17 +34,14 @@ class ParentChildrenScreen extends ConsumerStatefulWidget {
 }
 
 class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
-  late ScrollController _scrollController;
   late ParentChildrenViewModel _viewModel;
   late LoginPageViewModel _viewModel_login;
   TextEditingController editingController = TextEditingController();
   bool isParent = false;
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController = ScrollController()..addListener(getNext);
   }
 
   @override
@@ -72,8 +67,14 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
       ),
       floatingActionButton: widget.fromProfile
           ? floatingActionButtonAdd22(onClicked: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ChildAddingScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChildAddingScreen(onAdded: (child) {
+                        if(child!=null) {
+                          _viewModel.appendNewItems([child]);
+                        }
+                          })));
             })
           : null,
     );
@@ -107,26 +108,24 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
       case Status.COMPLETED:
         return CustomListView(
-            scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Child item) {
               return childNavigation(item);
             },
-            direction: Axis.vertical);
+            direction: Axis.vertical, scrollController: ScrollController(),);
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.childListResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(
-            scrollController: _scrollController,
             items: _viewModel.childListResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Child item) {
               return childNavigation(item);
             },
-            direction: Axis.vertical);
+            direction: Axis.vertical, scrollController: ScrollController(),);
 
       case Status.NON:
         return Container();
@@ -135,15 +134,6 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
     return Container();
   }
 
-  void getNext() async {
-    var state = _viewModel.childListResponse.status;
-    if (_scrollController.position.maxScrollExtent ==
-        _scrollController.position.pixels) {
-      if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
-        await _viewModel.fetchNextChildren();
-      }
-    }
-  }
 
   Widget childNavigation(Child item) {
     return ParentChildCard(
@@ -189,8 +179,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
               message: "Requesting the Kindergarten for joining your child in",
               onCompleted: (d) {},
             ));
-        await _viewModel
-            .setJoinKindergartenRequest(ApiResponse.non());
+        await _viewModel.setJoinKindergartenRequest(ApiResponse.non());
         break;
       case Status.COMPLETED:
         Navigator.pop(context);

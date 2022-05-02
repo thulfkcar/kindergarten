@@ -96,47 +96,47 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
 
     if (_key.currentState!.validate()) {
       ///////////////firebase auth////////////////////
-            showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.loading, title: "sign in", message: "please wait"));
-            await auth.verifyPhoneNumber(
-              phoneNumber: '+964${form.phoneNumber}',
-              timeout: const Duration(seconds: 60),
-             // autoRetrievedSmsCodeForTesting:"123456",
-              verificationCompleted: (PhoneAuthCredential credential) async {
-                await signInWithUserCredential(auth, credential);
-              },
-              verificationFailed: (FirebaseAuthException e) {
-                if (e.code == 'invalid-phone-number') {
-                  throw e;
-                }
-              },
-              codeSent: (String verificationId, int? resendToken) async {
-                // Update the UI - wait for the user to enter the SMS code
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PinCodeVerificationScreen(
-                              onVerify: (pin) async {
-                                String smsCode = pin;
-
-                                // Create a PhoneAuthCredential with the code
-                                PhoneAuthCredential credential =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: verificationId,
-                                        smsCode: smsCode);
-
-                                // Sign the user in (or link) with the credential
-
-                                await signInWithUserCredential(auth, credential);
-                              },
-                              onResendCode: () {},
-                              phoneNumber: '+964${form.phoneNumber}',
-                            )));
-              },
-              codeAutoRetrievalTimeout: (String verificationId) {},
-           );
+      //       showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.loading, title: "sign in", message: "please wait"));
+      //       await auth.verifyPhoneNumber(
+      //         phoneNumber: '+964${form.phoneNumber}',
+      //         timeout: const Duration(seconds: 60),
+      //        // autoRetrievedSmsCodeForTesting:"123456",
+      //         verificationCompleted: (PhoneAuthCredential credential) async {
+      //           await signInWithUserCredential(auth, credential);
+      //         },
+      //         verificationFailed: (FirebaseAuthException e) {
+      //           if (e.code == 'invalid-phone-number') {
+      //             throw e;
+      //           }
+      //         },
+      //         codeSent: (String verificationId, int? resendToken) async {
+      //           // Update the UI - wait for the user to enter the SMS code
+      //
+      //           Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                   builder: (context) => PinCodeVerificationScreen(
+      //                         onVerify: (pin) async {
+      //                           String smsCode = pin;
+      //
+      //                           // Create a PhoneAuthCredential with the code
+      //                           PhoneAuthCredential credential =
+      //                               PhoneAuthProvider.credential(
+      //                                   verificationId: verificationId,
+      //                                   smsCode: smsCode);
+      //
+      //                           // Sign the user in (or link) with the credential
+      //
+      //                           await signInWithUserCredential(auth, credential);
+      //                         },
+      //                         onResendCode: () {},
+      //                         phoneNumber: '+964${form.phoneNumber}',
+      //                       )));
+      //         },
+      //         codeAutoRetrievalTimeout: (String verificationId) {},
+      //      );
       //////////////////////////////
-      //       await viewModel.authByPhone(loginRequestData: form);
+            await viewModel.authByPhone(loginRequestData: form);
 
 
       /// No any error in validation

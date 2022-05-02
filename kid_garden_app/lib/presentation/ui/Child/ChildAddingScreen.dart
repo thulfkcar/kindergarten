@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
-import 'package:tuple/tuple.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 import '../../utile/FormValidator.dart';
@@ -16,7 +15,9 @@ import 'ChildViewModel.dart';
 import '../general_components/ActionDialog.dart';
 
 class ChildAddingScreen extends ConsumerStatefulWidget {
-  ChildAddingScreen({
+  Function(Child?) onAdded;
+  ChildAddingScreen( {
+    required this.onAdded,
     Key? key,
   }) : super(key: key);
 
@@ -201,6 +202,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
+        selectedDate=picked.toUtc();
         form.birthDate = picked.toUtc();
       });
     }
@@ -216,7 +218,8 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           groupValue: selectedGender,
           onChanged: (gender) {
             setState(() {
-              form.gender = gender!.index;
+              selectedGender=gender!;
+              form.gender = gender.index;
             });
           },
         ),
@@ -265,7 +268,9 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         ));
         _viewModel.addingChildResponse = ApiResponse.non();
         break;
+
       case Status.COMPLETED:
+        var date=_viewModel.addingChildResponse.data;
         Navigator.pop(context);
         showAlertDialog(
             messageDialog: ActionDialog(
@@ -276,6 +281,8 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
             Navigator.pop(context);
           },
         ));
+        widget.onAdded(date);
+
         _viewModel.addingChildResponse = ApiResponse.non();
         break;
       case Status.ERROR:

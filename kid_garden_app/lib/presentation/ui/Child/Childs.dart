@@ -62,12 +62,12 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
           Expanded(child: body())
         ],
       ),
-      floatingActionButton: widget.fromProfile
-          ? floatingActionButtonAdd22(onClicked: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ChildAddingScreen()));
-            })
-          : null,
+      // floatingActionButton: widget.fromProfile
+      //     ? floatingActionButtonAdd22(onClicked: () {
+      //         Navigator.push(context,
+      //             MaterialPageRoute(builder: (context) => ChildAddingScreen()));
+      //       })
+      //     : null,
     );
   }
 

@@ -1,19 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/CustomListView.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
-
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../general_components/loading.dart';
-import '../general_components/units/floating_action_button.dart';
 
 class ParentsScreen extends ConsumerStatefulWidget {
   const ParentsScreen({

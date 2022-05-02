@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
@@ -11,7 +10,6 @@ import '../../general_components/ActionDialog.dart';
 import '../../subscriptionScreen/SubscriptionScreen.dart';
 import '../../subscriptionScreen/SubscriptionViewModel.dart';
 import '../../userProfile/UserProfile.dart';
-
 class NavigationScreenParent extends ConsumerStatefulWidget {
   NavigationScreenParent({Key? key, required this.title}) : super(key: key);
   final String title;
