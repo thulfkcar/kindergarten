@@ -167,7 +167,10 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
   }
 
   void navigateToDest() async {
+
     var user = await login_viewModel.getUserChanges();
+    user != null ? FirebaseMessaging.instance
+        .subscribeToTopic("user_${user.id}"):null;
     (user!.role == Role.admin || user.role == Role.superAdmin)
         ?await Navigator.pushAndRemoveUntil(
             context,
@@ -180,7 +183,6 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
             ? await Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Container()))
             : await viewModel.checkParentSubscription();
-    user != null ? FirebaseMessaging.instance
-        .subscribeToTopic("user.${user.id}"):null;
+
   }
 }
