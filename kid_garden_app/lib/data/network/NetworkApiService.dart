@@ -157,6 +157,7 @@ class NetworkApiService extends BaseApiService {
       case 401:
       case 403:
       case 402:
+      case 405:
         throw response.body.toString();
       case 404:
         throw UrlNotFoundException(response.body.toString());

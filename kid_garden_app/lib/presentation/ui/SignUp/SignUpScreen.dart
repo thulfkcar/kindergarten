@@ -162,6 +162,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         }
         break;
       case Status.ERROR:
+        showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.warning, title: "SigUp Issue", message: viewModel.signUpApiResponse.message!+""));
+        viewModel.setSignUpApiResponse(ApiResponse.non());
+
         return login;
       case Status.NON:
         return login;

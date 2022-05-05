@@ -53,7 +53,9 @@ class LoginPageViewModel extends ChangeNotifier {
       await setUser(value);
       setUserApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
-      ApiResponse.error(error.toString());
+      setUserApiResponse(  ApiResponse.error(error.toString()));
+
+
     }).whenComplete(() => {});
   }
 
