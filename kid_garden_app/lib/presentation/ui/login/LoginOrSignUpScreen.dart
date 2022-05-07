@@ -9,6 +9,7 @@ import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScre
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/SignUp/SignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenStaff.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionScreen.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
 
@@ -181,7 +182,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
           )
         : (user.role == Role.Staff)
             ? await Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Container()))
+                context, MaterialPageRoute(builder: (context) => NavigationScreenStaff(title: user.name!)))
             : await viewModel.checkParentSubscription();
 
   }

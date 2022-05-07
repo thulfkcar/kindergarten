@@ -91,7 +91,7 @@ Widget staffCard(UserModel user, Function(UserModel) onClicked) {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            imageCircleWithoutShadow('$domain${user.image!}', 50),
+            user.image!=null? imageCircleWithoutShadow('$domain${user.image!}', 50):imageCircleWithoutShadow('$domain${"Resources/user.jpg"}', 50),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

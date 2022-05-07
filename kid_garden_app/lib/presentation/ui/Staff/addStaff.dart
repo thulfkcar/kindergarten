@@ -157,7 +157,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                           autofocus: false,
                           cursorColor: ColorStyle.female1,
                           decoration: InputDecoration(
-                            hintText: "Enter Password",
+                            hintText: "Enter phone number",
                             focusColor: ColorStyle.male1,
                             fillColor: ColorStyle.male1,
                             hoverColor: ColorStyle.male1,

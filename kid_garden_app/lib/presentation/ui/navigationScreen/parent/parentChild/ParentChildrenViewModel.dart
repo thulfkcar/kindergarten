@@ -63,7 +63,8 @@ class ParentChildrenViewModel extends ChangeNotifier {
             page: pageChild, searchKey: searchKey, subUserId: null)
         .then((value) {
       childLastPage = value.item2;
-      setChildListResponse(ApiResponse.completed(value.item1));
+      if(value.item1==null) setChildListResponse(ApiResponse.error("refresh the app"));
+        setChildListResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
       setChildListResponse(ApiResponse.error(error.toString()));
     });
