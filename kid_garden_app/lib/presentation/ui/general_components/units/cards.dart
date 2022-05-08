@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kid_garden_app/data/network/BaseApiService.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../../domain/UserModel.dart';
 import '../../../styles/colors_style.dart';
@@ -91,7 +92,10 @@ Widget staffCard(UserModel user, Function(UserModel) onClicked) {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            user.image!=null? imageCircleWithoutShadow('$domain${user.image!}', 50):imageCircleWithoutShadow('$domain${"Resources/user.jpg"}', 50),
+            user.image != null
+                ? imageCircleWithoutShadow('$domain${user.image!}', 50)
+                : imageCircleWithoutShadow(
+                '$domain${"Resources/user.jpg"}', 50),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -198,78 +202,96 @@ Widget childActionNumberCard(String titleText1, String descriptionText1,
   );
 }
 
-Widget action4ImgCard(var scrollController, ChildAction childAction) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: MaterialButton(
-      elevation: 0,
-      disabledElevation: 0,
-      focusElevation: 0,
-      highlightElevation: 0,
-      hoverElevation: 0,
-      padding: EdgeInsets.zero,
-      color: ColorStyle.text4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      onPressed: () {},
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  childAction.childName != null
-                      ? titleText(childAction.childName!, ColorStyle.text1)
-                      : Container(),
-                  childAction.actionGroupName != null
-                      ? titleText(
-                          childAction.actionGroupName!, ColorStyle.text1)
-                      : Container(),
-                  descriptionText(childAction.value, ColorStyle.text2),
-                  childAction.userName != null
-                      ? descriptionText(
-                          "Done by: ${childAction.userName}", ColorStyle.text2)
-                      : Container(),
-                  childAction.audience != null
-                      ? descriptionText(
-                          "Audience: ${childAction.audience.name}",
-                          ColorStyle.text2)
-                      : Container(),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  SingleChildScrollView(
-                    controller: scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: childAction.medias != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              for (int i = 0;
-                                  i < childAction.medias!.length;
-                                  i++)
-                                imageRectangleWithoutShadow(
-                                    '$domain${childAction.medias![i].url}', 50)
-                            ],
-                          )
+class action4ImgCard extends StatelessWidget {
+
+  var scrollController;
+  late ChildAction childAction;
+
+  action4ImgCard( this.scrollController,
+      this.childAction, {Key? key}) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MaterialButton(
+        elevation: 0,
+        disabledElevation: 0,
+        focusElevation: 0,
+        highlightElevation: 0,
+        hoverElevation: 0,
+        padding: EdgeInsets.zero,
+        color: ColorStyle.text4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        onPressed: () {},
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    childAction.childName != null
+                        ? titleText(childAction.childName!, ColorStyle.text1)
                         : Container(),
-                  )
-                ],
+                    childAction.actionGroupName != null
+                        ? titleText(
+                        childAction.actionGroupName!, ColorStyle.text1)
+                        : Container(),
+                    descriptionText(childAction.value, ColorStyle.text2),
+                    childAction.userName != null
+                        ? descriptionText(
+                        "${AppLocalizations.of(context)?.getText("done_by") ??
+                            "Done By"} : ${childAction.userName}",
+                        ColorStyle.text2)
+                        : Container(),
+                    childAction.audience != null
+                        ? descriptionText(
+                        "${AppLocalizations.of(context)?.getText("audience") ??
+                            "Audience"} :${AppLocalizations.of(context)
+                            ?.getText(childAction.audience.name) ??
+                            childAction.audience.name}",
+                        ColorStyle.text2)
+                        : Container(),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    SingleChildScrollView(
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: childAction.medias != null
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          for (int i = 0;
+                          i < childAction.medias!.length;
+                          i++)
+                            imageRectangleWithoutShadow(
+                                '$domain${childAction.medias![i].url}', 50)
+                        ],
+                      )
+                          : Container(),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
+
 
 Widget roundedClickableWithIcon(
     {required Icon icon, required double size, required Function() onClicked}) {
@@ -323,7 +345,7 @@ Widget radioChildCard() {
         mainAxisSize: MainAxisSize.max,
         children: [
           Checkbox(
-              // fillColor: ColorStyle.male1,
+            // fillColor: ColorStyle.male1,
               activeColor: ColorStyle.male1,
               value: value22,
               onChanged: (value) {

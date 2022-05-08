@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../domain/ActionGroup.dart';
 import '../../../domain/ChildAction.dart';
 import '../general_components/MultiSelectChip.dart';
@@ -45,7 +46,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
     return Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
         child: AlertDialog(
-          title: (Text("Adding Action")),
+          title: (Text(AppLocalizations.of(context)?.getText("adding_action")??"Adding Action")),
           content: Container(
 
             child: SingleChildScrollView(
@@ -69,7 +70,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                             )),
                         filled: true,
                         hintStyle: TextStyle(color: Colors.grey[400]),
-                        hintText: "bsdfg dfg sdfg dh sdghft",
+                        hintText: "playing with other children",
                       ),
                       maxLines: 6,
                       minLines: 4,
@@ -91,9 +92,9 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                       onPressed: () {
                         picImage();
                       },
-                      child: const Text(
-                        'Choose images',
-                        style: TextStyle(color: Colors.blue),
+                      child:  Text(
+                       AppLocalizations.of(context)?.getText("choose_image")?? 'Choose images',
+                        style: const TextStyle(color: Colors.blue),
                       )),
 
                 ],
@@ -108,7 +109,7 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                   widget.isAddingAction = false;/**/
                 });
               },
-              child: const Text("Cancel"),
+              child:  Text(AppLocalizations.of(context)?.getText("cancel")??"Cancel"),
             ),
             TextButton(
               //todo missing validate before that
@@ -127,14 +128,14 @@ class _AddChildActionDialogState extends ConsumerState<AddChildActionDialog> {
                 widget.isAddingAction = false;
                 widget.onDismiss(false);
               },
-              child: const Text("Save"),
+              child:  Text(AppLocalizations.of(context)?.getText("save")??"Save"),
             )
           ],
         ));
   }
 
   Future<void> picImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true,type:FileType.image );
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();

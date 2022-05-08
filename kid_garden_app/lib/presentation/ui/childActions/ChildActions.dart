@@ -211,8 +211,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
-              title: "Adding Child",
-              message: "pleas wait until process complete..",
+              title: AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
+              message:AppLocalizations.of(context)?.getText("adding_action_des")?? "please wait until process complete..",
               onCompleted: (s) {},
             ));
         _viewModel.setChildActionPostResponse(ApiResponse.non());
@@ -223,7 +223,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.completed,
-              title: "Competed",
+              title: AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
               message:
                   "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
               onCompleted: (s) {
@@ -238,7 +238,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.error,
-              title: "error",
+              title:AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
               message: _viewModel.childActionPostResponse.message.toString(),
               onCompleted: (s) {},
             ));

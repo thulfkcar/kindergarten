@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 class MultiSelectChip extends StatefulWidget {
   final List<Audience> reportList;
@@ -25,7 +26,7 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
-          label: Text(item.name),
+          label: Text(AppLocalizations.of(context)?.getText(item.name)??item.name),
           selected: selectedChoices.contains(item),
           onSelected: (selected) {
             if(selectedChoices.length == (widget.maxSelection  ?? -1) && !selectedChoices.contains(item)) {

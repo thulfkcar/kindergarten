@@ -46,7 +46,18 @@
   "sign_out": "Sign Out",
   "phone": "Phone Number",
   "child_actions": "Child Actions",
+  "adding_action": "Adding Action",
+  "adding_action_des": "please wait until process complete..",
   "search": "Search",
+  "done_by": "Done By",
+  "audience": "Audience",
+  "choose_image": "Choose Image",
+  "Staff": "Staff",
+  "Parents": "Parents",
+  "OnlyMe": "OnlyMe",
+  "All": "All",
+  "cancel": "cancel",
+  "save": "save",
   "app_dis": "Welcome in Phoenix Kindergarten",
   "app_dis_title": "Phoenix Kindergarten Log System."
 }
