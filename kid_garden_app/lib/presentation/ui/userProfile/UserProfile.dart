@@ -217,7 +217,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 
             Expanded(
-              child: user.role==Role.Staff? ChildrenExplorer(
+              child: (user.role==Role.Staff|| user.role==Role.Parents) ? ChildrenExplorer(
                 fromProfile: false,
                 subUserId: widget.userId,
               ):const AdminRequestsScreen(),

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class StringResources {
-  static StringResources? of(BuildContext context) {
-    return Localizations.of<StringResources>(context, StringResources);
+class AppLocalizations {
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
   String getText(String key) => language![key];
@@ -13,19 +14,26 @@ class StringResources {
 
 Map<String, dynamic>? language;
 
-class DemoLocalizationsDelegate extends LocalizationsDelegate<StringResources> {
-  const DemoLocalizationsDelegate();
+class ThugLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const ThugLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'ar'].contains(locale.languageCode);
+  bool isSupported(Locale locale) {
 
-  @override
-  Future<StringResources> load(Locale locale) async {
-    String string = await rootBundle.loadString("res/strings/${locale.languageCode}.json");
-    language = json.decode(string);
-    return SynchronousFuture<StringResources>(StringResources());
+    return  ['en', 'ar'].contains(locale.languageCode);
   }
 
+
   @override
-  bool shouldReload(DemoLocalizationsDelegate old) => false;
+  Future<AppLocalizations> load(Locale locale) async {
+    String string = await rootBundle.loadString("res/strings/${locale.languageCode}.json");
+    language = json.decode(string);
+    return SynchronousFuture<AppLocalizations>(AppLocalizations());
+  }
+
+
+
+  @override
+  bool shouldReload(ThugLocalizationsDelegate old) => false;
 }
+

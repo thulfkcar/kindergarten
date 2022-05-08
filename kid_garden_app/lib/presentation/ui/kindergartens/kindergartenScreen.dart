@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewMod
 import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
+import '../../utile/LangUtiles.dart';
 import 'KindergartensView.dart';
 
 class KindergartenScreen extends ConsumerStatefulWidget {
@@ -39,7 +40,9 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     loginViewModel = ref.watch(LoginPageViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("kindergarten")),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)?.getText("app_name") ?? "Error"),
+      ),
       bottomSheet: widget.childId == null
           ? Row(
               mainAxisSize: MainAxisSize.max,
@@ -53,8 +56,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
                           MaterialStateProperty.all(ColorStyle.male1),
                       elevation: MaterialStateProperty.all(0),
                     ),
-                    child: const Text(
-                      'Login',
+                    child:  Text(
+                     AppLocalizations.of(context)?.getText("login")??"Login",
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
@@ -73,7 +76,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
       body: Column(
         children: [
           head(),
-           Expanded(child: KindergartensView(childId: widget.childId))
+          Expanded(child: KindergartensView(childId: widget.childId))
         ],
       ),
     );
@@ -87,16 +90,15 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
           _viewModel.search(value);
         },
         controller: editingController,
-        decoration: const InputDecoration(
-            labelText: "Search",
-            hintText: "Search",
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
+        decoration:  InputDecoration(
+            labelText: AppLocalizations.of(context)?.getText("search")?? "Search",
+            hintText: AppLocalizations.of(context)?.getText("search")?? "Search",
+            prefixIcon: const Icon(Icons.search),
+            border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)))),
       ),
     );
   }
-
 
   void getNext() async {
     var state = _viewModel.kindergartenApiResponse.status;
@@ -107,5 +109,4 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
       }
     }
   }
-
 }

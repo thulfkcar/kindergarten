@@ -38,14 +38,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(signUpViewModelProvider);
-    return EntrySharedScreen(body:  Container(
-      child: Center(
-        child: Form(
-          key: _key,
-          autovalidateMode: _validate,
-          child: _getFormUI(),
+    return EntrySharedScreen(
+      body: Container(
+        child: Center(
+          child: Form(
+            key: _key,
+            autovalidateMode: _validate,
+            child: _getFormUI(),
+          ),
         ),
-      ),),
+      ),
     );
   }
 
@@ -61,7 +63,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               size: 18,
               color: ColorStyle.male1,
             ),
-            hint: 'Name',
+            hint: AppLocalizations.of(context)?.getText("name") ?? 'Name',
             textType: TextInputType.name,
             onChange: ((text) => form.fullName = text),
             validator: FormValidator(context).validateNotEmpty,
@@ -77,7 +79,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               size: 18,
               color: ColorStyle.male1,
             ),
-            hint: 'Phone Number',
+            hint: AppLocalizations.of(context)?.getText("phone") ??
+                'Phone Number',
             textType: TextInputType.phone,
             onChange: ((text) => form.phoneNumber = text),
             validator: FormValidator(context).validatePhone,
@@ -162,7 +165,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         }
         break;
       case Status.ERROR:
-        showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.warning, title: "SigUp Issue", message: viewModel.signUpApiResponse.message!+""));
+        showAlertDialog(
+            context: context,
+            messageDialog: ActionDialog(
+                type: DialogType.warning,
+                title: AppLocalizations.of(context)?.getText("warning") ??
+                    "Warning",
+                message: viewModel.signUpApiResponse.message! + ""));
         viewModel.setSignUpApiResponse(ApiResponse.non());
 
         return login;
@@ -177,7 +186,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget loginButton() {
     return customButton(
         icon: FontAwesomeIcons.solidArrowAltCircleRight,
-        text: "Sign Up",
+        text: AppLocalizations.of(context)?.getText("sign_up") ?? "Sign Up",
         mainColor: ColorStyle.white,
         backgroundColor: ColorStyle.male1,
         onPressed: () async {
@@ -193,8 +202,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         context: context,
         messageDialog: ActionDialog(
             type: DialogType.loading,
-            title: "Verification",
-            message: "please waite until verification process complete"));
+            title:AppLocalizations.of(context)?.getText("verification")?? "Verification",
+            message:AppLocalizations.of(context)?.getText("verification_des")?? "please waite until verification process complete"));
     await auth.signInWithCredential(credential).then((value) async {
       await viewModel.signUp(form);
       Navigator.pop(context);

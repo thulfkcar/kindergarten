@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: # Add this line
+    sdk: flutter
   font_awesome_flutter: ^9.2.0
   cupertino_icons: ^1.0.2
   http: ^0.13.3 #This is used for the API call

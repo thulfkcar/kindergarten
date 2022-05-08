@@ -61,7 +61,7 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
               size: 18,
               color: ColorStyle.male1,
             ),
-            hint: 'Phone Number',
+            hint: AppLocalizations.of(context)?.getText("phone")?? 'Phone Number',
             textType: TextInputType.phone,
             onChange: ((text) => form.phoneNumber = text),
             validator: FormValidator(context).validatePhone,
@@ -76,6 +76,23 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   }
 
   Widget loginButton() {
+
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () async {
+              await _sendToServer();
+            },
+            child: titleText(AppLocalizations.of(context)?.getText("sign_in")??"Sign In", ColorStyle.white),
+            style: ButtonStyle(
+                backgroundColor:
+                MaterialStateProperty.all(ColorStyle.male1),
+                elevation: MaterialStateProperty.all(0)),
+          ),
+        )
+      ],
+    );
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
@@ -86,7 +103,7 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
       onPressed: () async {
         await _sendToServer();
       },
-      child: Text(StringResources.of(context)?.getText("login") ?? "Error",
+      child: Text(AppLocalizations.of(context)?.getText("login") ?? "Error",
           style: TextStyle(color: Colors.white)),
     );
   }

@@ -104,7 +104,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
-          StringResources.of(context)?.getText("child_actions") ?? "Error",
+          AppLocalizations.of(context)?.getText("child_actions") ?? "Error",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,

@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Image.asset("res/images/logo_kindergarten.png"),
               const Padding(padding: EdgeInsets.only(top: 20.0)),
               Text(
-                StringResources.of(context)?.getText("app_name") ?? "Error",
+                AppLocalizations.of(context)?.getText("app_name") ?? "Error",
                 style: TextStyle(fontSize: 50.0),
               ),
               const Padding(padding: EdgeInsets.only(top: 20.0)),

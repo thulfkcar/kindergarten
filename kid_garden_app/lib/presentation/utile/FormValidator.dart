@@ -46,7 +46,7 @@ class FormValidator {
         r'7[3-9][0-9]{8}';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
-      return "phone number is required";
+      return AppLocalizations.of(context)?.getText("phone_required")?? "phone number is required";
     } else if (!regExp.hasMatch(value)) {
       return "invalid phone number";
     } else {

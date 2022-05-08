@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
@@ -88,13 +89,18 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
+
     return MaterialApp(
-      locale: Locale("en"),
-      // switch between en and ru to see effect
-      localizationsDelegates: const [DemoLocalizationsDelegate()],
+      locale: const Locale('ar', ''),
+      localizationsDelegates: const [
+        ThugLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: const [Locale('en', ''), Locale('ar', '')],
       onGenerateRoute: _routes(),
-      // title: StringResources.of(context)?.getText("text2") ?? "Error",
+      title: AppLocalizations.of(context)?.getText("app_name") ?? "Error",
       theme: KidThem.lightTheme,
       darkTheme: KidThem.darkTheme,
     );
@@ -115,15 +121,20 @@ class _MyAppState extends ConsumerState<MyApp> {
           viewModel.currentUser == null
               ? screen = KindergartenScreen()
               : (viewModel.currentUser!.role == Role.admin ||
-              viewModel.currentUser!.role == Role.superAdmin)
-              ? screen = NavigationScreen(title: "kinderGarten")
-              : (viewModel.currentUser!.role == Role.Staff)
-              ? screen = NavigationScreenStaff(
-              title: viewModel.currentUser!.name.toString())
-              : screen = NavigationScreenParent(
-              title: viewModel.currentUser!.name.toString());
-          viewModel.currentUser != null ? FirebaseMessaging.instance
-              .subscribeToTopic("user.${viewModel.currentUser?.id}"):null;
+                      viewModel.currentUser!.role == Role.superAdmin)
+                  ? screen = NavigationScreen(
+                      title:
+                          AppLocalizations.of(context)?.getText("app_name") ??
+                              "Error")
+                  : (viewModel.currentUser!.role == Role.Staff)
+                      ? screen = NavigationScreenStaff(
+                          title: viewModel.currentUser!.name.toString())
+                      : screen = NavigationScreenParent(
+                          title: viewModel.currentUser!.name.toString());
+          viewModel.currentUser != null
+              ? FirebaseMessaging.instance
+                  .subscribeToTopic("user.${viewModel.currentUser?.id}")
+              : null;
           break;
         case StaffUI_Route:
           screen = StaffUI();

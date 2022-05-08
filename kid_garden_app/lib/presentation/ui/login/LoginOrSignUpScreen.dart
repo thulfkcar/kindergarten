@@ -12,6 +12,7 @@ import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenStaff.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionScreen.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../main.dart';
@@ -44,8 +45,8 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
     return EntrySharedScreen(
       body: Column(
         children: [
-          titleText("Welcome in Phoenix Kindergarten", ColorStyle.text1),
-          descriptionText("Phoenix Kindergarten Log System.", ColorStyle.text1),
+          titleText(AppLocalizations.of(context)?.getText("app_dis")??"Phoenix Kindergarten Log System.", ColorStyle.text1),
+          descriptionText(AppLocalizations.of(context)?.getText("app_dis_title")??"Welcome in Phoenix Kindergarten", ColorStyle.text1),
           const SizedBox(
             height: 30,
           ),
@@ -72,7 +73,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       ),
                     );
                   },
-                  child: titleText("Sign In", ColorStyle.white),
+                  child: titleText(AppLocalizations.of(context)?.getText("sign_in")??"Sign In", ColorStyle.white),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.male1),
@@ -102,7 +103,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       ),
                     );
                   },
-                  child: titleText("Sign Up", ColorStyle.male1),
+                  child: titleText(AppLocalizations.of(context)?.getText("sign_up")??"Sign Up", ColorStyle.male1),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
