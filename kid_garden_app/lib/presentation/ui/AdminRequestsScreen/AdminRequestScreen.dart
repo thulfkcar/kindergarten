@@ -5,6 +5,7 @@ import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequests
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/RequestCard.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
@@ -40,7 +41,6 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
     Future.delayed(Duration.zero, () async {
       await acceptState();
     });
-
 
     return Scaffold(body: body());
   }
@@ -104,22 +104,26 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                 await showDialogGeneric(
                     context: context,
                     dialog: ConfirmationDialog(
-                        title: "Rejection Confirmation",
-                        message: "do you want to reject this request?",
+                        title: AppLocalizations.of(context)
+                                ?.getText("reject_title") ??
+                            "Rejection Confirmation",
+                        message: AppLocalizations.of(context)
+                                ?.getText("reject_des") ??
+                            "do you want to reject this request?",
                         confirmed: () async {
-                          await _viewModel.reject(item.id,value);
+                          await _viewModel.reject(item.id, value);
                           // request api
                         }));
               },
-              title: 'Reject Reason',
+              title:AppLocalizations.of(context)?.getText("reject_reason")?? 'Reject Reason',
             ));
       },
       onConfirmClicked: () {
         showDialogGeneric(
             context: context,
             dialog: ConfirmationDialog(
-                title: 'Confirm Request',
-                message: "do you want to Confirm this Request",
+                title:AppLocalizations.of(context)?.getText("confirm_request")?? 'Confirm Request',
+                message:AppLocalizations.of(context)?.getText("confirm_request_des")?? "do you want to Confirm this Request",
                 confirmed: () async {
                   await _viewModel.accept(item.id);
 
@@ -137,8 +141,8 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title: 'accepting request',
-                message: "Request Pending Please waite"));
+                title:AppLocalizations.of(context)?.getText("accepting_request")?? 'accepting request',
+                message:AppLocalizations.of(context)?.getText("accepting_request_des")?? "Request Pending Please waite"));
         _viewModel.setAcceptResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
@@ -148,8 +152,8 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                 context: context,
                 messageDialog: ActionDialog(
                     type: DialogType.completed,
-                    title: 'accepting request',
-                    message: "Request Accepted")));
+                    title:AppLocalizations.of(context)?.getText("accepting_request")?? 'accepting request',
+                    message: AppLocalizations.of(context)?.getText("request_accepted")??"Request Accepted")));
 
         break;
       case Status.ERROR:
@@ -176,8 +180,8 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title: 'rejecting request',
-                message: "Request Pending Please waite"));
+                title: AppLocalizations.of(context)?.getText("rejecting_request")?? 'rejecting request',
+                message:AppLocalizations.of(context)?.getText("rejecting_request_des")?? "Request Pending Please waite"));
         _viewModel.setRejectResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
@@ -187,8 +191,8 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                 context: context,
                 messageDialog: ActionDialog(
                     type: DialogType.completed,
-                    title: 'rejecting request',
-                    message: "Request rejected")));
+                    title: AppLocalizations.of(context)?.getText("rejecting_request")?? 'rejecting request',
+                    message:AppLocalizations.of(context)?.getText("request_rejected")??  "Request rejected")));
 
         break;
       case Status.ERROR:

@@ -7,6 +7,7 @@ import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../../../them/DentalThem.dart';
 import '../../styles/colors_style.dart';
+import '../../utile/LangUtiles.dart';
 import '../Child/Childs.dart';
 import '../Home/HomeUI.dart';
 import '../Staff/StaffUI.dart';
@@ -42,26 +43,26 @@ class _NavigationScreen extends State<NavigationScreen> {
   Widget get bottomNavigationBar {
     return BottomNavigationBar(
       backgroundColor: ColorStyle.second,
-      items: const <BottomNavigationBarItem>[
+      items:  <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_filled),
-          label: 'Home',
+          icon: const Icon(Icons.home_filled),
+          label:AppLocalizations.of(context)?.getText("home")?? 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.sentiment_satisfied_alt_sharp),
-          label: 'Children',
+          icon: const Icon(Icons.sentiment_satisfied_alt_sharp),
+          label:AppLocalizations.of(context)?.getText("children")?? 'Children',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Parents',
+          icon: const Icon(Icons.person),
+          label:AppLocalizations.of(context)?.getText("parents")?? 'Parents',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.supervised_user_circle),
-          label: 'Staff',
+          icon: const Icon(Icons.supervised_user_circle),
+          label:AppLocalizations.of(context)?.getText("staff")?? 'Staff',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
-          label: 'Profile',
+          icon: const Icon(Icons.account_circle),
+          label:AppLocalizations.of(context)?.getText("profile")?? 'Profile',
         ),
       ],
       currentIndex: _selectedIndex,

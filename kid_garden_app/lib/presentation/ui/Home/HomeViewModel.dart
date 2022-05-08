@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/KindergartenRepository.dart';
 import 'package:tuple/tuple.dart';
@@ -15,10 +16,12 @@ class HomeViewModel extends ChangeNotifier {
   final kindergartenRepository = KindergartenRepository();
   String? selectedActionGroupId;
   int pageChildAction = 1;
+ late BuildContext _context;
 
   var childActionsLastPage = false;
 
-  HomeViewModel() : super() {
+  HomeViewModel(BuildContext context) : super() {
+    _context=context;
     fetchChildActions();
   }
 
@@ -41,10 +44,10 @@ class HomeViewModel extends ChangeNotifier {
     setHomeInfoApiResponse(ApiResponse.loading());
     kindergartenRepository.getHome().then((value) {
       List<Tuple2<String, String>> list = [
-        Tuple2("Total Actions", value.todayActions.toString()),
-        Tuple2("Staff Count", value.staffCount.toString()),
-        Tuple2("Parents Count", value.parentCount.toString()),
-        Tuple2("Children Count", value.childrenCount.toString()),
+        Tuple2(AppLocalizations.of(_context)?.getText("total_actions")??"Total Actions", value.todayActions.toString()),
+        Tuple2(AppLocalizations.of(_context)?.getText("staff_count")??"Staff Count", value.staffCount.toString()),
+        Tuple2(AppLocalizations.of(_context)?.getText("parents_count")??"Parents Count", value.parentCount.toString()),
+        Tuple2(AppLocalizations.of(_context)?.getText("children_count")??"Children Count", value.childrenCount.toString()),
       ];
 
       setHomeInfoApiResponse(ApiResponse.completed(list));

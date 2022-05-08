@@ -8,6 +8,7 @@ import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dar
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
+import '../../utile/LangUtiles.dart';
 import '../general_components/loading.dart';
 
 class ParentsScreen extends ConsumerStatefulWidget {
@@ -51,11 +52,11 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
           _viewModel.search(value);
         },
         controller: editingController,
-        decoration: const InputDecoration(
-            labelText: "Search",
-            hintText: "Search",
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
+        decoration:  InputDecoration(
+            labelText:  AppLocalizations.of(context)?.getText("search")??"Search",
+            hintText:  AppLocalizations.of(context)?.getText("search")??"Search",
+            prefixIcon: const Icon(Icons.search),
+            border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)))),
       ),
     );

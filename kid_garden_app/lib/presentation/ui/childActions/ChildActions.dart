@@ -103,18 +103,19 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text(
-          AppLocalizations.of(context)?.getText("child_actions") ?? "Error",
-          style: TextStyle(color: Colors.black),
+        title:  Text(
+         AppLocalizations.of(context)?.getText("child_actions") ??"Child Actions",
+          style: const TextStyle(color: Colors.black),
         ),
         elevation: 0,
         actions: [
           ElevatedButton(
               onPressed: () async {
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AssignScreen(childId:widget.childId)));
-
-
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AssignScreen(childId: widget.childId)));
               },
               style: ButtonStyle(
                   backgroundColor:
@@ -173,7 +174,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           items: _viewModel.childActionResponse.data!,
           loadNext: false,
           itemBuilder: (BuildContext context, ChildAction item) {
-            return action4ImgCard(ScrollController(),item);          },
+            return action4ImgCard(ScrollController(), item);
+          },
           direction: Axis.vertical,
         );
       case Status.ERROR:
@@ -189,7 +191,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           items: _viewModel.childActionResponse.data!,
           loadNext: true,
           itemBuilder: (BuildContext context, ChildAction item) {
-            return action4ImgCard(ScrollController(),item);          },
+            return action4ImgCard(ScrollController(), item);
+          },
           direction: Axis.vertical,
         );
       case Status.NON:
@@ -244,5 +247,4 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       default:
     }
   }
-
 }

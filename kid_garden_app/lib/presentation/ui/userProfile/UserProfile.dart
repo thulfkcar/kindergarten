@@ -10,6 +10,7 @@ import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart'
 import 'package:kid_garden_app/presentation/ui/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfileViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:tuple/tuple.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 
@@ -44,92 +45,70 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   @override
   Widget build(BuildContext context) {
     viewModelLogin = ref.watch(LoginPageViewModelProvider);
-    id= viewModelLogin.currentUser!.id;
+    id = viewModelLogin.currentUser!.id;
     viewModel = ref.watch(userProfileViewModelProvider(
         widget.userId == null ? id! : widget.userId!));
-    return SafeArea(
-      child: Scaffold(
+    return  Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             centerTitle: true,
-            title: widget.userId!=null? const Text(
-              "Profile",
-              style: TextStyle(color: Colors.black),
-            ):Container(),
+            title: widget.userId != null
+                ? const Text(
+                    "Profile",
+                    style: TextStyle(color: Colors.black),
+                  )
+                : Container(),
           ),
           body: Padding(
             padding: const EdgeInsets.only(bottom: 32),
             child: body(),
           ),
-          bottomSheet: (widget.userId!=null)?Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Row(
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(ColorStyle.female3),
-                        elevation: MaterialStateProperty.all(0)),
-                    child: Text(
-                      'Delete',
-                      style: TextStyle(color: ColorStyle.female1),
-                    ),
-                    onPressed: () async {},
+          bottomSheet: (widget.userId != null)
+              ? const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 0,
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(ColorStyle.male3),
-                        elevation: MaterialStateProperty.all(0)),
-                    child: Text(
-                      'Edit',
-                      style: TextStyle(color: ColorStyle.male1),
-                    ),
-                    onPressed: () async {},
-                  ),
-                ],
-              ),
-            ]),
-          ):  Row(
-            children: [
-              Expanded(
-                
-                child:Padding(padding: EdgeInsets.only(left: 30,right: 30),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Future.delayed(Duration.zero, () async {
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30, right: 30),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Future.delayed(Duration.zero, () async {
+                              await viewModelLogin.logOut();
 
-                      await viewModelLogin.logOut();
+                              // Navigator.pushAndRemoveUntil(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
+                              //       (Route<dynamic> route) => false,
+                              // );
+                              RestartWidget.restartApp(context);
+                            });
+                          },
+                          child: descriptionText(
+                              AppLocalizations.of(context)
+                                      ?.getText("sign_out") ??
+                                  "Sign Out",
+                              ColorStyle.female1),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(ColorStyle.white),
+                              side: MaterialStateProperty.all(BorderSide(
+                                  width: 1, color: ColorStyle.female1)),
+                              elevation: MaterialStateProperty.all(0)),
+                        ),
+                      ),
+                    )
+                  ],
+                ));
 
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
-                      //       (Route<dynamic> route) => false,
-                      // );
-                      RestartWidget.restartApp(context);
-                    });
-                  },
-                  child: descriptionText("Sign Out", ColorStyle.female1),
-                  style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all(ColorStyle.white),
-                      side: MaterialStateProperty.all(
-                          BorderSide(width: 1, color: ColorStyle.female1)),
-                      elevation: MaterialStateProperty.all(0)),
-                ),),
-              )
-            ],
-          )),
-    );
   }
 
   Widget body() {
-
     var state = viewModel.staffProfileResult.status;
     switch (state) {
       case Status.LOADING:
@@ -140,7 +119,8 @@ class _UserProfileState extends ConsumerState<UserProfile> {
         return MyErrorWidget(
             msg: "error on fetching staff profile",
             onRefresh: () {
-              viewModel.getUser(userId: widget.userId == null ? id! : widget.userId!);
+              viewModel.getUser(
+                  userId: widget.userId == null ? id! : widget.userId!);
             });
       case Status.NON:
         return Container();
@@ -169,17 +149,14 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     //   ],
                     // ),
                     ContactList(
-                      contact: Contact(
-                          name: user.name!,
-                          email: user.email,
-                          phone: user.phone!,
-                          userType: user.role.name.toString()),
-                    )
+                        contact: Contact(
+                            name: user.name!,
+                            email: user.email,
+                            phone: user.phone!,
+                            userType: user.role.name.toString()))
                   ],
                 )),
-                imageRectangleWithoutShadow(
-                    domain + user.image!,
-                    90),
+                imageRectangleWithoutShadow(domain + user.image!, 90),
               ],
             ),
             Row(
@@ -188,7 +165,8 @@ class _UserProfileState extends ConsumerState<UserProfile> {
               children: [
                 InfoCard(
                   homeData: Tuple2(
-                      "Actions Count",
+                      AppLocalizations.of(context)?.getText("total_actions") ??
+                          "Actions Count",
                       user.actionsCount != null
                           ? (user.actionsCount.toString())
                           : "0"),
@@ -202,7 +180,8 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                   onPressed: () {},
                   child: InfoCard(
                     homeData: Tuple2(
-                        "Children",
+                        AppLocalizations.of(context)?.getText("children") ??
+                            "Children",
                         user.childrenCount != null
                             ? user.childrenCount.toString()
                             : "0"),
@@ -217,10 +196,12 @@ class _UserProfileState extends ConsumerState<UserProfile> {
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 
             Expanded(
-              child: (user.role==Role.Staff|| user.role==Role.Parents) ? ChildrenExplorer(
-                fromProfile: false,
-                subUserId: widget.userId,
-              ):const AdminRequestsScreen(),
+              child: (user.role == Role.Staff || user.role == Role.Parents)
+                  ? ChildrenExplorer(
+                      fromProfile: false,
+                      subUserId: widget.userId,
+                    )
+                  : const AdminRequestsScreen(),
             ),
           ],
         ));

@@ -100,7 +100,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       ],
       supportedLocales: const [Locale('en', ''), Locale('ar', '')],
       onGenerateRoute: _routes(),
-      title: AppLocalizations.of(context)?.getText("app_name") ?? "Error",
+      title: AppLocalizations.of(context)?.getText("app_name") ?? "Phoenix kindergarten",
       theme: KidThem.lightTheme,
       darkTheme: KidThem.darkTheme,
     );
@@ -112,7 +112,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       Widget screen;
       switch (settings.name) {
         case HomeScreenRoute:
-          screen = NavigationScreen(title: "KinderGarten");
+          screen = NavigationScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten");
           break;
         case ChildActionsRoute:
           screen = ChildActions();
@@ -125,7 +125,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   ? screen = NavigationScreen(
                       title:
                           AppLocalizations.of(context)?.getText("app_name") ??
-                              "Error")
+                              "Phoenix kindergarten")
                   : (viewModel.currentUser!.role == Role.Staff)
                       ? screen = NavigationScreenStaff(
                           title: viewModel.currentUser!.name.toString())

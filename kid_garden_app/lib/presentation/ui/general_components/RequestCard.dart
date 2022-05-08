@@ -6,6 +6,7 @@ import 'package:kid_garden_app/domain/AssignRequest.dart';
 import '../../../data/network/BaseApiService.dart';
 import '../../../domain/Child.dart';
 import '../../styles/colors_style.dart';
+import '../../utile/LangUtiles.dart';
 
 class RequestCard extends StatefulWidget {
   Function() onConfirmClicked;
@@ -54,15 +55,17 @@ class _RequestCardState extends State<RequestCard> {
                     padding: const EdgeInsets.only(top: 2, bottom: 2),
                     child: Center(
                         child: Text(status == RequestStatus.Pending
-                            ? "Pending"
+                            ?AppLocalizations.of(context)?.getText("pending")?? "Pending"
                             : status == RequestStatus.Joined
-                                ? "Accepted"
+                                ? AppLocalizations.of(context)?.getText("accepted")??"Accepted"
                                 : status == RequestStatus.Rejected
-                            ? "Rejected":"")),
+                            ?AppLocalizations.of(context)?.getText("rejected")?? "rejected":"")),
                   ),
                 ),
               ],
             ),
+
+
             Container(
               color: Colors.black,
               height: 1,
@@ -94,7 +97,7 @@ class _RequestCardState extends State<RequestCard> {
                     ],
                   )
                 : Container(),
-            Row(
+                  status == RequestStatus.Pending?    Row(
               children: [
                 Expanded(
                     child: ElevatedButton(
@@ -106,7 +109,7 @@ class _RequestCardState extends State<RequestCard> {
                           widget.onConfirmClicked();
                         },
                         child: Text(
-                          "Accept",
+                          AppLocalizations.of(context)?.getText("accept")??  "Accept",
                           style: TextStyle(color: ColorStyle.male1),
                         ))),
                 Expanded(
@@ -119,11 +122,11 @@ class _RequestCardState extends State<RequestCard> {
                           widget.onRejectClicked();
                         },
                         child: Text(
-                          "Reject",
+                          AppLocalizations.of(context)?.getText("reject")?? "Reject",
                           style: TextStyle(color: ColorStyle.female1),
                         )))
               ],
-            )
+            ):SizedBox(height: 30,),
           ],
         ),
       ),

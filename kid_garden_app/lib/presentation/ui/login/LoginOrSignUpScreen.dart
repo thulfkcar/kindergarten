@@ -178,7 +178,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    const NavigationScreen(title: 'kindergarten Name')),
+                     NavigationScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten")),
             (Route<dynamic> route) => false,
           )
         : (user.role == Role.Staff)

@@ -34,7 +34,7 @@ class _HomeXXState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    viewModel = ref.watch(HomeViewModelProvider);
+    viewModel = ref.watch(HomeViewModelProvider(context));
     return Scaffold(
       body: Column(
         children: [

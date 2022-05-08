@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
@@ -32,7 +33,7 @@ final userProfileViewModelProvider = ChangeNotifierProvider.autoDispose
         (ref, userId) => UserProfileViewModel(userId: userId));
 
 final HomeViewModelProvider =
-    ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
+    ChangeNotifierProvider.family<HomeViewModel,BuildContext>((ref,BuildContext context) => HomeViewModel(context));
 final kindergartenViewModelProvider =
     ChangeNotifierProvider<KindergartenViewModel>(
         (ref) => KindergartenViewModel());

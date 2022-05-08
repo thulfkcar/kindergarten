@@ -9,6 +9,7 @@ import 'package:tuple/tuple.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
+import '../../utile/LangUtiles.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';
 import '../general_components/InfoCard.dart';
@@ -44,7 +45,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
       body: Column(
         children: [
           InfoCard(
-              homeData: Tuple2("Staff Count", "999"),
+              homeData: Tuple2( AppLocalizations.of(context)?.getText("staff_count")??"Staff Count", "999"),
               startColor: Color(0xFF00962A),
               endColor: Color(0xFFF2A384)),
           Expanded(child: body()),

@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
@@ -80,11 +81,11 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         },
         controller: editingController,
         cursorColor: ColorStyle.female1,
-        decoration: const InputDecoration(
-            labelText: "Search",
-            hintText: "Typing to search",
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
+        decoration:  InputDecoration(
+            labelText: AppLocalizations.of(context)?.getText("search")??"Search",
+            hintText: AppLocalizations.of(context)?.getText("search")??"Search" "Typing to search",
+            prefixIcon: const Icon(Icons.search),
+            border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)))),
       ),
     );

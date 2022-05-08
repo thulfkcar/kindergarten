@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -13,14 +14,14 @@ import '../../styles/colors_style.dart';
 
 class ContactList extends StatelessWidget {
   Contact contact;
-  ContactList({Key? key, required this.contact}) : super(key: key);
+  ContactList( {Key? key, required this.contact}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            descriptionText("Name :", ColorStyle.text1),
+            descriptionText("${AppLocalizations.of(context)?.getText("name")??"Name" } :" , ColorStyle.text1),
             descriptionText(contact.name + " :: ", ColorStyle.text2),
             descriptionText(contact.userType, ColorStyle.text2),
             Expanded(child: Container())
@@ -28,7 +29,7 @@ class ContactList extends StatelessWidget {
         ),
         Row(
           children: [
-            descriptionText("Phone :", ColorStyle.text1),
+            descriptionText("${AppLocalizations.of(context)?.getText("phone")??"Phone" } :", ColorStyle.text1),
             descriptionText(contact.phone, ColorStyle.text2),
             Expanded(child: Container())
           ],
@@ -36,7 +37,7 @@ class ContactList extends StatelessWidget {
         contact.email != null
             ? Row(
                 children: [
-                  descriptionText("Email :", ColorStyle.text1),
+                  descriptionText("${AppLocalizations.of(context)?.getText("email")??"Email" } :", ColorStyle.text1),
                   descriptionText(contact.email!, ColorStyle.text2),
                   Expanded(child: Container())
                 ],
