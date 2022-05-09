@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
@@ -74,21 +75,19 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
-
-
-                                  FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+                                  FilePickerResult? result = await FilePicker
+                                      .platform
+                                      .pickFiles(type: FileType.image);
 
                                   if (result != null) {
                                     File file = File(result.files.single.path!);
 
                                     setState(() {
                                       widget.imagePath = file;
-
                                     });
                                   } else {
                                     // User canceled the picker
                                   }
-
                                 },
                                 child: widget.imagePath != null
                                     ? Container(
@@ -101,7 +100,8 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                                           ),
                                           image: DecorationImage(
                                             image: FileImage(
-                                                widget.imagePath!,),
+                                              widget.imagePath!,
+                                            ),
                                             fit: BoxFit.fill,
                                           ),
                                           shape: BoxShape.circle,
@@ -121,8 +121,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                               ),
                               Container(
                                   padding: const EdgeInsets.all(8),
-                                  child: const Text(
-                                    "Tap to add or change Image",
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                            ?.getText("add_image") ??
+                                        "Tap to add or change Image",
                                   ))
                             ],
                           ),
@@ -132,9 +134,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                           keyboardType: TextInputType.name,
                           autofocus: true,
                           cursorColor: ColorStyle.female1,
-
                           decoration: InputDecoration(
-                            hintText: "Enter Staff Name",
+                            hintText:
+                                AppLocalizations.of(context)?.getText("name") ??
+                                    "Enter Staff Name",
                             focusColor: ColorStyle.male1,
                             fillColor: ColorStyle.male1,
                             hoverColor: ColorStyle.male1,
@@ -148,7 +151,6 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             _staffAddingForm.name = value!;
                           },
                         ),
-
                         Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
                           onChanged: ((text) =>
@@ -157,7 +159,9 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                           autofocus: false,
                           cursorColor: ColorStyle.female1,
                           decoration: InputDecoration(
-                            hintText: "Enter phone number",
+                            hintText:
+                                AppLocalizations.of(context)?.getText("phone") ??
+                                    "Enter phone number",
                             focusColor: ColorStyle.male1,
                             fillColor: ColorStyle.male1,
                             hoverColor: ColorStyle.male1,
@@ -171,27 +175,31 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
                             _staffAddingForm.phoneNumber = value!;
                           },
                         ),
-
                         Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: ElevatedButton(
                               onPressed: () async {
                                 await _sendToServer();
-
                               },
                               style: ButtonStyle(
                                   elevation: MaterialStateProperty.all(0.0),
-                                  backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      ColorStyle.male1),
                                   shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          // side: BorderSide()
-                                    ))),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    // side: BorderSide()
+                                  ))),
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                child: Text("Add",style: TextStyle(color: ColorStyle.white),),
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                          ?.getText("add") ??
+                                      "Add",
+                                  style: TextStyle(color: ColorStyle.white),
+                                ),
                               ),
                             )),
                       ],
@@ -203,6 +211,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
           ),
         ));
   }
+
   Future<void> showAlertDialog({required ActionDialog messageDialog}) async {
     return showDialog<void>(
       context: context,
@@ -212,6 +221,7 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
       },
     );
   }
+
   Row addRadioButton(int btnValue, String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -231,9 +241,11 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
       ],
     );
   }
+
   Future _sendToServer() async {
     if (_key.currentState!.validate()) {
       await _viewModel.addStaff(staffAddingForm: _staffAddingForm);
+
       /// No any error in validation
       _key.currentState!.save();
     } else {
@@ -252,10 +264,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.loading,
-          title: "Adding Child",
+          title: AppLocalizations.of(context)?.getText("add") ?? "Adding Staff",
           message: "pleas wait until process complete..",
           onCompleted: (s) {
-            _viewModel.addingStaffResponse=ApiResponse.non();
+            _viewModel.addingStaffResponse = ApiResponse.non();
           },
         ));
         break;
@@ -264,10 +276,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.completed,
-          title: "Competed",
-          message: "child ${_viewModel.addingStaffResponse.data?.name}",
+          title: AppLocalizations.of(context)?.getText("add") ?? "Adding Staff",
+          message: "${_viewModel.addingStaffResponse.data?.name}",
           onCompleted: (s) {
-            _viewModel.addingStaffResponse=ApiResponse.non();
+            _viewModel.addingStaffResponse = ApiResponse.non();
             Navigator.pop(context);
           },
         ));
@@ -277,10 +289,10 @@ class _ChildAddingScreenState extends ConsumerState<StaffAdding> {
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.error,
-          title: "error",
+          title: AppLocalizations.of(context)?.getText("add") ?? "Adding Staff",
           message: _viewModel.addingStaffResponse.message.toString(),
           onCompleted: (s) {
-            _viewModel.addingStaffResponse=ApiResponse.non();
+            _viewModel.addingStaffResponse = ApiResponse.non();
           },
         ));
         break;

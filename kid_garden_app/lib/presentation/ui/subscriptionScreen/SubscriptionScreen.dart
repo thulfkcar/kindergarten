@@ -8,6 +8,7 @@ import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScre
 import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
 import '../general_components/units/texts.dart';
@@ -34,7 +35,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
     return EntrySharedScreen(
       body: Column(
         children: [
-          titleText("Subscription issue", ColorStyle.text1),
+          titleText(AppLocalizations.of(context)?.getText("sub_issue")??"Subscription issue", ColorStyle.text1),
           descriptionText(
             widget.message,
             ColorStyle.error,
@@ -55,8 +56,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                           context: context,
                           messageDialog: ActionDialog(
                             type: DialogType.scanner,
-                            title: "Scan Subscription",
-                            message: "Point the Camera on QR Code",
+                            title:AppLocalizations.of(context)?.getText("scan_sub_qr")?? "Scan Subscription",
+                            message: AppLocalizations.of(context)?.getText("scan_sub_des")?? "Point the Camera on QR Code",
                             onCompleted: (qr) async {
                               Navigator.pop(context);
                               subscribe(qr!);
@@ -65,7 +66,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     });
                   },
                   child:
-                      descriptionText("Scan Subscription QR", ColorStyle.male1),
+                      descriptionText(AppLocalizations.of(context)?.getText("scan_sub_qr")??"Scan Subscription QR", ColorStyle.male1),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
@@ -87,9 +88,9 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                             builder: (context) => Scaffold(
                                   appBar: AppBar(
                                     centerTitle: true,
-                                    title: const Text(
-                                      "your children",
-                                      style: TextStyle(color: Colors.black),
+                                    title:  Text(
+                                     AppLocalizations.of(context)?.getText("your_children")?? "your children",
+                                      style: const TextStyle(color: Colors.black),
                                     ),
                                     backgroundColor: Colors.transparent,
                                     elevation: 0,
@@ -97,12 +98,12 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                   body: ParentChildrenScreen(
                                     fromProfile: true,
                                     isSubscriptionValid: false,
-                                    subscriptionMessage:
+                                    subscriptionMessage:AppLocalizations.of(context)?.getText("subscription_des")??
                                         "your subscription invalid, please check your subscription status",
                                   ),
                                 )));
                   },
-                  child: descriptionText("your Children", ColorStyle.main),
+                  child: descriptionText(AppLocalizations.of(context)?.getText("your_children")??"your Children", ColorStyle.main),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
@@ -129,7 +130,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                       RestartWidget.restartApp(context);
                     });
                   },
-                  child: descriptionText("Sign Out", ColorStyle.female1),
+                  child: descriptionText(AppLocalizations.of(context)?.getText("sign_out")??"Sign Out", ColorStyle.female1),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
@@ -154,15 +155,15 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title: "Subscribe",
-                message: "Subscribing"));
+                title: AppLocalizations.of(context)?.getText("subscribe")?? "Subscribe",
+                message:AppLocalizations.of(context)?.getText("subscribing")?? "Subscribing"));
         break;
       case Status.COMPLETED:
         showAlertDialog(
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.completed,
-              title: "Subscribe",
+              title: AppLocalizations.of(context)?.getText("subscribe")?? "Subscribe",
               message: viewModel.userSubScribeApiResponse.message!,
               onCompleted: (s) {
                 viewModel.setSubscribeApiResponse(ApiResponse.non());
@@ -174,7 +175,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.error,
-              title: "Subscribe",
+              title: AppLocalizations.of(context)?.getText("subscribe")?? "Subscribe",
               message: viewModel.userSubScribeApiResponse.message!,
               onCompleted: (s) {},
             ));

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
@@ -9,6 +10,7 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/ContactList.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/KindergratenCard.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/BaseApiService.dart';
 import '../../../domain/Child.dart';
@@ -97,41 +99,47 @@ ParentchildRow(
   );
 }
 
-Widget requestedToKindergartenCard(
-    AssignRequest assignRequest, Function(String) onKindergartenClicked) {
-  var status = assignRequest.requestStatus;
-  return Column(
-    children: [
-      Row(
-        children: [
-          Expanded(
-            child: status == RequestStatus.Pending
-                ? Container(
-                    color: ColorStyle.main,
-                    child: Center(
-                      child: titleText("Request Pending", ColorStyle.text1),
-                    ))
-                : status == RequestStatus.Rejected
-                    ? Container(
-                        color: ColorStyle.female1,
-                        child: Center(
-                            child: titleText(
-                                "Request Rejected due :${assignRequest.message}",
-                                ColorStyle.text1)),
-                      )
-                    : Container(),
-          )
-        ],
-      ),
-      assignRequest.kindergartenId != null
-          ? KindergartenButton(
-              assignRequest.kindergartenId,
-              assignRequest.kindergartenImage!,
-              assignRequest.kindergartenName!,
-              onKindergartenClicked)
-          : Container()
-    ],
-  );
+class requestedToKindergartenCard extends StatelessWidget {
+  Function(String) onKindergartenClicked;
+  AssignRequest assignRequest;
+   requestedToKindergartenCard(this.assignRequest, this.onKindergartenClicked,{Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var status = assignRequest.requestStatus;
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: status == RequestStatus.Pending
+                  ? Container(
+                  color: ColorStyle.main,
+                  child: Center(
+                    child: titleText(AppLocalizations.of(context)?.getText("request_Pending")??"Request Pending", ColorStyle.text1),
+                  ))
+                  : status == RequestStatus.Rejected
+                  ? Container(
+                color: ColorStyle.female1,
+                child: Center(
+                    child: titleText(
+                        AppLocalizations.of(context)?.getText("request_reject_des")??  "Request Rejected due :${assignRequest.message}",
+                        ColorStyle.text1)),
+              )
+                  : Container(),
+            )
+          ],
+        ),
+        assignRequest.kindergartenId != null
+            ? KindergartenButton(
+            assignRequest.kindergartenId,
+            assignRequest.kindergartenImage!,
+            assignRequest.kindergartenName!,
+            onKindergartenClicked)
+            : Container()
+      ],
+    );
+  }
 }
 
 Widget ContactCard(List<Contact>? contacts) {

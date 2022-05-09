@@ -7,16 +7,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:kid_garden_app/presentation/styles/colors_style.dart';
+import 'package:kid_garden_app/presentation/ui/general_components/units/buttons.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 import '../../utile/FormValidator.dart';
+import '../../utile/LangUtiles.dart';
 import '../general_components/units/texts.dart';
 import 'ChildViewModel.dart';
 import '../general_components/ActionDialog.dart';
 
 class ChildAddingScreen extends ConsumerStatefulWidget {
   Function(Child?) onAdded;
-  ChildAddingScreen( {
+
+  ChildAddingScreen({
     required this.onAdded,
     Key? key,
   }) : super(key: key);
@@ -46,7 +50,8 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
     });
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Child"),
+        title: Text(
+            AppLocalizations.of(context)?.getText("add_child") ?? "Add Child"),
       ),
       body: SafeArea(
         maintainBottomViewPadding: true,
@@ -113,8 +118,10 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                             ),
                             Container(
                                 padding: const EdgeInsets.all(8),
-                                child: const Text(
-                                  "Tap to add or change Image",
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                          ?.getText("tap_add_image") ??
+                                      "Tap to add or change Image",
                                 ))
                           ],
                         ),
@@ -133,8 +140,14 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          addRadioButton(0, 'Male'),
-                          addRadioButton(1, 'Female'),
+                          addRadioButton(
+                              0,
+                              AppLocalizations.of(context)?.getText("male") ??
+                                  'Male'),
+                          addRadioButton(
+                              1,
+                              AppLocalizations.of(context)?.getText("female") ??
+                                  'Female'),
                         ],
                       ),
                       Container(
@@ -155,8 +168,10 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                                 const Icon(Icons.date_range),
                                 Expanded(
                                     child: Row(children: [
-                                  const Text(
-                                    "Birth Date:      ",
+                                  Text(
+                                    AppLocalizations.of(context)
+                                            ?.getText("birth_date") ??
+                                        "Birth Date:      ",
                                     style: TextStyle(color: Color(0xFF898989)),
                                   ),
                                   Text(
@@ -167,22 +182,26 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(0, 100, 0, 10),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await _sendToServer();
-                            },
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0.0),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18.0),
-                                        side: BorderSide()))),
-                            child: Text("Add"),
-                          ))
+                         child: customButton(text: AppLocalizations.of(context)?.getText("add")?? "Add", icon: Icons.add, mainColor: ColorStyle.text1, backgroundColor: ColorStyle.male1,onPressed: ()async {
+                           await _sendToServer();
+                         })),
+
+                          // child: ElevatedButton(
+                          //   onPressed: () async {
+                          //     await _sendToServer();
+                          //   },
+                          //   style: ButtonStyle(
+                          //       elevation: MaterialStateProperty.all(0.0),
+                          //       backgroundColor: MaterialStateProperty.all(
+                          //           Colors.transparent),
+                          //       shape: MaterialStateProperty.all<
+                          //               RoundedRectangleBorder>(
+                          //           RoundedRectangleBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(18.0),
+                          //               side: BorderSide()))),
+                          //   child: Text("Add"),
+                          // ))
                     ],
                   ),
                 ),
@@ -202,7 +221,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate=picked.toUtc();
+        selectedDate = picked.toUtc();
         form.birthDate = picked.toUtc();
       });
     }
@@ -218,7 +237,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
           groupValue: selectedGender,
           onChanged: (gender) {
             setState(() {
-              selectedGender=gender!;
+              selectedGender = gender!;
               form.gender = gender.index;
             });
           },
@@ -229,16 +248,18 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
   }
 
   Future _sendToServer() async {
-    if (_key.currentState!.validate()) {
-      await _viewModel.addChild(childForm: form);
+    if (form.imageFile != null) {
+      if (_key.currentState!.validate()) {
+        await _viewModel.addChild(childForm: form);
 
-      /// No any error in validation
-      _key.currentState!.save();
-    } else {
-      ///validation error
-      setState(() {
-        _validate = AutovalidateMode.always;
-      });
+        /// No any error in validation
+        _key.currentState!.save();
+      } else {
+        ///validation error
+        setState(() {
+          _validate = AutovalidateMode.always;
+        });
+      }
     }
   }
 
@@ -257,26 +278,25 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
 
     switch (status) {
       case Status.LOADING:
-        print("loading");
 
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.loading,
-          title: "Adding Child",
-          message: "pleas wait until process complete..",
+          title: AppLocalizations.of(context)?.getText("add_child")?? "Adding Child",
+          message: AppLocalizations.of(context)?.getText("adding_child_des")??"please wait until process complete..",
           onCompleted: (s) {},
         ));
         _viewModel.addingChildResponse = ApiResponse.non();
         break;
 
       case Status.COMPLETED:
-        var date=_viewModel.addingChildResponse.data;
+        var date = _viewModel.addingChildResponse.data;
         Navigator.pop(context);
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.completed,
-          title: "Competed",
-          message: "child ${_viewModel.addingChildResponse.data?.name}",
+          title:AppLocalizations.of(context)?.getText("add_child")?? "Competed",
+          message: "${_viewModel.addingChildResponse.data?.name}",
           onCompleted: (s) {
             Navigator.pop(context);
           },
@@ -290,7 +310,7 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
         showAlertDialog(
             messageDialog: ActionDialog(
           type: DialogType.error,
-          title: "error",
+          title:AppLocalizations.of(context)?.getText("add_child")?? "Adding Child",
           message: _viewModel.addingChildResponse.message.toString(),
           onCompleted: (s) {
             // _viewModel.addingChildResponse = ApiResponse.non();

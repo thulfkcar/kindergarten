@@ -91,7 +91,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     viewModel = ref.watch(LoginPageViewModelProvider);
 
     return MaterialApp(
-      locale: const Locale('en', ''),
+      locale: const Locale('ar', ''),
       localizationsDelegates: const [
         ThugLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
