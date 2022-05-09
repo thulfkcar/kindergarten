@@ -150,6 +150,7 @@ Widget ContactCard(List<Contact>? contacts) {
               final item = contacts[index];
 
               return ContactList(
+                true,
                 contact: item,
               );
             },

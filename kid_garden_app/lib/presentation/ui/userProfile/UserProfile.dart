@@ -148,7 +148,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     //     Expanded(child: Container())
                     //   ],
                     // ),
-                    ContactList(
+                   ContactList(widget.userId!=null?true:false ,
                         contact: Contact(
                             name: user.name!,
                             email: user.email,

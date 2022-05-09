@@ -41,7 +41,7 @@ final kindergartenViewModelProvider =
 final staffViewModelProvider =
     ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
 final adminRequestsViewModelProvider =
-    ChangeNotifierProvider<AdminRequestsViewModel>((ref) => AdminRequestsViewModel());
+    ChangeNotifierProvider.autoDispose<AdminRequestsViewModel>((ref) => AdminRequestsViewModel());
 
 final subscriptionViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<SubscriptionViewModel, bool>(

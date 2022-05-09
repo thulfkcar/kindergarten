@@ -14,7 +14,8 @@ import '../../styles/colors_style.dart';
 
 class ContactList extends StatelessWidget {
   Contact contact;
-  ContactList( {Key? key, required this.contact}) : super(key: key);
+   bool controls=false;
+  ContactList(this.controls, {Key? key, required this.contact}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,7 +47,7 @@ class ContactList extends StatelessWidget {
         const SizedBox(
           height: 4,
         ),
-        Row(
+        controls==true?  Row(
           children: [
             roundedClickableWithIcon(
                 size: 30,
@@ -100,7 +101,7 @@ class ContactList extends StatelessWidget {
                   await canLaunch(whatsappUrl)? launch(whatsappUrl):print("open whatsapp app link or do a snackbar with notification that there is no whatsapp installed");
                 }),
           ],
-        )
+        ):Container()
       ],
     );
   }
