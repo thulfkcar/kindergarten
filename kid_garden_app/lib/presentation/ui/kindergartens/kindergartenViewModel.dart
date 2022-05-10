@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
@@ -10,29 +12,33 @@ class KindergartenViewModel extends ChangeNotifier {
   Position? position;
 
   KindergartenViewModel() : super() {
-    fetchKindergarten(  );
+    fetchKindergarten();
   }
+
   var KindergartenLastPage = false;
   int pageKindergarten = 1;
 
   String? searchKey;
   final _repository = KindergartenRepository();
 
-  var kindergartenApiResponse =ApiResponse.non();
-  
-  void setKindergartenApiResponse(ApiResponse response){
-    
-    kindergartenApiResponse=response;
+  var kindergartenApiResponse = ApiResponse.non();
+
+  void setKindergartenApiResponse(ApiResponse response) {
+    kindergartenApiResponse = response;
     notifyListeners();
   }
-
 
   Future<void> fetchKindergarten() async {
     setKindergartenApiResponse(ApiResponse.loading());
 
-   await _determinePosition().then((value) => setPosition(value)).onError((error, stackTrace) => {});
+    await _determinePosition()
+        .then((value) => setPosition(value))
+        .onError((error, stackTrace) => {});
 
-    _repository.getMyKindergartenList(page: pageKindergarten,searchKey:searchKey,position: position).then((value) {
+    _repository
+        .getMyKindergartenList(
+            page: pageKindergarten, searchKey: searchKey, position: position)
+        .then((value) {
       KindergartenLastPage = value.item2;
       setKindergartenApiResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
@@ -46,7 +52,10 @@ class KindergartenViewModel extends ChangeNotifier {
       kindergartenApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getMyKindergartenList(page: pageKindergarten,searchKey: searchKey,position: position).then((value) {
+      _repository
+          .getMyKindergartenList(
+              page: pageKindergarten, searchKey: searchKey, position: position)
+          .then((value) {
         KindergartenLastPage = value.item2;
         setKindergartenApiResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
@@ -67,7 +76,7 @@ class KindergartenViewModel extends ChangeNotifier {
   }
 
   void search(String? value) {
-    this.searchKey=value;
+    this.searchKey = value;
     fetchKindergarten();
   }
 
@@ -113,6 +122,6 @@ class KindergartenViewModel extends ChangeNotifier {
   }
 
   setPosition(Position value) {
-    position=value;
+    position = value;
   }
 }

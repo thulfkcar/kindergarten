@@ -39,8 +39,11 @@ class ParentChildrenViewModel extends ChangeNotifier {
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
-    if (apiResponse.data != null) {
+    if (childListResponse.data != null && apiResponse.data!=null) {
      appendNewItems([apiResponse.data!]);
+    }
+    else if(apiResponse.data!=null){
+      setChildListResponse(ApiResponse.completed([apiResponse.data!]));
     }
 
     notifyListeners();
@@ -63,8 +66,13 @@ class ParentChildrenViewModel extends ChangeNotifier {
             page: pageChild, searchKey: searchKey, subUserId: null)
         .then((value) {
       childLastPage = value.item2;
-      if(value.item1==null) setChildListResponse(ApiResponse.error("refresh the app"));
+      if(value.item1==null) {
+        setChildListResponse(ApiResponse.error("refresh the app"));
+      } else  if(value.item1.isEmpty){
+        setChildListResponse(ApiResponse.empty());
+      }else {
         setChildListResponse(ApiResponse.completed(value.item1));
+      }
     }).onError((error, stackTrace) {
       setChildListResponse(ApiResponse.error(error.toString()));
     });
@@ -94,6 +102,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
   }
 
   void appendNewItems(List<Child> value) {
+    childListResponse.data ??= [];
     var data = childListResponse.data;
     data?.addAll(value);
     setChildListResponse(ApiResponse.completed(data));

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
@@ -9,6 +10,7 @@ import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
 import '../../../../../domain/Child.dart';
@@ -46,6 +48,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     _viewModel = ref.watch(parentChildrenViewModelProvider);
     _viewModel_login = ref.watch(LoginPageViewModelProvider);
     _viewModel_login.getUserChanges().then((value) {
@@ -56,7 +59,13 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
     Future.delayed(Duration.zero, () async {
       await addingRequestState();
     });
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.purple.withOpacity(0.3),
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light,
+    ));
     return Scaffold(
+
       body: Column(
         children: [
           isParent != true
@@ -127,6 +136,9 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
             },
             direction: Axis.vertical, scrollController: ScrollController(),);
 
+      case Status.Empty:
+        return EmptyWidget(
+            msg: AppLocalizations.of(context)?.getText("no_children")?? _viewModel.childListResponse.message ?? "Error");
       case Status.NON:
         return Container();
       default:

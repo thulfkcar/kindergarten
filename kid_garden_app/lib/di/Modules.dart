@@ -35,7 +35,7 @@ final userProfileViewModelProvider = ChangeNotifierProvider.autoDispose
 final HomeViewModelProvider =
     ChangeNotifierProvider.family<HomeViewModel,BuildContext>((ref,BuildContext context) => HomeViewModel(context));
 final kindergartenViewModelProvider =
-    ChangeNotifierProvider<KindergartenViewModel>(
+    ChangeNotifierProvider.autoDispose<KindergartenViewModel>(
         (ref) => KindergartenViewModel());
 
 final staffViewModelProvider =

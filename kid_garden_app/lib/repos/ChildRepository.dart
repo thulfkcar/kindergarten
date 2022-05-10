@@ -101,7 +101,8 @@ class ChildRepository {
       if (await childes.isNotEmpty) {
         return Tuple2(await childes, isLastPage);
       } else {
-        throw "no Data Available";
+        return  const Tuple2([], true);
+
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();

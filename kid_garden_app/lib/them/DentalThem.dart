@@ -1,33 +1,42 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class KidThem {
 
 
   KidThem._();
+  static Color third = const Color(0xffFFEAA2);
+  static Color female1 = const Color(0xffE78989);
+  static Color female2 = const Color(0xffFEB2B4);
+  static Color female3 = const Color(0xffFEDCDC);
+  static Color male1 = const Color(0xff89C7E7);
+  static Color male2 = const Color(0xffADD8E5);
+  static Color male3 = const Color(0xffC4EBF1);
+  static Color text1 = const Color(0xff3A515E);
+  static Color text2 = const Color(0xff8298A5);
+  static Color text3 = const Color(0xffB3BEC2);
+  static Color text4 = const Color(0xffdfdfdf);
+  static Color text5 = const Color(0xffe5e5e5);
+  static Color text6 = const Color(0xfff1f1f1);
+  static Color error = const Color(0xffC92929);
+  static Color active = const Color(0xff32BE23);
+  static Color white = const Color(0xffffffff);
 
   static final Color _iconColor = Colors.blueAccent.shade200;
-  static const Color _lightPrimaryColor = Color(0xFF546E7A);
-  static const Color _lightPrimaryVariantColor = Color(0xFF546E7A);
-  static const Color _lightSecondaryColor = Colors.green;
+
+
+  static const Color _lightPrimaryColor = Color(0xffFCD639);
+  static const Color _lightPrimaryVariantColor = Color(0xffe5e5e5);
+  static const Color _lightSecondaryColor = Color(0xffFCE16D);
+  static const Color _lightOnSecondaryColor = Color(0xff3A515E);
   static const Color _lightOnPrimaryColor = Colors.black;
 
-  static const maleForeground=Color(0xff668fff);
-  static const maleBackGround=Color(0x66668fff);
-  static const dialogBackground=Color(0xff2e2b3f);
-  static const dialogBorderAndText=Color(0xffe5e5e5);
-  static const profileDark=Color(0xff221f2e);
-  static const contentText=Color(0xff798289);
-  static const mainThemColor=Color(0xff7366ff);
-  static const secondaryColorOfSaveButton=Color(0xffff6cab);
-  static const shadow=Color(0x667366ff);
-  static const specSelectedSecondaryColor=Color(0x00212b35);
-  static const darkButton=Color(0x52727cbe);
 
-  static const Color _darkPrimaryColor = Color(0xff7366ff);
-  static const Color imageBakGround = Color(0x657366ff);
+  static const Color _darkPrimaryColor = Color(0xffFCD639);
   static const Color _darkPrimaryVariantColor = Colors.black;
-  static const Color _darkSecondaryColor = Colors.white;
+  static const Color _darkSecondaryColor = Color(0xffFCE16D);
+  static const Color _darkOnSecondaryColor = Color(0xff3A515E);
   static const Color _darkOnPrimaryColor = Colors.white;
 
   static const   textTitleColor=Colors.black;
@@ -36,15 +45,22 @@ class KidThem {
 
   static final ThemeData lightTheme = ThemeData(
       appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.blue, //
+          statusBarBrightness: Brightness.light// or set color with: Color(0xFF0000FF)
+        ),
         titleTextStyle: TextStyle(color:_darkSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.bold,fontSize: 26 ),
         color: _lightPrimaryVariantColor,
         iconTheme: IconThemeData(color: _lightOnPrimaryColor),
       ),
       colorScheme: const ColorScheme.light(
         primary: _lightPrimaryColor,
-        primaryVariant: _lightPrimaryVariantColor,
+        primaryContainer: _lightPrimaryVariantColor,
         secondary: _lightSecondaryColor,
+        onSecondary: _lightOnSecondaryColor,
         onPrimary: _lightOnPrimaryColor,
+        background: Colors.white70,
+
       ),
       iconTheme: IconThemeData(
         color: _iconColor,
@@ -59,13 +75,18 @@ class KidThem {
   static final ThemeData darkTheme = ThemeData(
       scaffoldBackgroundColor: _darkPrimaryVariantColor,
       appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.blue, //
+            statusBarBrightness: Brightness.dark// or set color with: Color(0xFF0000FF)
+        ),
         color: _darkPrimaryVariantColor,
         iconTheme: IconThemeData(color: _darkOnPrimaryColor),
       ),
       colorScheme: const ColorScheme.dark(
         primary: _darkPrimaryColor,
-        primaryVariant: _darkPrimaryVariantColor,
+        primaryContainer: _darkPrimaryVariantColor,
         secondary: _darkSecondaryColor,
+        onSecondary: _darkOnSecondaryColor,
         onPrimary: _darkOnPrimaryColor,
         background: Colors.white12,
       ),
@@ -89,6 +110,6 @@ class KidThem {
   TextStyle(fontSize: 26.0,fontWeight:FontWeight.bold, color: _lightOnPrimaryColor,fontFamily: "Roboto");
 
   static final TextStyle _darkScreenHeading1TextStyle =
-  _lightScreenHeading1TextStyle.copyWith(color: _darkOnPrimaryColor);
+  _lightScreenHeading1TextStyle.copyWith(color: _darkOnPrimaryColor,);
 
 }

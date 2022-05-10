@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
@@ -100,7 +102,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       ],
       supportedLocales: const [Locale('en', ''), Locale('ar', '')],
       onGenerateRoute: _routes(),
-      title: AppLocalizations.of(context)?.getText("app_name") ?? "Phoenix kindergarten",
+      title: AppLocalizations.of(context)?.getText("app_name") ??
+          "Phoenix kindergarten",
       theme: KidThem.lightTheme,
       darkTheme: KidThem.darkTheme,
     );
@@ -112,7 +115,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       Widget screen;
       switch (settings.name) {
         case HomeScreenRoute:
-          screen = NavigationScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten");
+          screen = NavigationScreen(
+              title: AppLocalizations.of(context)?.getText('app_name') ??
+                  "Phoenix kindergarten");
           break;
         case ChildActionsRoute:
           screen = ChildActions();

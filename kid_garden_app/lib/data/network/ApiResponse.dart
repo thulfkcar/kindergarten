@@ -1,3 +1,5 @@
+import 'package:kid_garden_app/domain/Child.dart';
+
 class ApiResponse<T> {
   Status? status;
   T? data;
@@ -6,6 +8,7 @@ class ApiResponse<T> {
   ApiResponse(this.status, this.data, this.message);
 
   ApiResponse.loading() : status = Status.LOADING;
+  ApiResponse.empty() : status = Status.Empty;
 
   ApiResponse.non() : status = Status.NON;
 
@@ -19,6 +22,7 @@ class ApiResponse<T> {
   String toString() {
     return "Status : $status \n Message : $message \n Data : $data";
   }
+
 }
 
-enum Status { LOADING, COMPLETED, ERROR, LOADING_NEXT_PAGE ,NON}
+enum Status { LOADING, COMPLETED, ERROR, LOADING_NEXT_PAGE ,NON,Empty}

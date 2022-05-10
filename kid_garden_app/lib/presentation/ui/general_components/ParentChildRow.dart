@@ -39,7 +39,7 @@ class ParentChildCard extends ConsumerStatefulWidget {
 class _ParentChildCardState extends ConsumerState<ParentChildCard> {
   @override
   Widget build(BuildContext context) {
-    return ParentchildRow(
+    return ParentchildRow(context,
         child: widget.child,
         onClicked: widget.onClicked,
         onChildActionsClicked: widget.onChildActionsClicked,
@@ -48,7 +48,7 @@ class _ParentChildCardState extends ConsumerState<ParentChildCard> {
   }
 }
 
-ParentchildRow(
+ParentchildRow(BuildContext context,
     {required Child child,
     required Function(Child) onClicked,
     required Function(String) onChildActionsClicked,
@@ -92,7 +92,7 @@ ParentchildRow(
                       child.assignRequest!.kindergartenImage!,
                       child.assignRequest!.kindergartenName!,
                       onKindergartenClicked))
-              : joinKindergartenCard(child.id, onJoinKindergartenClicked),
+              : joinKindergartenCard(child.id, onJoinKindergartenClicked,context),
         ],
       ),
     ),
@@ -170,7 +170,7 @@ Widget ContactCard(List<Contact>? contacts) {
       : Container();
 }
 
-Widget joinKindergartenCard(String childId, Function(String) onJoinClicked) {
+Widget joinKindergartenCard(String childId, Function(String) onJoinClicked,BuildContext context) {
   return ElevatedButton(
     onPressed: () {
       onJoinClicked(childId);
@@ -179,13 +179,13 @@ Widget joinKindergartenCard(String childId, Function(String) onJoinClicked) {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: titleText("Click to Join", ColorStyle.text1),
+          child: titleText(AppLocalizations.of(context)?.getText("click_to_join")??"Click to Join", ColorStyle.text1),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
               child: descriptionText(
-                  "your Child is not implemented in a kindergarten",
+                AppLocalizations.of(context)?.getText("click_to_join_des")??  "your Child is not implemented in a kindergarten",
                   ColorStyle.text1,
                   textAlign: TextAlign.center)),
         )

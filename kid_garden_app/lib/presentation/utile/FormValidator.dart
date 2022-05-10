@@ -58,7 +58,7 @@ class FormValidator {
         r'/^$|\s+/';
     RegExp regExp =  RegExp(pattern);
     if (value!.isEmpty) {
-      return "filed required.!!";
+      return AppLocalizations.of(context)?.getText("field_required")?? "filed required.!!";
     }  else {
       return null;
     }

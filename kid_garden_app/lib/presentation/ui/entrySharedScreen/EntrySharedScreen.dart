@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../styles/colors_style.dart';
 
@@ -20,6 +21,7 @@ class _EntrySharedScreenState extends ConsumerState<EntrySharedScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: ColorStyle.male1,
         elevation: 0,
