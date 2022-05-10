@@ -13,7 +13,7 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../../utile/FormValidator.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 import 'StaffViewModel.dart';
 
 class StaffAdding extends ConsumerStatefulWidget {

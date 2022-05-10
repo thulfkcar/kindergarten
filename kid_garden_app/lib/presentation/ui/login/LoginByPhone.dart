@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';

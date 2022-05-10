@@ -6,7 +6,7 @@ import '../../../../data/network/ApiResponse.dart';
 import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
 import '../../../../them/DentalThem.dart';
-import '../../general_components/ActionDialog.dart';
+import '../../dialogs/ActionDialog.dart';
 import '../../subscriptionScreen/SubscriptionScreen.dart';
 import '../../subscriptionScreen/SubscriptionViewModel.dart';
 import '../../userProfile/UserProfile.dart';

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRReader extends StatefulWidget {
@@ -61,7 +62,7 @@ class _QRReaderState extends State<QRReader> {
                 child: (result != null)
                     ? Text(
                         'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                    : Text('Scan a code'),
+                    : Text(AppLocalizations.of(context)?.getText("scan_pin")??'Scan a code'),
               ),
             ],
           ),

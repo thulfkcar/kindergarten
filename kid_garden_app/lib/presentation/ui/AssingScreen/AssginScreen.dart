@@ -6,7 +6,7 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/AssingChildForm.dart';
 import '../../../di/Modules.dart';
 import '../childActions/AssignChildViewModel.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 
 class AssignScreen extends ConsumerStatefulWidget {
   String? childId;

@@ -71,6 +71,8 @@
   "image_required": "الرجاء قم بأضافة صورة لطفلك",
   "field_required": "الحقل مطلوب",
   "no_children": "لايوجد اطفال",
+  "dismiss": "أنهاء",
+  "scan_pin": "اقرأ الترميز",
   "click_to_join": "أضغط للأنظمام",
   "click_to_join_des": "طفلك غير منظم الى حضانة",
   "verification_des": "الرجاء الانتظار قليلاً لحين اكمال عملية التأكيد.",

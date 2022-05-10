@@ -15,7 +15,7 @@ import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
 import '../general_components/units/texts.dart';
 import 'ChildViewModel.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 
 class ChildAddingScreen extends ConsumerStatefulWidget {
   Function(Child?) onAdded;

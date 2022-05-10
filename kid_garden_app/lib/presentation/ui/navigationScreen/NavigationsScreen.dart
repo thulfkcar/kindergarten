@@ -11,7 +11,7 @@ import '../../utile/LangUtiles.dart';
 import '../Child/Childs.dart';
 import '../Home/HomeUI.dart';
 import '../Staff/StaffUI.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 import '../parentsScreen/parentsScreen.dart';
 
 class NavigationScreen extends StatefulWidget {

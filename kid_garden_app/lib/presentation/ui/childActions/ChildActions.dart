@@ -10,7 +10,7 @@ import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
 import '../AssingScreen/AssginScreen.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 import '../general_components/ActionGroup.dart';
 import '../general_components/CustomListView.dart';
 import '../general_components/Error.dart';

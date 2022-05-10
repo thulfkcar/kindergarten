@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/RequestCard.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 

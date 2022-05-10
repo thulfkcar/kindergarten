@@ -7,7 +7,7 @@ import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../../../them/DentalThem.dart';
 import '../Child/Childs.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 import '../subscriptionScreen/SubscriptionScreen.dart';
 import '../subscriptionScreen/SubscriptionViewModel.dart';
 import '../userProfile/UserProfile.dart';

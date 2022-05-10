@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';

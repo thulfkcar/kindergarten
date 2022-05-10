@@ -13,7 +13,7 @@ import '../../../domain/UserModel.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
-import '../general_components/ActionDialog.dart';
+import '../dialogs/ActionDialog.dart';
 import '../general_components/units/buttons.dart';
 import '../general_components/units/texts.dart';
 import '../login/LoginPageViewModel.dart';

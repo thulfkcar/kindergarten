@@ -77,6 +77,8 @@
   "image_required": "Image Required",
   "field_required": "field required",
   "no_children": "No Children to Load",
+  "dismiss": "dismiss",
+  "scan_pin": "Scan QR",
   "meters": " Meters",
   "male": "Male",
   "female": "Female",
