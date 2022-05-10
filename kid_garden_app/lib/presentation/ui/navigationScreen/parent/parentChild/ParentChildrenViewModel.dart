@@ -23,6 +23,12 @@ class ParentChildrenViewModel extends ChangeNotifier {
   ApiResponse<List<Child>> childListResponse = ApiResponse.loading();
 
   void setChildListResponse(ApiResponse<List<Child>> response) {
+    if(response.data!=null) {
+      response.data!.forEach((element) {
+        element.contacts!.removeWhere((element) =>
+        element.userType == "Parent");
+      });
+    }
     childListResponse = response;
 
     notifyListeners();
@@ -39,10 +45,9 @@ class ParentChildrenViewModel extends ChangeNotifier {
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
-    if (childListResponse.data != null && apiResponse.data!=null) {
-     appendNewItems([apiResponse.data!]);
-    }
-    else if(apiResponse.data!=null){
+    if (childListResponse.data != null && apiResponse.data != null) {
+      appendNewItems([apiResponse.data!]);
+    } else if (apiResponse.data != null) {
       setChildListResponse(ApiResponse.completed([apiResponse.data!]));
     }
 
@@ -66,11 +71,11 @@ class ParentChildrenViewModel extends ChangeNotifier {
             page: pageChild, searchKey: searchKey, subUserId: null)
         .then((value) {
       childLastPage = value.item2;
-      if(value.item1==null) {
+      if (value.item1 == null) {
         setChildListResponse(ApiResponse.error("refresh the app"));
-      } else  if(value.item1.isEmpty){
+      } else if (value.item1.isEmpty) {
         setChildListResponse(ApiResponse.empty());
-      }else {
+      } else {
         setChildListResponse(ApiResponse.completed(value.item1));
       }
     }).onError((error, stackTrace) {

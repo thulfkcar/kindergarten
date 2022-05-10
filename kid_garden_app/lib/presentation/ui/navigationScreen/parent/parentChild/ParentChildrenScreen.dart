@@ -148,6 +148,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
 
   Widget childNavigation(Child item) {
+
     return ParentChildCard(
         onClicked: (child) {
           if (!widget.isSubscriptionValid) Navigator.pop(context);
@@ -165,12 +166,12 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
           // request if result not null
         },
         onKindergartenClicked: (kindergartenId) {
-          showAlertDialog(
-              context: context,
-              messageDialog: ActionDialog(
-                  type: DialogType.warning,
-                  title: "kinder Clicked",
-                  message: "sdfdssd"));
+          // showAlertDialog(
+          //     context: context,
+          //     messageDialog: ActionDialog(
+          //         type: DialogType.warning,
+          //         title: "kinder Clicked",
+          //         message: "sdfdssd"));
         },
         onChildActionsClicked: (childId) {
           if (!widget.isSubscriptionValid) Navigator.pop(context);
@@ -187,8 +188,8 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
-              title: "Request Dialog",
-              message: "Requesting the Kindergarten for joining your child in",
+              title:AppLocalizations.of(context)?.getText("join_request") ??"Request Dialog",
+              message:AppLocalizations.of(context)?.getText("join_request_des") ?? "Requesting the Kindergarten for joining your child in",
               onCompleted: (d) {},
             ));
         await _viewModel.setJoinKindergartenRequest(ApiResponse.non());
@@ -202,9 +203,9 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
               context: context,
               messageDialog: ActionDialog(
                 type: DialogType.completed,
-                title: "Request Dialog",
+                title:AppLocalizations.of(context)?.getText("join_request") ??"Request Dialog",
                 message:
-                    "Requesting the Kindergarten completed , your request in pending...",
+                AppLocalizations.of(context)?.getText("join_request_des_comp") ??  "Requesting the Kindergarten completed , your request in pending...",
                 onCompleted: (s) async {
                   await _viewModel.fetchChildren();
                   await _viewModel

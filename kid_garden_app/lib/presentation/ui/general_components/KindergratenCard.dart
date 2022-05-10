@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/BaseApiService.dart';
 import '../../utile/LocationUtiles.dart';
@@ -104,7 +105,7 @@ class _KindergartenCardState extends State<KindergartenCard> {
                           // side: BorderSide()
                         ))),
                     child: Text(
-                      "Join request",
+                     AppLocalizations.of(context)?.getText("click_to_join")?? "Join request",
                       style: TextStyle(color: ColorStyle.white),
                     ),
                   )
