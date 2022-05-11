@@ -36,12 +36,13 @@ class _KindergartenCardState extends State<KindergartenCard> {
  @override
  void setState(fn) {
    if(mounted) {
-     calculateDistance(widget.kindergraten.ditance!,widget.kindergraten.longitudes,widget.kindergraten.latitudes);
      super.setState(fn);
    }
  }
   @override
   Widget build(BuildContext context) {
+    calculateDistance(widget.kindergraten.ditance!,widget.kindergraten.longitudes,widget.kindergraten.latitudes);
+
     return Card(
       elevation: 0,
       color: ColorStyle.text4,

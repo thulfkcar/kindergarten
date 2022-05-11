@@ -18,7 +18,7 @@ var check=false;
   ApiResponse<Redeem> userSubScribeApiResponse = ApiResponse.non();
   ApiResponse<String> userSubscriptionStatusResponse = ApiResponse.non();
 
-  void setSubscribeApiResponse(ApiResponse<Redeem> apiResponse) async {
+  Future<void> setSubscribeApiResponse(ApiResponse<Redeem> apiResponse) async {
     userSubScribeApiResponse = apiResponse;
     await Future.delayed(Duration(milliseconds: 1)); // use await
 

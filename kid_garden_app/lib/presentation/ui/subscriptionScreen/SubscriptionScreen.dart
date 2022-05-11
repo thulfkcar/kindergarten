@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/NavigationScreenParent.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../styles/colors_style.dart';
@@ -159,16 +160,31 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 message:AppLocalizations.of(context)?.getText("subscribing")?? "Subscribing"));
         break;
       case Status.COMPLETED:
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-              type: DialogType.completed,
-              title: AppLocalizations.of(context)?.getText("subscribe")?? "Subscribe",
-              message: viewModel.userSubScribeApiResponse.message!,
-              onCompleted: (s) {
-                viewModel.setSubscribeApiResponse(ApiResponse.non());
-              },
-            ));
+        var message=AppLocalizations.of(context)?.getText("valid_subscription")??"your subscription is validated";
+
+        if(viewModel.userSubScribeApiResponse.message!=null){
+          message=viewModel.userSubScribeApiResponse.message!;
+        }
+       await viewModel.setSubscribeApiResponse(ApiResponse.non()).then((value) {
+          showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                type: DialogType.completed,
+                title: AppLocalizations.of(context)?.getText("subscribe")?? "Subscribe",
+                message:message ,
+                onCompleted: (s) async {
+                  Navigator.pop(context);
+
+                  await Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            NavigationScreenParent(title: "")),
+                        (Route<dynamic> route) => true,
+                  );                },
+              ));
+        });
+
         break;
       case Status.ERROR:
         showAlertDialog(
