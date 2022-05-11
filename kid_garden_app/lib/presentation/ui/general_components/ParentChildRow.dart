@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/ui/general_components/ContactList.da
 import 'package:kid_garden_app/presentation/ui/general_components/KindergratenCard.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:intl/intl.dart' as intl;
 
 import '../../../data/network/BaseApiService.dart';
 import '../../../domain/Child.dart';
@@ -64,13 +65,13 @@ ParentchildRow(BuildContext context,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: childCard(onClicked, child),
+                  child: childCard(context,onClicked, child),
                 ),
                 Container(
                   color: ColorStyle.text1,
                   width: 1,
                 ),
-                actionButton(child, onChildActionsClicked)
+                actionButton(context, child, onChildActionsClicked)
               ],
             ),
           ),
@@ -79,10 +80,12 @@ ParentchildRow(BuildContext context,
             height: 1,
           ),
           ContactCard(child.contacts),
-          Container(
-            color: ColorStyle.text1,
-            height: 1,
-          ),
+          (child.contacts != null && child.contacts!.isNotEmpty)
+              ? Container(
+                  color: ColorStyle.text1,
+                  height: 1,
+                )
+              : Container(),
           child.assignRequest != null
               ? child.assignRequest!.requestStatus == RequestStatus.Pending
                   ? requestedToKindergartenCard(
@@ -92,7 +95,8 @@ ParentchildRow(BuildContext context,
                       child.assignRequest!.kindergartenImage!,
                       child.assignRequest!.kindergartenName!,
                       onKindergartenClicked))
-              : joinKindergartenCard(child.id, onJoinKindergartenClicked,context),
+              : joinKindergartenCard(
+                  child.id, onJoinKindergartenClicked, context),
         ],
       ),
     ),
@@ -102,7 +106,10 @@ ParentchildRow(BuildContext context,
 class requestedToKindergartenCard extends StatelessWidget {
   Function(String) onKindergartenClicked;
   AssignRequest assignRequest;
-   requestedToKindergartenCard(this.assignRequest, this.onKindergartenClicked,{Key? key}) : super(key: key);
+
+  requestedToKindergartenCard(this.assignRequest, this.onKindergartenClicked,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,28 +121,34 @@ class requestedToKindergartenCard extends StatelessWidget {
             Expanded(
               child: status == RequestStatus.Pending
                   ? Container(
-                  color: ColorStyle.main,
-                  child: Center(
-                    child: titleText(AppLocalizations.of(context)?.getText("request_Pending")??"Request Pending", ColorStyle.text1),
-                  ))
+                      color: ColorStyle.main,
+                      child: Center(
+                        child: titleText(
+                            AppLocalizations.of(context)
+                                    ?.getText("request_Pending") ??
+                                "Request Pending",
+                            ColorStyle.text1),
+                      ))
                   : status == RequestStatus.Rejected
-                  ? Container(
-                color: ColorStyle.female1,
-                child: Center(
-                    child: titleText(
-                        AppLocalizations.of(context)?.getText("request_reject_des")??  "Request Rejected due :${assignRequest.message}",
-                        ColorStyle.text1)),
-              )
-                  : Container(),
+                      ? Container(
+                          color: ColorStyle.female1,
+                          child: Center(
+                              child: titleText(
+                                  AppLocalizations.of(context)
+                                          ?.getText("request_reject_des") ??
+                                      "Request Rejected due :${assignRequest.message}",
+                                  ColorStyle.text1)),
+                        )
+                      : Container(),
             )
           ],
         ),
         assignRequest.kindergartenId != null
             ? KindergartenButton(
-            assignRequest.kindergartenId,
-            assignRequest.kindergartenImage!,
-            assignRequest.kindergartenName!,
-            onKindergartenClicked)
+                assignRequest.kindergartenId,
+                assignRequest.kindergartenImage!,
+                assignRequest.kindergartenName!,
+                onKindergartenClicked)
             : Container()
       ],
     );
@@ -170,7 +183,8 @@ Widget ContactCard(List<Contact>? contacts) {
       : Container();
 }
 
-Widget joinKindergartenCard(String childId, Function(String) onJoinClicked,BuildContext context) {
+Widget joinKindergartenCard(
+    String childId, Function(String) onJoinClicked, BuildContext context) {
   return ElevatedButton(
     onPressed: () {
       onJoinClicked(childId);
@@ -179,13 +193,17 @@ Widget joinKindergartenCard(String childId, Function(String) onJoinClicked,Build
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: titleText(AppLocalizations.of(context)?.getText("click_to_join")??"Click to Join", ColorStyle.text1),
+          child: titleText(
+              AppLocalizations.of(context)?.getText("click_to_join") ??
+                  "Click to Join",
+              ColorStyle.text1),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
               child: descriptionText(
-                AppLocalizations.of(context)?.getText("click_to_join_des")??  "your Child is not implemented in a kindergarten",
+                  AppLocalizations.of(context)?.getText("click_to_join_des") ??
+                      "your Child is not implemented in a kindergarten",
                   ColorStyle.text1,
                   textAlign: TextAlign.center)),
         )
@@ -203,7 +221,7 @@ Widget joinKindergartenCard(String childId, Function(String) onJoinClicked,Build
   );
 }
 
-Widget childCard(Function(Child p1) onClicked, Child child) {
+Widget childCard(BuildContext context,Function(Child p1) onClicked, Child child) {
   return ElevatedButton(
     onPressed: () {
       onClicked(child);
@@ -290,7 +308,10 @@ Widget childCard(Function(Child p1) onClicked, Child child) {
       backgroundColor: MaterialStateProperty.all(ColorStyle.text4),
       elevation: MaterialStateProperty.all(0),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        const RoundedRectangleBorder(
+        Directionality.of(context).index == 0
+            ? const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(10)),
+        ):const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
         ),
       ),
@@ -330,18 +351,26 @@ Widget KindergartenButton(String? id, String image, String name,
   );
 }
 
-Widget actionButton(Child child, Function(String) onChildActionsClicked) {
+Widget actionButton(
+    BuildContext context, Child child, Function(String) onChildActionsClicked) {
   return ElevatedButton(
     onPressed: () {
       onChildActionsClicked(child.id);
     },
-    child: titleText("Actions", ColorStyle.white),
+    child: titleText(
+        AppLocalizations.of(context)?.getText("actions") ?? "Actions",
+        ColorStyle.white),
     style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(ColorStyle.text3),
-        elevation: MaterialStateProperty.all(0),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(10)),
-        ))),
+      backgroundColor: MaterialStateProperty.all(ColorStyle.text3),
+      elevation: MaterialStateProperty.all(0),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        Directionality.of(context).index == 0? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
+              )
+            : const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(topRight: Radius.circular(10)),
+              ),
+      ),
+    ),
   );
 }

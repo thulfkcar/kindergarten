@@ -9,6 +9,7 @@ import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:tuple/tuple.dart';
@@ -26,8 +27,10 @@ import '../general_components/units/texts.dart';
 class UserProfile extends ConsumerStatefulWidget {
   String? userId;
   Role userType;
+  bool self;
 
   UserProfile({
+    required this.self,
     required this.userType,
     required this.userId,
     Key? key,
@@ -196,12 +199,15 @@ class _UserProfileState extends ConsumerState<UserProfile> {
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 
             Expanded(
-              child: (user.role == Role.Staff || user.role == Role.Parents)
+              child: (user.role == Role.Staff )
                   ? ChildrenExplorer(
                       fromProfile: false,
                       subUserId: widget.userId,
                     )
-                  : const AdminRequestsScreen(),
+                  :(user.role == Role.Parents&& widget.self==false)?ChildrenExplorer(
+                fromProfile: false,
+                subUserId: widget.userId,
+              ):(user.role == Role.Parents&& widget.self==true)?ParentChildrenScreen(isSubscriptionValid: true, fromProfile: false): const AdminRequestsScreen(),
             ),
           ],
         ));

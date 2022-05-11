@@ -31,7 +31,7 @@ class _NavigationScreen extends State<NavigationScreen> {
     ),
     ParentsScreen(),
     StaffUI(),
-    UserProfile(userType: Role.admin, userId: null),
+    UserProfile(self:true,userType: Role.admin, userId: null),
   ];
 
   void _onItemTapped(int index) {

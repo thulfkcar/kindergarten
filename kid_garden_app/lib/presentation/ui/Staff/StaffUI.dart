@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -74,7 +75,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => UserProfile(
+                      builder: (context) => UserProfile(self: false,
                             userType: item.role,
                             userId: item.id!,
                           )));
@@ -96,7 +97,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => UserProfile(
+                      builder: (context) => UserProfile(self: false,
                             userType: item.role,
                             userId: item.id!,
                           )));

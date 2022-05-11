@@ -62,7 +62,7 @@ class _NavigationScreenParentState
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => UserProfile(
+                      builder: (context) => UserProfile(self: true,
                         userType: Role.Parents,
                         userId: null,
                       )));

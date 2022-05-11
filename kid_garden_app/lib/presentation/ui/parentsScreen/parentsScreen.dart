@@ -77,7 +77,7 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             itemBuilder: (BuildContext context, UserModel item) {
               return staffCard(item, (user) {
                 Navigator.push(
-                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(userType: Role.Parents, userId: user.id) ));
+                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(self:false,userType: Role.Parents, userId: user.id) ));
               });
             },
             direction: Axis.vertical);
@@ -93,7 +93,7 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             itemBuilder: (BuildContext context, UserModel item) {
               return staffCard(item, (user) {
                 Navigator.push(
-                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(userType: Role.Parents, userId: user.id) ));
+                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(self:false,userType: Role.Parents, userId: user.id) ));
               });
             },
             direction: Axis.vertical);
