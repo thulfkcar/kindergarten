@@ -41,6 +41,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         title: Text(AppLocalizations.of(context)?.getText("app_name") ?? "Error"),
       ),
       bottomSheet: widget.childId == null
@@ -58,13 +60,13 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
                     ),
                     child:  Text(
                      AppLocalizations.of(context)?.getText("login")??"Login",
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginOrSignUpScreen()));
+                              builder: (context) => const LoginOrSignUpScreen()));
                     },
                   ),
                 ),

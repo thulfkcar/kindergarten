@@ -28,8 +28,7 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController = ScrollController()
-      ..addListener(getNext);
+    _scrollController = ScrollController()..addListener(getNext);
   }
 
   @override
@@ -52,9 +51,11 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
           _viewModel.search(value);
         },
         controller: editingController,
-        decoration:  InputDecoration(
-            labelText:  AppLocalizations.of(context)?.getText("search")??"Search",
-            hintText:  AppLocalizations.of(context)?.getText("search")??"Search",
+        decoration: InputDecoration(
+            labelText:
+                AppLocalizations.of(context)?.getText("search") ?? "Search",
+            hintText:
+                AppLocalizations.of(context)?.getText("search") ?? "Search",
             prefixIcon: const Icon(Icons.search),
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)))),
@@ -77,7 +78,12 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             itemBuilder: (BuildContext context, UserModel item) {
               return staffCard(item, (user) {
                 Navigator.push(
-                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(self:false,userType: Role.Parents, userId: user.id) ));
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => UserProfile(
+                            self: false,
+                            userType: Role.Parents,
+                            userId: user.id)));
               });
             },
             direction: Axis.vertical);
@@ -91,10 +97,18 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
             items: _viewModel.parentListResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, UserModel item) {
-              return staffCard(item, (user) {
-                Navigator.push(
-                    context, MaterialPageRoute( builder: (BuildContext context) => UserProfile(self:false,userType: Role.Parents, userId: user.id) ));
-              });
+              return staffCard(
+                item,
+                (user) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => UserProfile(
+                              self: false,
+                              userType: Role.Parents,
+                              userId: user.id)));
+                },
+              );
             },
             direction: Axis.vertical);
 

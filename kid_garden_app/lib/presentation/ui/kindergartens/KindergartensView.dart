@@ -14,28 +14,23 @@ import '../navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
 
 class KindergartensView extends ConsumerStatefulWidget {
   String? childId;
-
   KindergartensView({
     required this.childId,
     Key? key,
   }) : super(key: key);
-
   @override
   ConsumerState createState() => _KindergartensViewState();
 }
-
 class _KindergartensViewState extends ConsumerState<KindergartensView> {
   late KindergartenViewModel _viewModel;
   late ScrollController _scrollController;
   late ParentChildrenViewModel viewModelParentChildrenShared;
   TextEditingController editingController = TextEditingController();
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _scrollController = ScrollController()..addListener(getNext);
   }
-
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(kindergartenViewModelProvider);
@@ -43,7 +38,6 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
 
     return body();
   }
-
   Widget body() {
     var status = _viewModel.kindergartenApiResponse.status;
 
@@ -80,7 +74,6 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
     }
     return Container();
   }
-
   void getNext() async {
     var state = _viewModel.kindergartenApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
@@ -90,7 +83,6 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
       }
     }
   }
-
   Widget kinderCard(Kindergraten item,BuildContext context) {
     return KindergartenCard(
       kindergraten: item,

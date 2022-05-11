@@ -50,6 +50,8 @@ class _ChildAddingScreenState extends ConsumerState<ChildAddingScreen> {
     });
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         title: Text(
             AppLocalizations.of(context)?.getText("add_child") ?? "Add Child"),
       ),

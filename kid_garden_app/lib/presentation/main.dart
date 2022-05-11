@@ -105,7 +105,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: AppLocalizations.of(context)?.getText("app_name") ??
           "Phoenix kindergarten",
       theme: KidThem.lightTheme,
-      darkTheme: KidThem.darkTheme,
+      // darkTheme: KidThem.darkTheme,
     );
   }
 

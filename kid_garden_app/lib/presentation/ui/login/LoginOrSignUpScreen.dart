@@ -16,6 +16,7 @@ import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../main.dart';
+import '../AboutCompany/AboutCompany.dart';
 import '../general_components/units/texts.dart';
 import '../navigationScreen/parent/NavigationScreenParent.dart';
 import '../navigationScreen/NavigationsScreen.dart';
@@ -109,6 +110,30 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                           MaterialStateProperty.all(ColorStyle.white),
                       side: MaterialStateProperty.all(
                           BorderSide(width: 1, color: ColorStyle.male1)),
+                      elevation: MaterialStateProperty.all(0)),
+                ),
+              )
+            ],
+          ),
+          SizedBox(height: 60,),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AboutCompany(),
+                      ),
+                    );
+                  },
+                  child: descriptionText(AppLocalizations.of(context)?.getText("register_new_kindergarten")??"register new kindergarten", ColorStyle.female1),
+                  style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all(ColorStyle.white),
+                      side: MaterialStateProperty.all(
+                          const BorderSide(width: 0, color: Colors.transparent)),
                       elevation: MaterialStateProperty.all(0)),
                 ),
               )

@@ -321,26 +321,36 @@ Widget childCard(BuildContext context,Function(Child p1) onClicked, Child child)
 
 Widget KindergartenButton(String? id, String image, String name,
     Function(String) onKindergartenClicked) {
-  var kinder = Kindergraten(
-      id: id!,
-      longitudes: 34545,
-      ditance: '',
-      latitudes: 3455,
-      location: '',
-      phone: '',
-      media: Media("sfdf", "Resources/kinder.jpg", MediaType.image),
-      name: name);
+
   return ElevatedButton(
     onPressed: () {
-      onKindergartenClicked(kinder.id);
+      onKindergartenClicked(id!);
     },
-    child: KindergartenCard(
-      kindergraten: kinder,
-      addRequestEnable: false,
-      onAddRequestClicked: (String) {},
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(50.0),
+              child: Image.network(
+                domain + image,
+                width: 70,
+                height: 70,
+              )),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Text(
+              name,
+            ),
+          ),
+
+        ],
+      ),
     ),
     style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(ColorStyle.text4),
         elevation: MaterialStateProperty.all(0),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(

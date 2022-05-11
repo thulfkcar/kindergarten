@@ -51,64 +51,66 @@ class _UserProfileState extends ConsumerState<UserProfile> {
     id = viewModelLogin.currentUser!.id;
     viewModel = ref.watch(userProfileViewModelProvider(
         widget.userId == null ? id! : widget.userId!));
-    return  Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            title: widget.userId != null
-                ? const Text(
-                    "Profile",
-                    style: TextStyle(color: Colors.black),
-                  )
-                : Container(),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.only(bottom: 32),
-            child: body(),
-          ),
-          bottomSheet: (widget.userId != null)
-              ? const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 0,
-                  ),
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          title: widget.userId != null
+              ? const Text(
+                  "Profile",
+                  style: TextStyle(color: Colors.black),
                 )
-              : Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30, right: 30),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Future.delayed(Duration.zero, () async {
-                              await viewModelLogin.logOut();
+              : Container(),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(bottom: 32),
+          child: body(),
+        ),
+        bottomSheet: (widget.userId != null)
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 0,
+                ),
+              )
+            : Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: (widget.self &&
+                              (widget.userType == Role.Parents ||
+                                  widget.userType == Role.Staff))
+                          ? const EdgeInsets.only(left: 30, right: 30,bottom: 30)
+                          : const EdgeInsets.only(left: 30, right: 30),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Future.delayed(Duration.zero, () async {
+                            await viewModelLogin.logOut();
 
-                              // Navigator.pushAndRemoveUntil(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
-                              //       (Route<dynamic> route) => false,
-                              // );
-                              RestartWidget.restartApp(context);
-                            });
-                          },
-                          child: descriptionText(
-                              AppLocalizations.of(context)
-                                      ?.getText("sign_out") ??
-                                  "Sign Out",
-                              ColorStyle.female1),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(ColorStyle.white),
-                              side: MaterialStateProperty.all(BorderSide(
-                                  width: 1, color: ColorStyle.female1)),
-                              elevation: MaterialStateProperty.all(0)),
-                        ),
+                            // Navigator.pushAndRemoveUntil(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
+                            //       (Route<dynamic> route) => false,
+                            // );
+                            RestartWidget.restartApp(context);
+                          });
+                        },
+                        child: descriptionText(
+                            AppLocalizations.of(context)?.getText("sign_out") ??
+                                "Sign Out",
+                            ColorStyle.female1),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(ColorStyle.white),
+                            side: MaterialStateProperty.all(BorderSide(
+                                width: 1, color: ColorStyle.female1)),
+                            elevation: MaterialStateProperty.all(0)),
                       ),
-                    )
-                  ],
-                ));
-
+                    ),
+                  ),
+                ],
+              ));
   }
 
   Widget body() {
@@ -151,7 +153,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     //     Expanded(child: Container())
                     //   ],
                     // ),
-                   ContactList(widget.userId!=null?true:false ,
+                    ContactList(widget.userId != null ? true : false,
                         contact: Contact(
                             name: user.name!,
                             email: user.email,
@@ -199,15 +201,20 @@ class _UserProfileState extends ConsumerState<UserProfile> {
             // ( user.role==Role.admin || user.role==Role.superAdmin)? const ChildrenExplorer():Container(),
 
             Expanded(
-              child: (user.role == Role.Staff )
+              child: (user.role == Role.Staff)
                   ? ChildrenExplorer(
                       fromProfile: false,
                       subUserId: widget.userId,
                     )
-                  :(user.role == Role.Parents&& widget.self==false)?ChildrenExplorer(
-                fromProfile: false,
-                subUserId: widget.userId,
-              ):(user.role == Role.Parents&& widget.self==true)?ParentChildrenScreen(isSubscriptionValid: true, fromProfile: false): const AdminRequestsScreen(),
+                  : (user.role == Role.Parents && widget.self == false)
+                      ? ChildrenExplorer(
+                          fromProfile: false,
+                          subUserId: widget.userId,
+                        )
+                      : (user.role == Role.Parents && widget.self == true)
+                          ? ParentChildrenScreen(
+                              isSubscriptionValid: true, fromProfile: false)
+                          : const AdminRequestsScreen(),
             ),
           ],
         ));

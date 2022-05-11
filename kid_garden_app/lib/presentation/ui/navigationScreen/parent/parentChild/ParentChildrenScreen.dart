@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
+import 'package:kid_garden_app/presentation/ui/childActions/ChildActions.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
@@ -173,8 +174,16 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
           //         title: "kinder Clicked",
           //         message: "sdfdssd"));
         },
-        onChildActionsClicked: (childId) {
-          if (!widget.isSubscriptionValid) Navigator.pop(context);
+        onChildActionsClicked: (childId) async {
+          if (!widget.isSubscriptionValid) {
+            Navigator.pop(context);
+          } else{
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ChildActions(childId: childId,)));
+          }
         },
         child: item);
   }

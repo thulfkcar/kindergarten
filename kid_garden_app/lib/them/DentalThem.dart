@@ -25,7 +25,6 @@ class KidThem {
 
   static final Color _iconColor = Colors.blueAccent.shade200;
 
-
   static const Color _lightPrimaryColor = Color(0xffFCD639);
   static const Color _lightPrimaryVariantColor = Color(0xffe5e5e5);
   static const Color _lightSecondaryColor = Color(0xffFCE16D);
@@ -36,7 +35,7 @@ class KidThem {
   static const Color _darkPrimaryColor = Color(0xffFCD639);
   static const Color _darkPrimaryVariantColor = Colors.black;
   static const Color _darkSecondaryColor = Color(0xffFCE16D);
-  static const Color _darkOnSecondaryColor = Color(0xff3A515E);
+  static const Color _darkOnSecondaryColor = Color(0xffa4c9de);
   static const Color _darkOnPrimaryColor = Colors.white;
 
   static const   textTitleColor=Colors.black;
@@ -46,10 +45,11 @@ class KidThem {
   static final ThemeData lightTheme = ThemeData(
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.blue, //
           statusBarBrightness: Brightness.light// or set color with: Color(0xFF0000FF)
         ),
-        titleTextStyle: TextStyle(color:_darkSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.bold,fontSize: 26 ),
+        titleTextStyle: TextStyle(color:_lightOnSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.bold,fontSize: 26 ),
+        toolbarTextStyle: TextStyle(color: _lightOnSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.normal,fontSize: 20),
+
         color: _lightPrimaryVariantColor,
         iconTheme: IconThemeData(color: _lightOnPrimaryColor),
       ),
@@ -65,7 +65,9 @@ class KidThem {
       iconTheme: IconThemeData(
         color: _iconColor,
       ),
+elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.all(text5))),
       textTheme: _lightTextTheme,
+      primaryTextTheme: _lightTextTheme,
       dividerTheme: const DividerThemeData(
           color: Colors.black12
       )
@@ -76,9 +78,11 @@ class KidThem {
       scaffoldBackgroundColor: _darkPrimaryVariantColor,
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.blue, //
             statusBarBrightness: Brightness.dark// or set color with: Color(0xFF0000FF)
         ),
+        titleTextStyle: TextStyle(color:_darkOnSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.bold,fontSize: 26 ),
+        toolbarTextStyle: TextStyle(color: _darkOnSecondaryColor,fontFamily: "Roboto",fontWeight: FontWeight.normal,fontSize: 20),
+
         color: _darkPrimaryVariantColor,
         iconTheme: IconThemeData(color: _darkOnPrimaryColor),
       ),
@@ -93,6 +97,8 @@ class KidThem {
       iconTheme: IconThemeData(
         color: _iconColor,
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.all(text1))),
+
       textTheme: _darkTextTheme,
       dividerTheme: const DividerThemeData(
           color: Colors.black
