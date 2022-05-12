@@ -10,13 +10,13 @@ import '../../../styles/colors_style.dart';
 //   );
 // }
 
-Widget customButton  ({required String text, required IconData icon,
+Widget customButton  ({ double size=20,double paddingEdges=20,required String text, required IconData icon,
     required Color mainColor, required Color backgroundColor, void Function()? onPressed}) {
   return Padding(
     padding: const EdgeInsets.all(0),
     child: MaterialButton(
-      height: 40,
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      height: size*2,
+      padding:  EdgeInsets.only(left: paddingEdges, right: paddingEdges),
       color: backgroundColor,
       elevation: 0,
       disabledElevation: 0,
@@ -34,7 +34,7 @@ Widget customButton  ({required String text, required IconData icon,
           Icon(
             icon,
             color: mainColor,
-            size: 20,
+            size: size,
           ),
           const SizedBox(width: 6, height: 1),
           Text(
