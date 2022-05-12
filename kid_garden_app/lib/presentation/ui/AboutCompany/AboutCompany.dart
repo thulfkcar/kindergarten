@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../data/network/BaseApiService.dart';
 import '../general_components/units/cards.dart';
@@ -67,9 +68,15 @@ class _AboutCompanyState extends State<AboutCompany> {
                         FontAwesomeIcons.facebook,
                         size: 30,
                         color: Colors.blueAccent,
+
                       ),
                       size: 40,
-                      onClicked: () {}),
+                      onClicked: () async {
+                        final toFaceBook = Uri(
+                            scheme: 'https',
+                            path: "www.facebook.com/phoenix.company.iq");
+                        await launchUrl(toFaceBook);
+                      }),
                   roundedClickableWithIcon(
                       icon: const Icon(
                         FontAwesomeIcons.instagram,
@@ -77,7 +84,13 @@ class _AboutCompanyState extends State<AboutCompany> {
                         color: Colors.redAccent,
                       ),
                       size: 40,
-                      onClicked: () {}),
+                      onClicked: () async {
+                        final toInstagram=Uri(
+                          scheme: 'http',
+                          path: 'instagram.com/phoenix_company_iq'
+                        );
+                        await launchUrl(toInstagram);
+                      }),
                   roundedClickableWithIcon(
                       icon: const Icon(
                         FontAwesomeIcons.phone,
@@ -85,7 +98,10 @@ class _AboutCompanyState extends State<AboutCompany> {
                         color: Colors.green,
                       ),
                       size: 40,
-                      onClicked: () {}),
+                      onClicked: () async {
+                        var toPhone=Uri(scheme: 'tel',path:"07802253870");
+                        await launchUrl(toPhone);
+                      }),
                   roundedClickableWithIcon(
                       icon: const Icon(
                         FontAwesomeIcons.mailBulk,
@@ -93,7 +109,12 @@ class _AboutCompanyState extends State<AboutCompany> {
                         color: Colors.lightBlueAccent,
                       ),
                       size: 40,
-                      onClicked: () {}),
+                      onClicked: () async {
+                        var mailto=Uri(scheme: 'mailto',path: 'phoenix.tech.2023@gmail.com',
+                            queryParameters: {'subject': 'Example'});
+                        await launchUrl(mailto);
+
+                      }),
                   roundedClickableWithIcon(
                       icon: const Icon(
                         FontAwesomeIcons.telegram,
@@ -101,7 +122,13 @@ class _AboutCompanyState extends State<AboutCompany> {
                         color: Colors.blueAccent,
                       ),
                       size: 40,
-                      onClicked: () {}),
+                      onClicked: () async {
+                      //  telegram.me/<YourBotUsername>
+                        final toTelegram = Uri(
+                            scheme: 'https',
+                            path: "t.me/phoenix_company_iq");
+                        await launchUrl(toTelegram);
+                      }),
                 ],
               ),
               Text(
@@ -136,6 +163,13 @@ class WebViewImpl extends StatefulWidget {
 }
 
 class WebViewImplState extends State<WebViewImpl> {
+var myLocale="en";
+  @override
+  void didChangeDependencies() {
+    Locale myLocale = Localizations.localeOf(context);
+    this.myLocale=myLocale.toString();
+    super.didChangeDependencies();
+  }
   @override
   void initState() {
     super.initState();
@@ -152,7 +186,7 @@ class WebViewImplState extends State<WebViewImpl> {
     return Container(
       height: 2800,
       child: WebView(
-        initialUrl: domain + 'Resources/privacy_policy.html',
+        initialUrl: domain +( myLocale=="ar"?'Resources/privacy_policy_ar.html':'Resources/privacy_policy.html'),
         // javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller.complete(webViewController);

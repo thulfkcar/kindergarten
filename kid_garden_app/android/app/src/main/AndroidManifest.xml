@@ -30,7 +30,7 @@
         </intent>
     </queries>
    <application
-        android:label="kid_garden_app"
+        android:label="Kindergartens"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

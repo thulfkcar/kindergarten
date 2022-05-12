@@ -69,6 +69,10 @@
     <array>
       <string>https</string>
       <string>http</string>
+      <string>instagram</string>
+      <string>facebook</string>
+      <string>whatsapp</string>
+      <string>telegram</string>
     </array>
 </dict>
 </plist>

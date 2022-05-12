@@ -77,7 +77,7 @@ class ContactList extends StatelessWidget {
                       final mailtoUri = Uri(
                           scheme: 'mailto',
                           path: contact.email,
-                          queryParameters: {'subject': 'Example'});
+                            queryParameters: {'subject': 'Example'});
                       await launchUrl(mailtoUri);
                     })
                 : Container(),
