@@ -23,23 +23,18 @@ class KindergartenCard extends StatefulWidget {
 
   @override
   State<KindergartenCard> createState() => _KindergartenCardState();
-
 }
 
 class _KindergartenCardState extends State<KindergartenCard> {
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
- String distance="";
-
- @override
- void setState(fn) {
-   if(mounted) {
-     super.setState(fn);
-   }
- }
   @override
   Widget build(BuildContext context) {
-    calculateDistance(widget.kindergraten.ditance!,widget.kindergraten.longitudes,widget.kindergraten.latitudes);
-
     return Card(
       elevation: 0,
       color: ColorStyle.text4,
@@ -72,8 +67,9 @@ class _KindergartenCardState extends State<KindergartenCard> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400),
                   ),
-                  Text(distance
-                   ,
+                  Text(
+                   locationConvertorTracker(
+                        double.parse(widget.kindergraten.ditance!), context),
                     style: TextStyle(color: ColorStyle.text2),
                   ),
                   Text(
@@ -103,7 +99,8 @@ class _KindergartenCardState extends State<KindergartenCard> {
                           // side: BorderSide()
                         ))),
                     child: Text(
-                     AppLocalizations.of(context)?.getText("click_to_join")?? "Join request",
+                      AppLocalizations.of(context)?.getText("click_to_join") ??
+                          "Join request",
                       style: TextStyle(color: ColorStyle.white),
                     ),
                   )
@@ -112,31 +109,5 @@ class _KindergartenCardState extends State<KindergartenCard> {
         ),
       ),
     );
-  }
-
- calculateDistance(String ditance, double long, double lat) async {
-    const LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-    );
-    StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream(locationSettings:  locationSettings)
-            .listen((Position? position) {
-      if (position != null) {
-        setState(()   {
-        distance=  locationConvertorTracker(
-              GeolocatorPlatform.instance.distanceBetween(
-                  position.latitude, position.longitude, lat, long),
-              context);
-        });
-      }
-      else {
-        setState(()  {
-          distance =  locationConvertorTracker(double.parse(widget.kindergraten.ditance!), context);
-
-        });
-      }
-
-        });
   }
 }

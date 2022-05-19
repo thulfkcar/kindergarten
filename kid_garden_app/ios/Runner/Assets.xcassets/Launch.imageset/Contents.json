@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "kinder.jpg",
+      "filename" : "appstore.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "kinder-1.jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "kinder-2.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1+alpha2
+version: 1.0.3+alpha4
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -34,14 +34,14 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   cupertino_icons: ^1.0.2
   http: ^0.13.3 #This is used for the API call
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.0.0-dev.7
   json_serializable: ^6.1.4
   build_runner: ^1.3.1
   json_annotation: ^4.4.0
   shared_preferences: ^2.0.13
   tuple: ^2.0.0
   qr_flutter: ^4.0.0
-  qr_code_scanner: ^0.7.0
+#  qr_code_scanner: ^0.7.0
   firebase_auth: ^3.3.14
   geolocator: ^8.2.0
   pin_code_fields: ^7.3.0
@@ -66,6 +66,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
+dependency_overrides:
+  qr_code_scanner:
+    git:
+      url: https://github.com/X-SLAYER/qr_code_scanner.git
+      ref: flutter-beta
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

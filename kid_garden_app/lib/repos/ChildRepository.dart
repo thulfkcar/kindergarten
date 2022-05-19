@@ -82,7 +82,7 @@ class ChildRepository {
       dynamic response = await _apiService.postResponse(url,jsonBody);
 
       bool isLastPage = false;
-
+if(response==null) throw "Click To Update";
       var childes;
       var mainResponse =
       MultiResponse<List<Child>>.fromJson(await response, (jsonList) {

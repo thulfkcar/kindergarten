@@ -34,6 +34,7 @@ class _KindergartensViewState extends ConsumerState<KindergartensView> {
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(kindergartenViewModelProvider);
+    if(widget.childId!=null)
     viewModelParentChildrenShared = ref.watch(parentChildrenViewModelProvider);
 
     return body();
