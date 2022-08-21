@@ -15,7 +15,7 @@ import '../presentation/ui/childActions/AssignChildViewModel.dart';
 import '../presentation/ui/childActions/ChildActionViewModel.dart';
 import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
 import '../presentation/ui/navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
-import '../presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
+import '../presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
 import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 
 final childViewModelProvider =

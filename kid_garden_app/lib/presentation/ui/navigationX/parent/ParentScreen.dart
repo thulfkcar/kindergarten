@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
 import '../../../../data/network/ApiResponse.dart';
 import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
 import '../../../../them/DentalThem.dart';
 import '../../dialogs/ActionDialog.dart';
-import '../../subscriptionScreen/SubscriptionScreen.dart';
-import '../../subscriptionScreen/SubscriptionViewModel.dart';
 import '../../userProfile/UserProfile.dart';
 class ParentScreen extends ConsumerStatefulWidget {
   ParentScreen({Key? key, required this.title}) : super(key: key);
