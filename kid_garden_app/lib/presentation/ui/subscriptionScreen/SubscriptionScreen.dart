@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/di/Modules.dart';
+import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
@@ -12,7 +13,6 @@ import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChi
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
-import '../general_components/units/texts.dart';
 import 'SubscriptionViewModel.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {

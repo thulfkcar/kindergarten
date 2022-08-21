@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
+import 'package:kid_garden_app/presentation/general_components/ActionGroup.dart';
+import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/AssignChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
@@ -11,11 +16,7 @@ import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
 import '../AssingScreen/AssginScreen.dart';
 import '../dialogs/ActionDialog.dart';
-import '../general_components/ActionGroup.dart';
-import '../general_components/CustomListView.dart';
-import '../general_components/Error.dart';
-import '../general_components/loading.dart';
-import '../general_components/units/cards.dart';
+
 import 'AddChildActionDialog.dart';
 
 class ChildActions extends ConsumerStatefulWidget {

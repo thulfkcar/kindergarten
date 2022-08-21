@@ -7,13 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/ChildForm.dart';
+import 'package:kid_garden_app/presentation/general_components/units/buttons.dart';
+import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/units/buttons.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
-import '../general_components/units/texts.dart';
 import 'ChildViewModel.dart';
 import '../dialogs/ActionDialog.dart';
 

@@ -2,21 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
+import 'package:kid_garden_app/presentation/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
 
-import 'package:kid_garden_app/presentation/ui/general_components/StaffCard.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
 import 'package:tuple/tuple.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/UserModel.dart';
 import '../../utile/LangUtiles.dart';
-import '../general_components/CustomListView.dart';
-import '../general_components/Error.dart';
-import '../general_components/InfoCard.dart';
-import '../general_components/loading.dart';
-import '../general_components/units/cards.dart';
-import '../general_components/units/floating_action_button.dart';
+
 import 'addStaff.dart';
 
 class StaffUI extends ConsumerStatefulWidget {
@@ -45,10 +44,10 @@ class _StaffUIState extends ConsumerState<StaffUI> {
     return Scaffold(
       body: Column(
         children: [
-          InfoCard(
-              homeData: Tuple2( AppLocalizations.of(context)?.getText("staff_count")??"Staff Count", "999"),
-              startColor: Color(0xFF00962A),
-              endColor: Color(0xFFF2A384)),
+          // InfoCard(
+          //     homeData: Tuple2( AppLocalizations.of(context)?.getText("staff_count")??"Staff Count", "999"),
+          //     startColor: Color(0xFF00962A),
+          //     endColor: Color(0xFFF2A384)),
           Expanded(child: body()),
         ],
       ),

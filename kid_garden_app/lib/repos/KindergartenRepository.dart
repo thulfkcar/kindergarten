@@ -9,7 +9,7 @@ import '../data/network/NetworkApiService.dart';
 import '../data/network/models/MultiResponse.dart';
 import '../data/network/models/SingleResponse.dart';
 import '../domain/HomeModel.dart';
-import '../presentation/ui/general_components/KindergratenCard.dart';
+import '../presentation/general_components/KindergratenCard.dart';
 
 class KindergartenRepository{
 

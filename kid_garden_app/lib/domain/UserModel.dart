@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kid_garden_app/domain/AssignRequest.dart';
 part 'UserModel.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.none)

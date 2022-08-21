@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/units/texts.dart';
 
 import '../../utile/FormValidator.dart';
 

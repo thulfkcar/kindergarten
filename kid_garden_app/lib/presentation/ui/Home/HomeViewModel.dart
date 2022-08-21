@@ -1,14 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
-import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/KindergartenRepository.dart';
 import 'package:tuple/tuple.dart';
-
 import '../../../data/network/ApiResponse.dart';
-import '../../../domain/Child.dart';
 import '../../../domain/ChildAction.dart';
-import '../../../domain/HomeModel.dart';
 import '../../../repos/ActionRepository.dart';
 
 class HomeViewModel extends ChangeNotifier {

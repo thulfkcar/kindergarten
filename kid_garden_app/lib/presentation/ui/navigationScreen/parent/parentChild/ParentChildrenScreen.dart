@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
+import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
+import 'package:kid_garden_app/presentation/general_components/ParentChildRow.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActions.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
@@ -15,10 +19,7 @@ import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
 import '../../../../../domain/Child.dart';
-import '../../../general_components/CustomListView.dart';
-import '../../../general_components/ParentChildRow.dart';
-import '../../../general_components/loading.dart';
-import '../../../general_components/units/floating_action_button.dart';
+
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {
   bool fromProfile;
@@ -110,7 +111,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   }
 
   Widget body() {
-    var status = _viewModel.childListResponse.status;
+    var status = _viewModel.collectionApiResponse.status;
 
     switch (status) {
       case Status.LOADING:
@@ -118,7 +119,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
       case Status.COMPLETED:
         return CustomListView(
-            items: _viewModel.childListResponse.data!,
+            items: _viewModel.collectionApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Child item) {
               return childNavigation(item);
@@ -126,11 +127,11 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
             direction: Axis.vertical, scrollController: ScrollController(),);
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.childListResponse.message ?? "Error");
+            msg: _viewModel.collectionApiResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
         return CustomListView(
-            items: _viewModel.childListResponse.data!,
+            items: _viewModel.collectionApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Child item) {
               return childNavigation(item);
@@ -139,7 +140,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
       case Status.Empty:
         return EmptyWidget(
-            msg: AppLocalizations.of(context)?.getText("no_children")?? _viewModel.childListResponse.message ?? "Error");
+            msg: AppLocalizations.of(context)?.getText("no_children")?? _viewModel.collectionApiResponse.message ?? "Error");
       case Status.NON:
         return Container();
       default:

@@ -6,7 +6,6 @@ import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
 
 import '../../../repos/KindergartenRepository.dart';
-import '../general_components/KindergratenCard.dart';
 
 class KindergartenViewModel extends ChangeNotifier {
   Position? position;

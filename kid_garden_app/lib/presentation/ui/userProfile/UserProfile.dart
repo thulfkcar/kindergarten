@@ -4,10 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
+import 'package:kid_garden_app/presentation/general_components/ContactList.dart';
+import 'package:kid_garden_app/presentation/general_components/units/images.dart';
+import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestScreen.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/InfoCard.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfileViewModel.dart';
@@ -20,9 +23,7 @@ import '../../../data/network/BaseApiService.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
 import '../Child/Childs.dart';
-import '../general_components/ContactList.dart';
-import '../general_components/units/images.dart';
-import '../general_components/units/texts.dart';
+
 
 class UserProfile extends ConsumerStatefulWidget {
   String? userId;

@@ -13,4 +13,5 @@ abstract class BaseApiService {
 
 
 }
-const String domain="http://5.182.33.67/";
+// const String domain="http://5.182.33.67/";//online
+const String domain="http://192.168.1.25:81/";//offline

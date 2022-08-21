@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/ChildAction.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/InfoCard.dart';
+import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/InfoCard.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
-import '../general_components/CustomListView.dart';
-import '../general_components/Error.dart';
-import '../general_components/loading.dart';
-import '../general_components/units/cards.dart';
+
 import 'HomeViewModel.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -76,14 +77,13 @@ class _HomeXXState extends ConsumerState<Home> {
         );
       case Status.ERROR:
         return MyErrorWidget(
-          msg: viewModel.childActionResponse.message!,
+          msg: viewModel.childActionResponse.message!=null ?viewModel.childActionResponse.message!.toString():"",
           onRefresh: () {
             viewModel.fetchChildActions();
           },
         );
       default:
     }
-
     return Container();
   }
 

@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "517790856908-gu2fqq39418hi1ukrjop6ikbhrgchg38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phoenix.kid_garden_app",
+            "certificate_hash": "e0f0e13a231b6c444e132ad0d9c60bbfc337b212"
+          }
+        },
+        {
+          "client_id": "517790856908-sf8pc3cmbavkdj9sdfmpk6jidib2mu2n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phoenix.kid_garden_app",
+            "certificate_hash": "5caede1a1b868fcea08625e4a9979393ca6eecd4"
+          }
+        },
+        {
           "client_id": "517790856908-esa04jh54sv4jjm991fef58mv4lld9eg.apps.googleusercontent.com",
           "client_type": 3
         }

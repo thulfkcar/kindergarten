@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Child.dart';
+import 'package:kid_garden_app/presentation/viewModels/viewModelCollection.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../data/network/FromData/ChildForm.dart';
 
-class ParentChildrenViewModel extends ChangeNotifier {
+class ParentChildrenViewModel extends ViewModelCollection<Child> {
   final _repository = ChildRepository();
   final _userRepository = UserRepository();
   var childLastPage = false;
@@ -20,7 +21,6 @@ class ParentChildrenViewModel extends ChangeNotifier {
     fetchChildren();
   }
 
-  ApiResponse<List<Child>> childListResponse = ApiResponse.loading();
 
   void setChildListResponse(ApiResponse<List<Child>> response) {
     if(response.data!=null) {
@@ -29,7 +29,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
         element.userType == "Parent");
       });
     }
-    childListResponse = response;
+    collectionApiResponse = response;
 
     notifyListeners();
   }
@@ -45,7 +45,7 @@ class ParentChildrenViewModel extends ChangeNotifier {
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
-    if (childListResponse.data != null && apiResponse.data != null) {
+    if (collectionApiResponse.data != null && apiResponse.data != null) {
       appendNewItems([apiResponse.data!]);
     } else if (apiResponse.data != null) {
       setChildListResponse(ApiResponse.completed([apiResponse.data!]));
@@ -54,15 +54,15 @@ class ParentChildrenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addChild({required ChildForm childForm}) async {
-    setAddingChildResponse(ApiResponse.loading());
-    _repository.addChild(childForm).then((value) {
-      childListResponse.data ??= [];
-      setAddingChildResponse(ApiResponse.completed(value));
-    }).onError((error, stackTrace) {
-      setAddingChildResponse(ApiResponse.error(error.toString()));
-    });
-  }
+  // Future<void> addChild({required ChildForm childForm}) async {
+  //   setAddingChildResponse(ApiResponse.loading());
+  //   _repository.addChild(childForm).then((value) {
+  //     collectionApiResponse.data ??= [];
+  //     setAddingChildResponse(ApiResponse.completed(value));
+  //   }).onError((error, stackTrace) {
+  //     setAddingChildResponse(ApiResponse.error(error.toString()));
+  //   });
+  // }
 
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
@@ -85,8 +85,9 @@ class ParentChildrenViewModel extends ChangeNotifier {
 
   Future<void> fetchNextChildren() async {
     if (childLastPage == false) {
+
       incrementPageChildAction();
-      childListResponse.status = Status.LOADING_NEXT_PAGE;
+      collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
       _repository
@@ -102,16 +103,8 @@ class ParentChildrenViewModel extends ChangeNotifier {
     }
   }
 
-  void incrementPageChildAction() {
-    pageChild += 1;
-  }
 
-  void appendNewItems(List<Child> value) {
-    childListResponse.data ??= [];
-    var data = childListResponse.data;
-    data?.addAll(value);
-    setChildListResponse(ApiResponse.completed(data));
-  }
+
 
   void search(String? value) {
     this.searchKey = value;

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/Kindergraten.dart';
-import 'package:kid_garden_app/presentation/ui/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/KindergratenCard.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../dialogs/dialogs.dart';
-import '../general_components/CustomListView.dart';
-import '../general_components/KindergratenCard.dart';
-import '../general_components/loading.dart';
 import '../navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
 
 class KindergartensView extends ConsumerStatefulWidget {
