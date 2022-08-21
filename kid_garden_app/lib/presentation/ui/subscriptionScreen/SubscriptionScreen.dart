@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
-import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/NavigationScreenParent.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
@@ -179,7 +178,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            NavigationScreenParent(title: "")),
+                            ParentScreen(title: "")),
                         (Route<dynamic> route) => true,
                   );                },
               ));

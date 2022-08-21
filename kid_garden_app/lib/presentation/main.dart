@@ -1,6 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,9 +6,9 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/ui/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/NavigationScreenParent.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenStaff.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationsScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/presentation/utile/RestartApp.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
@@ -114,7 +112,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       Widget screen;
       switch (settings.name) {
         case HomeScreenRoute:
-          screen = NavigationScreen(
+          screen = AdminScreen(
               title: AppLocalizations.of(context)?.getText('app_name') ??
                   "Phoenix kindergarten");
           break;
@@ -126,14 +124,14 @@ class _MyAppState extends ConsumerState<MyApp> {
               ? screen = KindergartenScreen()
               : (viewModel.currentUser!.role == Role.admin ||
                       viewModel.currentUser!.role == Role.superAdmin)
-                  ? screen = NavigationScreen(
+                  ? screen = AdminScreen(
                       title:
                           AppLocalizations.of(context)?.getText("app_name") ??
                               "Phoenix kindergarten")
                   : (viewModel.currentUser!.role == Role.Staff)
-                      ? screen = NavigationScreenStaff(
+                      ? screen = StaffScreen(
                           title: viewModel.currentUser!.name.toString())
-                      : screen = NavigationScreenParent(
+                      : screen = ParentScreen(
                           title: viewModel.currentUser!.name.toString());
           viewModel.currentUser != null
               ? FirebaseMessaging.instance

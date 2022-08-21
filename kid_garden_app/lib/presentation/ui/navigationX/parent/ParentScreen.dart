@@ -10,17 +10,17 @@ import '../../dialogs/ActionDialog.dart';
 import '../../subscriptionScreen/SubscriptionScreen.dart';
 import '../../subscriptionScreen/SubscriptionViewModel.dart';
 import '../../userProfile/UserProfile.dart';
-class NavigationScreenParent extends ConsumerStatefulWidget {
-  NavigationScreenParent({Key? key, required this.title}) : super(key: key);
+class ParentScreen extends ConsumerStatefulWidget {
+  ParentScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  ConsumerState<NavigationScreenParent> createState() =>
+  ConsumerState<ParentScreen> createState() =>
       _NavigationScreenParentState();
 }
 
 class _NavigationScreenParentState
-    extends ConsumerState<NavigationScreenParent> {
+    extends ConsumerState<ParentScreen> {
   late SubscriptionViewModel viewModel;
   late LoginPageViewModel viewModelLogin;
 
@@ -37,11 +37,11 @@ class _NavigationScreenParentState
           ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all(Colors.transparent),
+                  MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
                 var provide =
-                    ProviderContainer().read(LoginPageViewModelProvider);
+                ProviderContainer().read(LoginPageViewModelProvider);
                 await provide.getUserChanges();
                 var user = provide.currentUser;
                 showAlertDialog(
@@ -63,9 +63,9 @@ class _NavigationScreenParentState
                   context,
                   MaterialPageRoute(
                       builder: (context) => UserProfile(self: true,
-                            userType: Role.Parents,
-                            userId: null,
-                          )));
+                        userType: Role.Parents,
+                        userId: null,
+                      )));
             },
             child: const Icon(Icons.person)),
         automaticallyImplyLeading: true,
@@ -106,9 +106,9 @@ class _NavigationScreenParentState
         break;
       case Status.ERROR:
         var errorMessage =
-            viewModel.userSubscriptionStatusResponse.message != null
-                ? viewModel.userSubscriptionStatusResponse.message!
-                : "corrupted";
+        viewModel.userSubscriptionStatusResponse.message != null
+            ? viewModel.userSubscriptionStatusResponse.message!
+            : "corrupted";
         await viewModel
             .setUserSubscriptionStatusResponse(ApiResponse.non())
             .then((value) async {
@@ -119,7 +119,7 @@ class _NavigationScreenParentState
             MaterialPageRoute(
                 builder: (context) =>
                     SubscriptionScreen(message: errorMessage)),
-            (Route<dynamic> route) => true,
+                (Route<dynamic> route) => true,
           );
         });
 

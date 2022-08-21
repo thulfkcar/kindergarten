@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
+import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
-import '../../../di/Modules.dart';
-import '../../../domain/UserModel.dart';
-import '../../../them/DentalThem.dart';
-import '../../styles/colors_style.dart';
-import '../../utile/LangUtiles.dart';
-import '../Child/Childs.dart';
-import '../Home/HomeUI.dart';
-import '../Staff/StaffUI.dart';
-import '../dialogs/ActionDialog.dart';
-import '../parentsScreen/parentsScreen.dart';
+import '../../../../di/Modules.dart';
+import '../../../../domain/UserModel.dart';
+import '../../../../them/DentalThem.dart';
+import '../../../styles/colors_style.dart';
+import '../../Child/Childs.dart';
+import '../../Home/HomeUI.dart';
+import '../../Staff/StaffUI.dart';
+import '../../dialogs/ActionDialog.dart';
+import '../../parentsScreen/parentsScreen.dart';
 
-class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({Key? key, required this.title}) : super(key: key);
+class AdminScreen extends StatefulWidget {
+  const AdminScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<NavigationScreen> createState() => _NavigationScreen();
+  State<AdminScreen> createState() => _NavigationScreen();
 }
 
-class _NavigationScreen extends State<NavigationScreen> {
+class _NavigationScreen extends State<AdminScreen> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     Home(),

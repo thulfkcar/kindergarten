@@ -10,16 +10,14 @@ import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScre
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/SignUp/SignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/NavigationScreenStaff.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionScreen.dart';
 import 'package:kid_garden_app/presentation/ui/subscriptionScreen/SubscriptionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
-
 import '../../../data/network/ApiResponse.dart';
-import '../../main.dart';
 import '../AboutCompany/AboutCompany.dart';
-import '../navigationScreen/parent/NavigationScreenParent.dart';
-import '../navigationScreen/NavigationsScreen.dart';
 import 'LoginByPhone.dart';
 
 class LoginOrSignUpScreen extends ConsumerStatefulWidget {
@@ -164,7 +162,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  NavigationScreenParent(title: 'Parent App')),
+                  ParentScreen(title: 'Parent App')),
           (Route<dynamic> route) => false,
         );
 
@@ -203,12 +201,12 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                     NavigationScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten")),
+                     AdminScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten")),
             (Route<dynamic> route) => false,
           )
         : (user.role == Role.Staff)
             ? await Navigator.push(
-                context, MaterialPageRoute(builder: (context) => NavigationScreenStaff(title: user.name!)))
+                context, MaterialPageRoute(builder: (context) => StaffScreen(title: user.name!)))
             : await viewModel.checkParentSubscription();
 
   }

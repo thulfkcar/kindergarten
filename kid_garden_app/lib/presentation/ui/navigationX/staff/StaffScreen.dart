@@ -2,27 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../di/Modules.dart';
-import '../../../domain/UserModel.dart';
-import '../../../them/DentalThem.dart';
-import '../Child/Childs.dart';
-import '../dialogs/ActionDialog.dart';
-import '../subscriptionScreen/SubscriptionScreen.dart';
-import '../subscriptionScreen/SubscriptionViewModel.dart';
-import '../userProfile/UserProfile.dart';
 
-class NavigationScreenStaff extends ConsumerStatefulWidget {
-  NavigationScreenStaff({Key? key, required this.title}) : super(key: key);
+import '../../../../di/Modules.dart';
+import '../../../../domain/UserModel.dart';
+import '../../../../them/DentalThem.dart';
+import '../../Child/Childs.dart';
+import '../../dialogs/ActionDialog.dart';
+import '../../userProfile/UserProfile.dart';
+
+
+class StaffScreen extends ConsumerStatefulWidget {
+  StaffScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  ConsumerState<NavigationScreenStaff> createState() =>
+  ConsumerState<StaffScreen> createState() =>
       _NavigationScreenParentState();
 }
 
 class _NavigationScreenParentState
-    extends ConsumerState<NavigationScreenStaff> {
+    extends ConsumerState<StaffScreen> {
   late LoginPageViewModel viewModelLogin;
 
 
