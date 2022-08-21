@@ -98,7 +98,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('en', ''), Locale('ar', '')],
-      onGenerateRoute: _routes(),
+      // onGenerateRoute: _routes(),
+      home: home(),
       title: AppLocalizations.of(context)?.getText("app_name") ??
           "Phoenix kindergarten",
       theme: KidThem.lightTheme,
@@ -148,4 +149,34 @@ class _MyAppState extends ConsumerState<MyApp> {
       return MaterialPageRoute(builder: (BuildContext context) => screen);
     };
   }
+
+
+  Widget home() {
+    AsyncValue<UserModel?> user = ref.watch(userProvider);
+    late Widget screen;
+    user.whenOrNull(
+        data: (user) {
+
+          user == null
+              ? screen =  KindergartenScreen()
+              : (user.role == Role.admin ||
+              user.role == Role.superAdmin)
+              ? screen = AdminScreen(
+            title: AppLocalizations.of(context)
+                ?.getText("app_name") ??
+                "Phoenix Hospital")     : (viewModel.currentUser!.role == Role.Staff)
+              ? screen = StaffScreen(
+              title: viewModel.currentUser!.name.toString())
+              : screen = ParentScreen(
+              title: viewModel.currentUser!.name.toString());
+          user != null
+              ? FirebaseMessaging.instance
+              .subscribeToTopic("user.${user.id}")
+              : null;
+        },
+        loading: ()  => screen= const CircularProgressIndicator(),
+        error: (err, stack)=> screen= Text('خطاء: $err'));
+    return screen;
+  }
+
 }

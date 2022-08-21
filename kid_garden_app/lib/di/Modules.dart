@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../domain/UserModel.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
 import '../presentation/ui/SignUp/SignUpViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
@@ -17,7 +21,14 @@ import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 final childViewModelProvider =
     ChangeNotifierProvider.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
-
+final userProvider = FutureProvider<UserModel?>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  var userJson = prefs.getString("User");
+  if (userJson != null && userJson != 'null') {
+    Map<String, dynamic> userMap = await jsonDecode(userJson);
+    return await UserModel.fromJson(userMap);
+  }
+});
 final parentChildrenViewModelProvider =
     ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>((ref) => ParentChildrenViewModel());
 

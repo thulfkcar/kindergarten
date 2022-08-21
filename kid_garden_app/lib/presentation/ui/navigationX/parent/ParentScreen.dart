@@ -22,12 +22,10 @@ class ParentScreen extends ConsumerStatefulWidget {
 class _NavigationScreenParentState
     extends ConsumerState<ParentScreen> {
   late SubscriptionViewModel viewModel;
-  late LoginPageViewModel viewModelLogin;
 
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(subscriptionViewModelProvider(true));
-    viewModelLogin = ref.watch(LoginPageViewModelProvider);
     Future.delayed(Duration.zero, () async {
       checkParentSubscription();
     });

@@ -6,6 +6,7 @@ import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
@@ -122,12 +123,12 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                     Future.delayed(Duration.zero, () async {
                       await loginViewModel.logOut();
 
-                      // Navigator.pushAndRemoveUntil(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
-                      //       (Route<dynamic> route) => false,
-                      // );
-                      RestartWidget.restartApp(context);
+                      // RestartWidget.restartApp(context);
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) =>  KindergartenScreen()),
+                              (route) => false);
                     });
                   },
                   child: descriptionText(AppLocalizations.of(context)?.getText("sign_out")??"Sign Out", ColorStyle.female1),

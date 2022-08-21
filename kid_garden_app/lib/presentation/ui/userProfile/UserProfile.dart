@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestS
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/InfoCard.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
+import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfileViewModel.dart';
@@ -23,7 +24,6 @@ import '../../../data/network/BaseApiService.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/RestartApp.dart';
 import '../Child/Childs.dart';
-
 
 class UserProfile extends ConsumerStatefulWidget {
   String? userId;
@@ -82,19 +82,20 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                       padding: (widget.self &&
                               (widget.userType == Role.Parents ||
                                   widget.userType == Role.Staff))
-                          ? const EdgeInsets.only(left: 30, right: 30,bottom: 30)
+                          ? const EdgeInsets.only(
+                              left: 30, right: 30, bottom: 30)
                           : const EdgeInsets.only(left: 30, right: 30),
                       child: ElevatedButton(
                         onPressed: () {
                           Future.delayed(Duration.zero, () async {
                             await viewModelLogin.logOut();
 
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => MyApp(key: UniqueKey(),)),
-                            //       (Route<dynamic> route) => false,
-                            // );
-                            RestartWidget.restartApp(context);
+                            // RestartWidget.restartApp(context);
+
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => KindergartenScreen()),
+                                (route) => false);
                           });
                         },
                         child: descriptionText(
