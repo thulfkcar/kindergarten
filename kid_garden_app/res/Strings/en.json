@@ -98,6 +98,8 @@
   "app_dis": "Welcome in Phoenix Kindergarten",
   "app_dis_title": "Phoenix Kindergarten Log System.",
   "km": "km.",
-  "type_to_search": "Type To Search"
+  "type_to_search": "Type To Search",
+  "childId": "Child Identifier"
+
 
 }
