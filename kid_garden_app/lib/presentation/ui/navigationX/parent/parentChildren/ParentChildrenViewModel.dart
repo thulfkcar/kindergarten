@@ -25,8 +25,8 @@ class ParentChildrenViewModel extends ViewModelCollection<Child> {
   void setChildListResponse(ApiResponse<List<Child>> response) {
     if(response.data!=null) {
       response.data!.forEach((element) {
-        element.contacts!.removeWhere((element) =>
-        element.userType == "Parent");
+        // element.contacts!.removeWhere((element) =>
+        // element.userType == "Parent");
       });
     }
     collectionApiResponse = response;

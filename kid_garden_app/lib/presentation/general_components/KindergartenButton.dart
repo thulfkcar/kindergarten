@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/network/BaseApiService.dart';
+import '../../them/DentalThem.dart';
 
 class KindergartenButton extends StatelessWidget {
   String? id;
@@ -39,13 +40,11 @@ class KindergartenButton extends StatelessWidget {
         ),
       ),
       style: ButtonStyle(
-          elevation: MaterialStateProperty.all(0),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(10),
-                bottomLeft: Radius.circular(10)),
-          ))),
+          backgroundColor:
+          MaterialStateProperty.all(KidThem.white),
+          side: MaterialStateProperty.all(
+              BorderSide(width: 1, color: KidThem.male1)),
+          elevation: MaterialStateProperty.all(0)),
     );
   }
 }

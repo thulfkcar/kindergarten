@@ -19,21 +19,21 @@ class ChildRepository {
 
   final BaseApiService _apiService = NetworkApiService();
 
-  Future<Tuple2<List<Child>, bool>> getMyChildList({required int page, String? searchKey,String? subUserId}) async {
+  Future<Tuple2<List<Child>, bool>> getMyChildList(
+      {required int page, String? searchKey, String? subUserId}) async {
     try {
       Map<String, String> jsonBody = Map();
 
-      var url="Child/getAll/$page";
-      if(subUserId!=null){
-        jsonBody.addAll({"UserId":subUserId});
-
+      var url = "Child/getAll/$page";
+      if (subUserId != null) {
+        jsonBody.addAll({"UserId": subUserId});
       }
-      if(searchKey!=null && searchKey.trim().isNotEmpty) {
-        jsonBody.addAll({"ChildName":searchKey});
+      if (searchKey != null && searchKey.trim().isNotEmpty) {
+        jsonBody.addAll({"ChildName": searchKey});
         // url+="?childName=$searchKey";
       }
 
-      dynamic response = await _apiService.postResponse(url,jsonBody);
+      dynamic response = await _apiService.postResponse(url, jsonBody);
 
       bool isLastPage = false;
 
@@ -64,28 +64,27 @@ class ChildRepository {
     }
   }
 
-
-  Future<Tuple2<List<Child>, bool>> getParentChildren({required int page, String? searchKey,String? subUserId}) async {
+  Future<Tuple2<List<Child>, bool>> getParentChildren(
+      {required int page, String? searchKey, String? subUserId}) async {
     try {
       Map<String, String> jsonBody = Map();
 
-      var url="Child/GetParentChildren";
-      if(subUserId!=null){
-        jsonBody.addAll({"UserId":subUserId});
-
+      var url = "Child/GetParentChildren";
+      if (subUserId != null) {
+        jsonBody.addAll({"UserId": subUserId});
       }
-      if(searchKey!=null && searchKey.trim().isNotEmpty) {
-        jsonBody.addAll({"ChildName":searchKey});
+      if (searchKey != null && searchKey.trim().isNotEmpty) {
+        jsonBody.addAll({"ChildName": searchKey});
         // url+="?childName=$searchKey";
       }
 
-      dynamic response = await _apiService.postResponse(url,jsonBody);
+      dynamic response = await _apiService.postResponse(url, jsonBody);
 
       bool isLastPage = false;
-if(response==null) throw "Click To Update";
+      if (response == null) throw "Click To Update";
       var childes;
       var mainResponse =
-      MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
+          MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
           childes = (jsonList as List).map((i) => Child.fromJson(i)).toList();
           return childes;
@@ -101,8 +100,7 @@ if(response==null) throw "Click To Update";
       if (await childes.isNotEmpty) {
         return Tuple2(await childes, isLastPage);
       } else {
-        return  const Tuple2([], true);
-
+        return const Tuple2([], true);
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
@@ -110,6 +108,7 @@ if(response==null) throw "Click To Update";
       rethrow;
     }
   }
+
   Future<Tuple2<List<Child>, bool>> getChildrenWithInfo(
       {required int page}) async {
     try {
@@ -144,10 +143,6 @@ if(response==null) throw "Click To Update";
     }
   }
 
-
-
-
-
   Future<Child> addChild(ChildForm childForm) async {
     try {
       Map<String, String> jsonBody = Map();
@@ -177,8 +172,8 @@ if(response==null) throw "Click To Update";
 
   Future<bool> assignChild(AssignChildForm assignChildForm) async {
     try {
-      dynamic response = await _apiService.postResponseJsonBody(
-          "Child/assign", "{childId: '${assignChildForm.childID!}', userId: '${assignChildForm.staffId!}'}");
+      dynamic response = await _apiService.postResponseJsonBody("Child/assign",
+          "{childId: '${assignChildForm.childID!}', userId: '${assignChildForm.staffId!}'}");
       var isAssign = ErrorResponse.fromJson(await response);
       return isAssign.status!;
     } catch (e) {
@@ -188,5 +183,4 @@ if(response==null) throw "Click To Update";
       rethrow;
     }
   }
-
 }

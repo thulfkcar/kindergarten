@@ -99,7 +99,10 @@
   "app_dis_title": "Phoenix Kindergarten Log System.",
   "km": "km.",
   "type_to_search": "Type To Search",
-  "childId": "Child Identifier"
+  "childId": "Child Identifier",
+  "Parent": "Parent",
+  "Admin": "Kindergarten Manager",
+  "Contacts": "Contacts"
 
 
 }
