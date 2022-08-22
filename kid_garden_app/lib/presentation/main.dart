@@ -82,12 +82,13 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  late LoginPageViewModel viewModel;
+  // late LoginPageViewModel viewModel;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    viewModel = ref.watch(LoginPageViewModelProvider);
+
+    // viewModel = ref.watch(LoginPageViewModelProvider);
 
     return MaterialApp(
       // locale: const Locale('ar', ''),
@@ -107,52 +108,53 @@ class _MyAppState extends ConsumerState<MyApp> {
     );
   }
 
-  RouteFactory _routes() {
-    return (settings) {
-      final Object? arguments = settings.arguments;
-      Widget screen;
-      switch (settings.name) {
-        case HomeScreenRoute:
-          screen = AdminScreen(
-              title: AppLocalizations.of(context)?.getText('app_name') ??
-                  "Phoenix kindergarten");
-          break;
-        case ChildActionsRoute:
-          screen = ChildActions();
-          break;
-        case Login_Page:
-          viewModel.currentUser == null
-              ? screen = KindergartenScreen()
-              : (viewModel.currentUser!.role == Role.admin ||
-                      viewModel.currentUser!.role == Role.superAdmin)
-                  ? screen = AdminScreen(
-                      title:
-                          AppLocalizations.of(context)?.getText("app_name") ??
-                              "Phoenix kindergarten")
-                  : (viewModel.currentUser!.role == Role.Staff)
-                      ? screen = StaffScreen(
-                          title: viewModel.currentUser!.name.toString())
-                      : screen = ParentScreen(
-                          title: viewModel.currentUser!.name.toString());
-          viewModel.currentUser != null
-              ? FirebaseMessaging.instance
-                  .subscribeToTopic("user.${viewModel.currentUser?.id}")
-              : null;
-          break;
-        case StaffUI_Route:
-          screen = StaffUI();
-          break;
-        default:
-          return null;
-      }
-
-      return MaterialPageRoute(builder: (BuildContext context) => screen);
-    };
-  }
+  // RouteFactory _routes() {
+  //   return (settings) {
+  //     final Object? arguments = settings.arguments;
+  //     Widget screen;
+  //     switch (settings.name) {
+  //       case HomeScreenRoute:
+  //         screen = AdminScreen(
+  //             title: AppLocalizations.of(context)?.getText('app_name') ??
+  //                 "Phoenix kindergarten");
+  //         break;
+  //       case ChildActionsRoute:
+  //         screen = ChildActions();
+  //         break;
+  //       case Login_Page:
+  //         viewModel.currentUser == null
+  //             ? screen = KindergartenScreen()
+  //             : (viewModel.currentUser!.role == Role.admin ||
+  //                     viewModel.currentUser!.role == Role.superAdmin)
+  //                 ? screen = AdminScreen(
+  //                     title:
+  //                         AppLocalizations.of(context)?.getText("app_name") ??
+  //                             "Phoenix kindergarten")
+  //                 : (viewModel.currentUser!.role == Role.Staff)
+  //                     ? screen = StaffScreen(
+  //                         title: viewModel.currentUser!.name.toString())
+  //                     : screen = ParentScreen(
+  //                         title: viewModel.currentUser!.name.toString());
+  //         viewModel.currentUser != null
+  //             ? FirebaseMessaging.instance
+  //                 .subscribeToTopic("user.${viewModel.currentUser?.id}")
+  //             : null;
+  //         break;
+  //       case StaffUI_Route:
+  //         screen = StaffUI();
+  //         break;
+  //       default:
+  //         return null;
+  //     }
+  //
+  //     return MaterialPageRoute(builder: (BuildContext context) => screen);
+  //   };
+  // }
 
 
   Widget home() {
-    AsyncValue<UserModel?> user = ref.watch(userProvider);
+    AsyncValue<UserModel?>  user = ref.watch(userProvider);
+
     late Widget screen;
     user.whenOrNull(
         data: (user) {
@@ -164,11 +166,11 @@ class _MyAppState extends ConsumerState<MyApp> {
               ? screen = AdminScreen(
             title: AppLocalizations.of(context)
                 ?.getText("app_name") ??
-                "Phoenix Hospital")     : (viewModel.currentUser!.role == Role.Staff)
+                "Phoenix Hospital")     : (user.role == Role.Staff)
               ? screen = StaffScreen(
-              title: viewModel.currentUser!.name.toString())
+              title: user.name.toString())
               : screen = ParentScreen(
-              title: viewModel.currentUser!.name.toString());
+              title: user.name.toString());
           user != null
               ? FirebaseMessaging.instance
               .subscribeToTopic("user.${user.id}")

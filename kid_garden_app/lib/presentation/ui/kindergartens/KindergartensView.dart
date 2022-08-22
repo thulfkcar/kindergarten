@@ -10,7 +10,7 @@ import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../dialogs/dialogs.dart';
-import '../navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
+import '../navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 
 class KindergartensView extends ConsumerStatefulWidget {
   String? childId;

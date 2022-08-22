@@ -14,11 +14,11 @@ import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
 import '../../../../../domain/Child.dart';
+import 'ParentChildrenViewModel.dart';
 
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {

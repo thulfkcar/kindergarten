@@ -8,10 +8,10 @@ import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScre
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
-import 'package:kid_garden_app/presentation/ui/navigationScreen/parent/parentChild/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
+import '../parentChildren/ParentChildrenScreen.dart';
 import 'SubscriptionViewModel.dart';
 
 class SubscriptionScreen extends ConsumerStatefulWidget {
