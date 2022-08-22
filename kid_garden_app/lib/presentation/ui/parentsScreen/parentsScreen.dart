@@ -62,7 +62,6 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
       ),
     );
   }
-
   Widget body() {
     var status = _viewModel.parentListResponse.status;
 
@@ -118,7 +117,6 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
     }
     return Container();
   }
-
   void getNext() async {
     var state = _viewModel.parentListResponse.status;
     if (_scrollController.position.maxScrollExtent ==
@@ -128,4 +126,8 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
       }
     }
   }
+
+
+
+
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
@@ -31,7 +32,7 @@ final userProvider = FutureProvider<UserModel?>((ref) async {
 });
 final parentChildrenViewModelProvider =
     ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>((ref) => ParentChildrenViewModel());
-
+final childProfileViewModelProvider=ChangeNotifierProvider((ref) => ChildProfileViewModel());
 final parentViewModelProvider =
     ChangeNotifierProvider<ParentViewModel>((ref) => ParentViewModel());
 

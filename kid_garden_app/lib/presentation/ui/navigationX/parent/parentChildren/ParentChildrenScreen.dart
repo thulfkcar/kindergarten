@@ -3,23 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
-import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
-import 'package:kid_garden_app/presentation/general_components/ParentChildRow.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
-import 'package:kid_garden_app/presentation/ui/childActions/ChildActions.dart';
+import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
-import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
-import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
 import '../../../../../domain/Child.dart';
+import '../../../../general_components/ParentChildCardGrid.dart';
 import 'ParentChildrenViewModel.dart';
-
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {
   bool fromProfile;
@@ -39,7 +36,6 @@ class ParentChildrenScreen extends ConsumerStatefulWidget {
 
 class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   late ParentChildrenViewModel _viewModel;
-  late LoginPageViewModel _viewModel_login;
   TextEditingController editingController = TextEditingController();
   bool isParent = false;
 
@@ -50,14 +46,16 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     _viewModel = ref.watch(parentChildrenViewModelProvider);
-    _viewModel_login = ref.watch(LoginPageViewModelProvider);
-    _viewModel_login.getUserChanges().then((value) {
-      setState(() {
-        value?.role == Role.Parents ? isParent = true : isParent = false;
+
+    setState(() {
+      AsyncValue<UserModel?> user = ref.watch(userProvider);
+
+      user.whenOrNull(data: (user) {
+        user!.role == Role.Parents ? isParent = true : isParent = false;
       });
     });
+
     Future.delayed(Duration.zero, () async {
       await addingRequestState();
     });
@@ -67,7 +65,6 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
       statusBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
-
       body: Column(
         children: [
           isParent != true
@@ -82,9 +79,9 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ChildAddingScreen(onAdded: (child) {
-                        if(child!=null) {
-                          _viewModel.appendNewItems([child]);
-                        }
+                            if (child != null) {
+                              _viewModel.appendNewItems([child]);
+                            }
                           })));
             })
           : null,
@@ -100,11 +97,11 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         },
         controller: editingController,
         cursorColor: ColorStyle.female1,
-        decoration: const InputDecoration(
-            labelText: "Search",
-            hintText: "Typing to search",
-            prefixIcon: Icon(Icons.search),
-            border: OutlineInputBorder(
+        decoration: InputDecoration(
+            labelText: getTranslated("search", context),
+            hintText: getTranslated("type_to_search", context),
+            prefixIcon: const Icon(Icons.search),
+            border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)))),
       ),
     );
@@ -118,75 +115,24 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         return LoadingWidget();
 
       case Status.COMPLETED:
-        return CustomListView(
-            items: _viewModel.collectionApiResponse.data!,
-            loadNext: false,
-            itemBuilder: (BuildContext context, Child item) {
-              return childNavigation(item);
-            },
-            direction: Axis.vertical, scrollController: ScrollController(),);
+        return childrenGrid();
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.collectionApiResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-            items: _viewModel.collectionApiResponse.data!,
-            loadNext: true,
-            itemBuilder: (BuildContext context, Child item) {
-              return childNavigation(item);
-            },
-            direction: Axis.vertical, scrollController: ScrollController(),);
+        return childrenGrid();
 
       case Status.Empty:
         return EmptyWidget(
-            msg: AppLocalizations.of(context)?.getText("no_children")?? _viewModel.collectionApiResponse.message ?? "Error");
+            msg: AppLocalizations.of(context)?.getText("no_children") ??
+                _viewModel.collectionApiResponse.message ??
+                "Error");
       case Status.NON:
         return Container();
       default:
     }
     return Container();
-  }
-
-
-  Widget childNavigation(Child item) {
-
-    return ParentChildCard(
-        onClicked: (child) {
-          if (!widget.isSubscriptionValid) Navigator.pop(context);
-        },
-        onJoinKindergartenClicked: (childId) async {
-          await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          KindergartenScreen(childId: item.id)))
-              .then((value) async {
-            await _viewModel.joinRequest(childId);
-          });
-
-          // request if result not null
-        },
-        onKindergartenClicked: (kindergartenId) {
-          // showAlertDialog(
-          //     context: context,
-          //     messageDialog: ActionDialog(
-          //         type: DialogType.warning,
-          //         title: "kinder Clicked",
-          //         message: "sdfdssd"));
-        },
-        onChildActionsClicked: (childId) async {
-          if (!widget.isSubscriptionValid) {
-            Navigator.pop(context);
-          } else{
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ChildActions(childId: childId,)));
-          }
-        },
-        child: item);
   }
 
   Future<void> addingRequestState() async {
@@ -198,8 +144,11 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
-              title:AppLocalizations.of(context)?.getText("join_request") ??"Request Dialog",
-              message:AppLocalizations.of(context)?.getText("join_request_des") ?? "Requesting the Kindergarten for joining your child in",
+              title: AppLocalizations.of(context)?.getText("join_request") ??
+                  "Request Dialog",
+              message:
+                  AppLocalizations.of(context)?.getText("join_request_des") ??
+                      "Requesting the Kindergarten for joining your child in",
               onCompleted: (d) {},
             ));
         await _viewModel.setJoinKindergartenRequest(ApiResponse.non());
@@ -213,9 +162,11 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
               context: context,
               messageDialog: ActionDialog(
                 type: DialogType.completed,
-                title:AppLocalizations.of(context)?.getText("join_request") ??"Request Dialog",
-                message:
-                AppLocalizations.of(context)?.getText("join_request_des_comp") ??  "Requesting the Kindergarten completed , your request in pending...",
+                title: AppLocalizations.of(context)?.getText("join_request") ??
+                    "Request Dialog",
+                message: AppLocalizations.of(context)
+                        ?.getText("join_request_des_comp") ??
+                    "Requesting the Kindergarten completed , your request in pending...",
                 onCompleted: (s) async {
                   await _viewModel.fetchChildren();
                   await _viewModel
@@ -249,5 +200,31 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
 
       default:
     }
+  }
+
+  childrenGrid() {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      children:
+          List.generate(_viewModel.collectionApiResponse.data!.length, (index) {
+        Child child = _viewModel.collectionApiResponse.data![index];
+        return Padding(
+            padding: const EdgeInsets.all(8),
+            child: ParentChildCardGrid(
+                size: 200,
+                onClicked: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => ChildProfileScreen(
+                                isSubscriptionValid: widget.isSubscriptionValid,
+                                subscriptionMessage: widget.subscriptionMessage,
+                                child: child,
+                              )));
+                },
+                child: child));
+      }, growable: false),
+    );
   }
 }
