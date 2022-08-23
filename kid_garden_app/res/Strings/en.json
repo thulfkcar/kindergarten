@@ -104,8 +104,11 @@
   "Admin": "Kindergarten Manager",
   "Contacts": "Contacts",
   "self_identity": "your QR Identity",
-  "scan_for_Operation": "Scan QR CodeTo Make Operation"
-
-
+  "scan_for_Operation": "Scan QR CodeTo Make Operation",
+  "joining_request_des": "Do you want to make your child joining this Kindergarten?",
+  "joining_request": "Joining Request",
+  "taking_care_by": "Taking care by",
+  "nobody": "No One",
+  "not_joined_yet": "not joined to kindergarten"
 
 }

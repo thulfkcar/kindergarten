@@ -187,16 +187,23 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   }
 
   childrenGrid() {
+    var size = MediaQuery.of(context).size;
+
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 6;
+    final double itemWidth = size.width / 5;
     return GridView.count(
-      shrinkWrap: true,
       crossAxisCount: 2,
+      childAspectRatio: (itemWidth / itemHeight),
+      controller: ScrollController(keepScrollOffset: false),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       children:
           List.generate(_viewModel.collectionApiResponse.data!.length, (index) {
         Child child = _viewModel.collectionApiResponse.data![index];
         return Padding(
             padding: const EdgeInsets.all(8),
             child: ParentChildCardGrid(
-                size: 200,
+              height: itemHeight,
                 onClicked: () {
                   Navigator.push(
                       context,

@@ -122,8 +122,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                 widget.child.staffName != null
                                     ? Text(
                                         "Taking care by: " +
-                                            widget.child.staffName
-                                                .toString(),
+                                            widget.child.staffName.toString(),
                                         style: const TextStyle(
                                           fontFamily: 'Lexend Deca',
                                           color: Color(0xFF57636C),
@@ -156,8 +155,8 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: titleText(getTranslated("actions", context),
-                              Colors.black),
+                          child: titleText(
+                              getTranslated("actions", context), Colors.black),
                         ),
                         style: ButtonStyle(
                             backgroundColor:
@@ -177,10 +176,9 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                             //todo: request kindergarten
                           })
                         : (KindergartenButton(
-                            name:
-                                widget.child.assignRequest!.kindergartenName!,
-                            image: widget
-                                .child.assignRequest!.kindergartenImage!,
+                            name: widget.child.assignRequest!.kindergartenName!,
+                            image:
+                                widget.child.assignRequest!.kindergartenImage!,
                             id: widget.child.assignRequest!.kindergartenId,
                           ))
                     : joinKindergartenCard(),
@@ -190,8 +188,11 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                              getTranslated("childId", context)+" : ",style: TextStyle(fontSize: 18,color: Colors.black87,fontWeight: FontWeight.bold)),
+                          Text(getTranslated("childId", context) + " : ",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                       QrImage(
@@ -220,7 +221,10 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                          getTranslated("Contacts", context), style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
+                        getTranslated("Contacts", context),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
                     ),
                   ],
                 ),
@@ -254,13 +258,14 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
     return ElevatedButton(
       onPressed: () async {
         await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        KindergartenScreen(childId: widget.child.id)))
-            .then((value) async {
-          await _viewModel.joinRequest(widget.child.id);
-        });
+            context,
+            MaterialPageRoute(
+                builder: (context) => KindergartenScreen(
+                      childId: widget.child.id,
+                      onKindergartenChoosed: (kindergartenId) async {
+                        await _viewModel.joinRequest(widget.child.id,kindergartenId);
+                      },
+                    )));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -275,15 +280,19 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         ColorStyle.text1,
                         textAlign: TextAlign.center)),
                 Text(
-                    getTranslated("click_to_join", context), style: TextStyle(color: Colors.black87,fontSize: 18),)
-
+                  getTranslated("click_to_join", context),
+                  style: TextStyle(color: Colors.black87, fontSize: 18),
+                )
               ],
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(Icons.warning_amber_outlined,color: Colors.yellow.shade800,size: 30,),
+                Icon(
+                  Icons.warning_amber_outlined,
+                  color: Colors.yellow.shade800,
+                  size: 30,
+                ),
               ],
             )
           ],

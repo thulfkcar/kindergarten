@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
 import 'package:kid_garden_app/domain/Child.dart';
 import 'package:kid_garden_app/presentation/viewModels/viewModelCollection.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
 import '../../../../../data/network/ApiResponse.dart';
-import '../../../../../data/network/FromData/ChildForm.dart';
 
 class ParentChildrenViewModel extends ViewModelCollection<Child> {
   final _repository = ChildRepository();
@@ -15,7 +13,6 @@ class ParentChildrenViewModel extends ViewModelCollection<Child> {
 
   String? searchKey;
 
-  String? requestedKindergartenId;
 
   ParentChildrenViewModel() : super() {
     fetchChildren();
@@ -111,23 +108,7 @@ class ParentChildrenViewModel extends ViewModelCollection<Child> {
     fetchChildren();
   }
 
-  Future<void> joinRequest(String childId) async {
-    //after request done
-    if (requestedKindergartenId != null) {
-      await setJoinKindergartenRequest(ApiResponse.loading());
-      await _userRepository
-          .requestToKindergarten(childId, requestedKindergartenId!)
-          .then((value) async {
-        await setJoinKindergartenRequest(ApiResponse.completed(value));
-        setRequestedKindergartenId(null);
-      }).onError((error, stackTrace) async {
-        await setJoinKindergartenRequest(ApiResponse.error(error.toString()));
-        setRequestedKindergartenId(null);
-      });
-    }
-  }
 
-  void setRequestedKindergartenId(String? id) {
-    requestedKindergartenId = id;
-  }
+
+
 }

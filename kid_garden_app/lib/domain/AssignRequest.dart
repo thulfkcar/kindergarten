@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Child.dart';
-import 'Kindergraten.dart';
+import 'Kindergarten.dart';
 import 'UserModel.dart';
 
 part 'AssignRequest.g.dart';

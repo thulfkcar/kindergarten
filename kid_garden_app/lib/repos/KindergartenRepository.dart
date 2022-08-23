@@ -1,7 +1,7 @@
 
 
 import 'package:geolocator/geolocator.dart';
-import 'package:kid_garden_app/domain/Kindergraten.dart';
+import 'package:kid_garden_app/domain/Kindergarten.dart';
 import 'package:tuple/tuple.dart';
 
 import '../data/network/BaseApiService.dart';
@@ -16,7 +16,7 @@ class KindergartenRepository{
 
   final BaseApiService _apiService = NetworkApiService();
 
-  Future<Tuple2<List<Kindergraten>, bool>> getMyKindergartenList({required Position? position,required int page, String? searchKey}) async {
+  Future<Tuple2<List<Kindergarten>, bool>> getMyKindergartenList({required Position? position,required int page, String? searchKey}) async {
     try {
 
       var url="Kindergarten/getAll/$page";
@@ -34,9 +34,9 @@ class KindergartenRepository{
 
       var kindergartens;
       var mainResponse =
-      MultiResponse<List<Kindergraten>>.fromJson(await response, (jsonList) {
+      MultiResponse<List<Kindergarten>>.fromJson(await response, (jsonList) {
         if (jsonList != null) {
-          kindergartens = (jsonList as List).map((i) => Kindergraten.fromJson(i)).toList();
+          kindergartens = (jsonList as List).map((i) => Kindergarten.fromJson(i)).toList();
           return kindergartens;
         } else {
           throw "no Data Available";

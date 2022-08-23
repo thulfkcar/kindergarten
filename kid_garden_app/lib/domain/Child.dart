@@ -1,5 +1,5 @@
 import 'package:kid_garden_app/domain/AssignRequest.dart';
-import 'package:kid_garden_app/domain/Kindergraten.dart';
+import 'package:kid_garden_app/domain/Kindergarten.dart';
 
 import 'ChildAction.dart';
 import 'Contact.dart';
@@ -21,7 +21,7 @@ class Child {
   String? mediaId;
   String? staffName;
   String? kindergartenId;
-  Kindergraten? kindergraten;
+  String? kindergartenName;
   List<Contact>? contacts;
   AssignRequest? assignRequest;
   Child(
@@ -32,7 +32,7 @@ class Child {
       this.age,
       this.birthDate,
       this.childActions,
-      this.user,this.contacts});
+      this.user,this.contacts,this.kindergartenName});
 
   factory Child.fromJson(Map<String, dynamic> json) => _$ChildFromJson(json);
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
-import 'package:kid_garden_app/domain/Kindergraten.dart';
+import 'package:kid_garden_app/domain/Kindergarten.dart';
 
 import '../../../repos/KindergartenRepository.dart';
 
@@ -68,7 +68,7 @@ class KindergartenViewModel extends ChangeNotifier {
     pageKindergarten += 1;
   }
 
-  ApiResponse<List<Kindergraten>> appendNewItems(List<Kindergraten> value) {
+  ApiResponse<List<Kindergarten>> appendNewItems(List<Kindergarten> value) {
     var data = kindergartenApiResponse.data;
     data?.addAll(value);
     return ApiResponse.completed(data);

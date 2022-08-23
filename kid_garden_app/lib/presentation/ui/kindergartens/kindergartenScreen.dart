@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/di/Modules.dart';
@@ -6,8 +5,9 @@ import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../data/network/ApiResponse.dart';
-import '../../../domain/Kindergraten.dart';
+import '../../../domain/Kindergarten.dart';
 import '../../general_components/CustomListView.dart';
 import '../../general_components/Error.dart';
 import '../../general_components/KindergratenCard.dart';
@@ -17,9 +17,11 @@ import '../dialogs/dialogs.dart';
 import '../navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 
 class KindergartenScreen extends ConsumerStatefulWidget {
-  String? childId;
+  final String? childId;
+  final Function(String)? onKindergartenChoosed;
 
-  KindergartenScreen({
+  const KindergartenScreen({
+     this.onKindergartenChoosed,
     this.childId,
     Key? key,
   }) : super(key: key);
@@ -125,8 +127,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
             scrollController: _scrollController,
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: false,
-            itemBuilder: (BuildContext context, Kindergraten item) {
-              return kinderCard(item,context);
+            itemBuilder: (BuildContext context, Kindergarten item) {
+              return joinKindergartenCard(item,context);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -138,8 +140,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
             scrollController: _scrollController,
             items: _viewModel.kindergartenApiResponse.data!,
             loadNext: true,
-            itemBuilder: (BuildContext context, Kindergraten item) {
-              return kinderCard(item,context);
+            itemBuilder: (BuildContext context, Kindergarten item) {
+              return joinKindergartenCard(item,context);
             },
             direction: Axis.vertical);
 
@@ -161,19 +163,18 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     }
   }
 
-  Widget kinderCard(Kindergraten item,BuildContext context) {
+  Widget joinKindergartenCard(Kindergarten kindergraten,BuildContext context) {
     return KindergartenCard(
-      kindergraten: item,
+      kindergraten: kindergraten,
       addRequestEnable: widget.childId != null ? true : false,
       onAddRequestClicked: (id) {
         showDialogGeneric(
             context: context,
             dialog: ConfirmationDialog(
-                title: "Joining Request",
-                message:
-                "do you want to make your child joining this Kindergarten?",
+                title: getTranslated("joining_request", context),
+                message:getTranslated("joining_request_des", context),
                 confirmed: () {
-                  viewModelParentChildrenShared.setRequestedKindergartenId(item.id);
+                 widget.onKindergartenChoosed!(kindergraten.id);
                   Navigator.pop(context);
 
 

@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kid_garden_app/domain/Media.dart';
-part 'Kindergraten.g.dart';
+part 'Kindergarten.g.dart';
 
 @JsonSerializable()
-class Kindergraten{
+class Kindergarten{
 
 String id;
 String name;
@@ -15,12 +15,12 @@ String phone;
 String? ditance;
 Media? media;
 
-Kindergraten({required this.id, required this.name, this.description, required this.location,
+Kindergarten({required this.id, required this.name, this.description, required this.location,
       required this.latitudes, required this.longitudes, required this.phone, required this.ditance, required this.media});
 
-factory Kindergraten.fromJson(Map<String, dynamic> json) =>
-    _$KindergratenFromJson(json);
+factory Kindergarten.fromJson(Map<String, dynamic> json) =>
+    _$KindergartenFromJson(json);
 
 /// Connect the generated [_$PersonToJson] function to the `toJson` method.
-Map<String, dynamic> toJson() => _$KindergratenToJson(this);
+Map<String, dynamic> toJson() => _$KindergartenToJson(this);
 }
