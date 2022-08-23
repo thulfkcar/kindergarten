@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../../data/network/ApiResponse.dart';
 import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
@@ -37,17 +38,17 @@ class _NavigationScreenParentState
                   MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
-                var provide =
-                ProviderContainer().read(LoginPageViewModelProvider);
-                await provide.getUserChanges();
-                var user = provide.currentUser;
-                showAlertDialog(
-                    context: context,
-                    messageDialog: ActionDialog(
-                        type: DialogType.qr,
-                        qr: user!.id,
-                        title: "your QR Identity",
-                        message: "Scan To Make Opration"));
+                ProviderContainer().read(userProvider).whenOrNull(data:(user){
+                  showAlertDialog(
+                      context: context,
+                      messageDialog: ActionDialog(
+                          type: DialogType.qr,
+                          qr: user!.id,
+                          title: getTranslated("self_identity", context),
+                          message: getTranslated("scan_for_Operation", context)));
+                });
+
+
               },
               child: const Icon(Icons.qr_code)),
         ],

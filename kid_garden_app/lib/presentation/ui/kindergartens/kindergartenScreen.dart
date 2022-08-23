@@ -7,8 +7,14 @@ import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenViewMod
 import 'package:kid_garden_app/presentation/ui/login/LoginOrSignUpScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
+import '../../../domain/Kindergraten.dart';
+import '../../general_components/CustomListView.dart';
+import '../../general_components/Error.dart';
+import '../../general_components/KindergratenCard.dart';
+import '../../general_components/loading.dart';
 import '../../utile/LangUtiles.dart';
-import 'KindergartensView.dart';
+import '../dialogs/dialogs.dart';
+import '../navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 
 class KindergartenScreen extends ConsumerStatefulWidget {
   String? childId;
@@ -26,6 +32,8 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
   late KindergartenViewModel _viewModel;
   late LoginPageViewModel loginViewModel;
   late ScrollController _scrollController;
+
+  late ParentChildrenViewModel viewModelParentChildrenShared;
   TextEditingController editingController = TextEditingController();
 
   @override
@@ -38,7 +46,9 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(kindergartenViewModelProvider);
     loginViewModel = ref.watch(LoginPageViewModelProvider);
-
+    if(widget.childId!=null) {
+      viewModelParentChildrenShared = ref.watch(parentChildrenViewModelProvider);
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,7 +88,7 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
       body: Column(
         children: [
           head(),
-          Expanded(child: KindergartensView(childId: widget.childId))
+          Expanded(child: kindergartens())
         ],
       ),
     );
@@ -102,6 +112,45 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
     );
   }
 
+
+  Widget kindergartens() {
+    var status = _viewModel.kindergartenApiResponse.status;
+
+    switch (status) {
+      case Status.LOADING:
+        return LoadingWidget();
+
+      case Status.COMPLETED:
+        return CustomListView(
+            scrollController: _scrollController,
+            items: _viewModel.kindergartenApiResponse.data!,
+            loadNext: false,
+            itemBuilder: (BuildContext context, Kindergraten item) {
+              return kinderCard(item,context);
+            },
+            direction: Axis.vertical);
+      case Status.ERROR:
+        return MyErrorWidget(
+            msg: _viewModel.kindergartenApiResponse.message ?? "Error");
+
+      case Status.LOADING_NEXT_PAGE:
+        return CustomListView(
+            scrollController: _scrollController,
+            items: _viewModel.kindergartenApiResponse.data!,
+            loadNext: true,
+            itemBuilder: (BuildContext context, Kindergraten item) {
+              return kinderCard(item,context);
+            },
+            direction: Axis.vertical);
+
+      case Status.NON:
+        return Container();
+      default:
+    }
+    return Container();
+  }
+
+
   void getNext() async {
     var state = _viewModel.kindergartenApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
@@ -111,4 +160,26 @@ class _KindergartenScreenState extends ConsumerState<KindergartenScreen> {
       }
     }
   }
+
+  Widget kinderCard(Kindergraten item,BuildContext context) {
+    return KindergartenCard(
+      kindergraten: item,
+      addRequestEnable: widget.childId != null ? true : false,
+      onAddRequestClicked: (id) {
+        showDialogGeneric(
+            context: context,
+            dialog: ConfirmationDialog(
+                title: "Joining Request",
+                message:
+                "do you want to make your child joining this Kindergarten?",
+                confirmed: () {
+                  viewModelParentChildrenShared.setRequestedKindergartenId(item.id);
+                  Navigator.pop(context);
+
+
+                }));
+      },
+    );
+  }
+
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/floating_action_button.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
@@ -10,7 +9,6 @@ import 'package:kid_garden_app/presentation/ui/Child/ChildAddingScreen.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileScreen.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
-import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
@@ -19,16 +17,15 @@ import '../../../../general_components/ParentChildCardGrid.dart';
 import 'ParentChildrenViewModel.dart';
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {
-  bool fromProfile;
-  bool isSubscriptionValid;
-  String? subscriptionMessage;
+ final bool fromProfile;
+ final bool isSubscriptionValid;
+ final String? subscriptionMessage;
 
-  ParentChildrenScreen({
+  const ParentChildrenScreen({Key? key,
     this.subscriptionMessage,
     required this.isSubscriptionValid,
     required this.fromProfile,
-    Key? key,
-  }) : super(key: key);
+  }) : super(key: key) ;
 
   @override
   ConsumerState createState() => _ParentChildrenScreenState();
@@ -37,7 +34,6 @@ class ParentChildrenScreen extends ConsumerStatefulWidget {
 class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   late ParentChildrenViewModel _viewModel;
   TextEditingController editingController = TextEditingController();
-  bool isParent = false;
 
   @override
   void didChangeDependencies() {
@@ -49,11 +45,9 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
     _viewModel = ref.watch(parentChildrenViewModelProvider);
 
     setState(() {
-      AsyncValue<UserModel?> user = ref.watch(userProvider);
-
-      user.whenOrNull(data: (user) {
-        user!.role == Role.Parents ? isParent = true : isParent = false;
-      });
+      // ref.watch(userProvider).whenOrNull(data: (user) {
+      //   user!.role == Role.Parents ? isParent = true : isParent = false;
+      // });
     });
 
     Future.delayed(Duration.zero, () async {
@@ -67,9 +61,6 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
     return Scaffold(
       body: Column(
         children: [
-          isParent != true
-              ? (widget.fromProfile ? head() : Container())
-              : Container(),
           Expanded(child: body())
         ],
       ),
@@ -124,10 +115,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         return childrenGrid();
 
       case Status.Empty:
-        return EmptyWidget(
-            msg: AppLocalizations.of(context)?.getText("no_children") ??
-                _viewModel.collectionApiResponse.message ??
-                "Error");
+        return EmptyWidget(msg: getTranslated("no_children", context));
       case Status.NON:
         return Container();
       default:
@@ -144,12 +132,11 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
-              title: AppLocalizations.of(context)?.getText("join_request") ??
-                  "Request Dialog",
-              message:
-                  AppLocalizations.of(context)?.getText("join_request_des") ??
-                      "Requesting the Kindergarten for joining your child in",
-              onCompleted: (d) {},
+              title: getTranslated("join_request", context),
+              message: getTranslated("join_request_des", context),
+              onCompleted: (d) {
+                //todo:solve this shit for the sake of future projects
+              },
             ));
         await _viewModel.setJoinKindergartenRequest(ApiResponse.non());
         break;
@@ -162,11 +149,8 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
               context: context,
               messageDialog: ActionDialog(
                 type: DialogType.completed,
-                title: AppLocalizations.of(context)?.getText("join_request") ??
-                    "Request Dialog",
-                message: AppLocalizations.of(context)
-                        ?.getText("join_request_des_comp") ??
-                    "Requesting the Kindergarten completed , your request in pending...",
+                title: getTranslated("join_request", context),
+                message: getTranslated("join_request_des_comp", context),
                 onCompleted: (s) async {
                   await _viewModel.fetchChildren();
                   await _viewModel

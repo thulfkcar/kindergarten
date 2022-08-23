@@ -67,7 +67,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         children: [
                           ClipOval(
                             child: SizedBox.fromSize(
-                                size: const Size.fromRadius(30),
+                                size: const Size.fromRadius(50),
                                 child: Image.network(
                                     '$domain${widget.child.image!}',
                                     fit: BoxFit.cover)),
@@ -85,7 +85,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                   style: const TextStyle(
                                     fontFamily: 'Lexend Deca',
                                     color: Color(0xFF090F13),
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -188,8 +188,12 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      titleText(
-                          getTranslated("childId", context), Colors.black),
+                      Row(
+                        children: [
+                          Text(
+                              getTranslated("childId", context)+" : ",style: TextStyle(fontSize: 18,color: Colors.black87,fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       QrImage(
                         data: widget.child.id,
                         version: QrVersions.auto,
@@ -215,8 +219,8 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: titleText(
-                          getTranslated("Contacts", context), Colors.black),
+                      child: Text(
+                          getTranslated("Contacts", context), style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
                     ),
                   ],
                 ),
@@ -258,22 +262,32 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
           await _viewModel.joinRequest(widget.child.id);
         });
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: titleText(
-                getTranslated("click_to_join", context), ColorStyle.text1),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: descriptionText(
-                    getTranslated("click_to_join_des", context),
-                    ColorStyle.text1,
-                    textAlign: TextAlign.center)),
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              children: [
+                Center(
+                    child: descriptionText(
+                        getTranslated("click_to_join_des", context),
+                        ColorStyle.text1,
+                        textAlign: TextAlign.center)),
+                Text(
+                    getTranslated("click_to_join", context), style: TextStyle(color: Colors.black87,fontSize: 18),)
+
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(Icons.warning_amber_outlined,color: Colors.yellow.shade800,size: 30,),
+              ],
+            )
+          ],
+        ),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(KidThem.white),
