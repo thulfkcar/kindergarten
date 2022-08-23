@@ -68,8 +68,8 @@ class ParentChildCardGrid extends StatelessWidget {
                             fit: BoxFit.cover),
                       ),
                     ),
-                    Container(
-                      color: ColorStyle.text5,
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -109,6 +109,7 @@
   "joining_request": "Joining Request",
   "taking_care_by": "Taking care by",
   "nobody": "No One",
-  "not_joined_yet": "not joined to kindergarten"
+  "not_joined_yet": "not joined to kindergarten",
+  "joining_request_sending": "Sending join Request .."
 
 }

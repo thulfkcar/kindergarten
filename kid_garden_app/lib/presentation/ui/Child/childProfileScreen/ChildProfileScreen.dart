@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../../../../data/network/ApiResponse.dart';
 import '../../../../data/network/BaseApiService.dart';
 import '../../../../di/Modules.dart';
 import '../../../../domain/AssignRequest.dart';
@@ -43,6 +46,9 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
     user = ref.watch(userProvider);
 
     _viewModel = ref.watch(childProfileViewModelProvider);
+    Future.delayed(Duration.zero, () {
+      kindergratenRequestViewResponse();
+    });
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -263,7 +269,9 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                 builder: (context) => KindergartenScreen(
                       childId: widget.child.id,
                       onKindergartenChoosed: (kindergartenId) async {
-                        await _viewModel.joinRequest(widget.child.id,kindergartenId);
+
+                        await _viewModel.joinRequest(
+                            widget.child.id, kindergartenId);
                       },
                     )));
       },
@@ -304,5 +312,39 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
               BorderSide(width: 1, color: KidThem.male1)),
           elevation: MaterialStateProperty.all(0)),
     );
+  }
+
+  kindergratenRequestViewResponse() {
+    var status = _viewModel.joinKindergartenRequest.status;
+    switch (status) {
+      case Status.LOADING:
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.loading,
+                title: getTranslated("joining_request", context),
+                message: getTranslated("joining_request_sending", context)));
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.completed,
+                title: getTranslated("joining_request", context),
+                message: getTranslated("joining_request_sending", context)));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.error,
+                title: getTranslated("joining_request", context),
+                message: "دز كي من الapi حته ع اساسه تظهرله الرسالة"));
+        break;
+      default:
+    }
   }
 }

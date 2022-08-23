@@ -99,5 +99,6 @@
   "joining_request_des": "هل تريد أن ينظم طفلك الى هذه الحضانة؟",
   "taking_care_by": "مراقب بواسطة",
   "nobody": "لا أحد",
-  "not_joined_yet": "غير منظم الى حضانة"
+  "not_joined_yet": "غير منظم الى حضانة",
+  "joining_request_sending": "جر ارسال طلب الانظمام.."
 }
