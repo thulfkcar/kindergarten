@@ -44,11 +44,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(parentChildrenViewModelProvider);
 
-    setState(() {
-      // ref.watch(userProvider).whenOrNull(data: (user) {
-      //   user!.role == Role.Parents ? isParent = true : isParent = false;
-      // });
-    });
+
 
     Future.delayed(Duration.zero, () async {
       await addingRequestState();
@@ -71,7 +67,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                   MaterialPageRoute(
                       builder: (context) => ChildAddingScreen(onAdded: (child) {
                             if (child != null) {
-                              _viewModel.appendNewItems([child]);
+                              _viewModel.addNewItemToCollection(child);
                             }
                           })));
             })
