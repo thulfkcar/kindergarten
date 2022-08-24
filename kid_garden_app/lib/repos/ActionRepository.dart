@@ -30,7 +30,7 @@ class ActionRepository {
       if (await actionGroups.isNotEmpty) {
         return await actionGroups;
       } else {
-        throw "no Data Available";
+        return [];
       }
     } catch (e) {
       rethrow;
@@ -63,7 +63,7 @@ class ActionRepository {
       if (await childActions.isNotEmpty) {
         return Tuple2(await childActions, isLastPage);
       } else {
-        throw "no Data Available";
+        return const Tuple2([], true);
       }
     } catch (e) {
       rethrow;
@@ -96,7 +96,7 @@ class ActionRepository {
       if (await childActions.isNotEmpty) {
         return Tuple2(await childActions, isLastPage);
       } else {
-        throw "no Data Available";
+       return Tuple2([], true);
       }
     } catch (e) {
       rethrow;

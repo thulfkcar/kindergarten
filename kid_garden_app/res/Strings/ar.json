@@ -107,5 +107,6 @@
   "Subscription_Check": "التاكد من صلاحية الاشتراك",
   "done": "انهاء",
   "remainingDays": "الايام المتبقية",
-  "scratchDate": "تاريخ الاشتراك"
+  "scratchDate": "تاريخ الاشتراك",
+  "noActionsForChild": "لايوجد احداث مضافة"
 }

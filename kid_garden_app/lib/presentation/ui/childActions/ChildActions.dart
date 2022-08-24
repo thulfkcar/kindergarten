@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/general_components/units/cards.dart'
 import 'package:kid_garden_app/presentation/ui/childActions/AssignChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
@@ -104,8 +105,9 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title:  Text(
-         AppLocalizations.of(context)?.getText("child_actions") ??"Child Actions",
+        title: Text(
+          AppLocalizations.of(context)?.getText("child_actions") ??
+              "Child Actions",
           style: const TextStyle(color: Colors.black),
         ),
         elevation: 0,
@@ -155,6 +157,13 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
                 }));
       case Status.ERROR:
         return MyErrorWidget(msg: _viewModel.actionGroupResponse.message!);
+      case Status.Empty:
+        return EmptyWidget(
+          msg: "not action group added by super admin",
+          onRefresh: () {
+            _viewModel.fetchActionGroups();
+          },
+        );
       case Status.NON:
         break;
       default:
@@ -179,6 +188,10 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           },
           direction: Axis.vertical,
         );
+      case Status.Empty:
+        return EmptyWidget(msg: getTranslated("noActionsForChild", context),onRefresh: (){
+          _viewModel.fetchChildActions();
+        },);
       case Status.ERROR:
         return MyErrorWidget(
           msg: _viewModel.childActionResponse.message!,
@@ -212,8 +225,11 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.loading,
-              title: AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
-              message:AppLocalizations.of(context)?.getText("adding_action_des")?? "please wait until process complete..",
+              title: AppLocalizations.of(context)?.getText("adding_action") ??
+                  "Adding Action",
+              message:
+                  AppLocalizations.of(context)?.getText("adding_action_des") ??
+                      "please wait until process complete..",
               onCompleted: (s) {},
             ));
         _viewModel.setChildActionPostResponse(ApiResponse.non());
@@ -224,7 +240,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.completed,
-              title: AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
+              title: AppLocalizations.of(context)?.getText("adding_action") ??
+                  "Adding Action",
               message:
                   "action ${_viewModel.childActionPostResponse.data?.actionGroupName} is added.",
               onCompleted: (s) {
@@ -239,7 +256,8 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
             context: context,
             messageDialog: ActionDialog(
               type: DialogType.error,
-              title:AppLocalizations.of(context)?.getText("adding_action")??"Adding Action",
+              title: AppLocalizations.of(context)?.getText("adding_action") ??
+                  "Adding Action",
               message: _viewModel.childActionPostResponse.message.toString(),
               onCompleted: (s) {},
             ));

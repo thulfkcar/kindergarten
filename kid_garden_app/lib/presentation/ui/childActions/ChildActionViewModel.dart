@@ -62,9 +62,15 @@ class ChildActionViewModel extends ChangeNotifier {
     setActionGroupResponse(ApiResponse.loading());
     _repository
         .getActionsGroups(page: 1)
-        .then((value) => setActionGroupResponse(ApiResponse.completed(value)))
-        .onError((error, stackTrace) =>
-            setActionGroupResponse(ApiResponse.error(error.toString())));
+        .then((value) {
+          setActionGroupResponse(ApiResponse.completed(value));
+          if(value.isEmpty) {
+            setActionGroupResponse(ApiResponse.empty());
+          }
+        })
+        .onError((error, stackTrace) {
+          setActionGroupResponse(ApiResponse.error(error.toString()));
+        });
   }
 
   Future<void> addChildAction(

@@ -80,7 +80,6 @@
   "dismiss": "dismiss",
   "scan_pin": "Scan QR",
   "join_request": "Join Request",
-
   "join_request_des": "Requesting the Kindergarten for joining your child in",
   "join_request_des_comp": "Requesting the Kindergarten completed , your request in pending...",
   "meters": " Meters",
@@ -116,6 +115,6 @@
   "Subscription_Check": "Subscription Check",
   "done": "Done",
   "remainingDays": "Remaining Days",
-  "scratchDate": "Subscription StartDate"
-
+  "scratchDate": "Subscription StartDate",
+  "noActionsForChild": "No Actions Found."
 }

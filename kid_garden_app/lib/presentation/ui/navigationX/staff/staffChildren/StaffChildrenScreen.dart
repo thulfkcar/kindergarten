@@ -81,7 +81,7 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
             items: _viewModel.collectionApiResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Child item) {
-              return childRow(context: context, child: item);
+              return ChildRow( child: item);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -96,7 +96,7 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
             items: _viewModel.collectionApiResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Child item) {
-              return childRow(context: context, child: item);
+              return ChildRow( child: item);
             },
             direction: Axis.vertical);
       case Status.Empty:

@@ -102,7 +102,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
             items: _viewModel.childListResponse.data!,
             loadNext: false,
             itemBuilder: (BuildContext context, Child item) {
-              return childRow(context: context, child: item);
+              return ChildRow( child: item);
             },
             direction: Axis.vertical);
       case Status.ERROR:
@@ -115,7 +115,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
             items: _viewModel.childListResponse.data!,
             loadNext: true,
             itemBuilder: (BuildContext context, Child item) {
-              return childRow(context: context, child: item);
+              return ChildRow( child: item);
             },
             direction: Axis.vertical);
 
