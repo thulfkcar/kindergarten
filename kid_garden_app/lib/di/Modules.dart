@@ -22,9 +22,11 @@ import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 final childViewModelProvider =
     ChangeNotifierProvider.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
-final userProvider = FutureProvider<UserModel?>((ref) async {
+
+
+final userProvider = FutureProvider.autoDispose<UserModel?>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  var userJson = prefs.getString("User");
+  var userJson = await prefs.getString("User");
   if (userJson != null && userJson != 'null') {
     Map<String, dynamic> userMap = await jsonDecode(userJson);
     return await UserModel.fromJson(userMap);

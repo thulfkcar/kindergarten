@@ -15,6 +15,7 @@ var check=false;
 
     if(check){
       checkParentSubscription();
+      getParentSubscription();
     }
   }
 
@@ -38,6 +39,15 @@ var check=false;
   Future<void> subscribe({required String subscription}) async {
     setSubscribeApiResponse(ApiResponse.loading());
     await userRepo.subscribe(subscription).then((value) async {
+      setSubscribeApiResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setSubscribeApiResponse(ApiResponse.error(error.toString()));
+    });
+  }
+
+  Future<void> getParentSubscription() async {
+    setSubscribeApiResponse(ApiResponse.loading());
+    await userRepo.getParentSubscription().then((value) async {
       setSubscribeApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       setSubscribeApiResponse(ApiResponse.error(error.toString()));

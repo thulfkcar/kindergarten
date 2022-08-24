@@ -110,6 +110,9 @@
   "taking_care_by": "Taking care by",
   "nobody": "No One",
   "not_joined_yet": "not joined to kindergarten",
-  "joining_request_sending": "Sending join Request .."
+  "joining_request_sending": "Sending join Request ..",
+  "Subscription_Check_Des": "please wait until your Subscription Checked",
+  "Subscription_Check": "Subscription Check",
+  "done": "Done"
 
 }

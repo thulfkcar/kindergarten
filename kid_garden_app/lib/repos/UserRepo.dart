@@ -142,6 +142,21 @@ class UserRepository {
     }
   }
 
+  Future<Redeem> getParentSubscription() async {
+    try {
+      var response = await _apiService.getResponse(
+          "Subscription/getParentSubscription");
+      var result;
+      SingleResponse<Redeem>.fromJson(await response, (json) {
+        result = Redeem.fromJson(json as Map<String, dynamic>);
+        return result;
+      });
+      return await result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<String> checkSubscription() async {
     try {
       var response =
@@ -260,9 +275,8 @@ class UserRepository {
 
   Future<AssignRequest> rejectRequest(String id, String message) async {
     try {
-
       dynamic response = await _apiService.postResponse(
-          "User/assignRequestReject/$id/$message",Map());
+          "User/assignRequestReject/$id/$message", Map());
 
       var request;
       SingleResponse<AssignRequest>.fromJson(await response, (json) {
@@ -275,21 +289,19 @@ class UserRepository {
     }
   }
 
- Future<AssignRequest> acceptRequest(String id) async {
-   try {
+  Future<AssignRequest> acceptRequest(String id) async {
+    try {
+      dynamic response =
+          await _apiService.postResponse("User/assignRequestAccept/$id", Map());
 
-
-     dynamic response = await _apiService.postResponse(
-         "User/assignRequestAccept/$id", Map());
-
-     var request;
-     SingleResponse<AssignRequest>.fromJson(await response, (json) {
-       request = AssignRequest.fromJson(json as Map<String, dynamic>);
-       return request;
-     });
-     return await request;
-   } catch (e) {
-     rethrow;
-   }
- }
+      var request;
+      SingleResponse<AssignRequest>.fromJson(await response, (json) {
+        request = AssignRequest.fromJson(json as Map<String, dynamic>);
+        return request;
+      });
+      return await request;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

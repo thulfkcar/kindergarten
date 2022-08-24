@@ -78,18 +78,24 @@ class ParentChildCardGrid extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.child_care),
-                              Text(
-                                child.name,
-                                style: const TextStyle(
-                                  fontFamily: 'Lexend Deca',
-                                  color: Color(0xFF090F13),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.only(right: 13.0),
+                                  child: Text(
+                                    child.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontFamily: 'Lexend Deca',
+                                        color: Color(0xFF57636C),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentDialogInfo.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
@@ -9,23 +11,26 @@ import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
 import '../../../../them/DentalThem.dart';
 import '../../dialogs/ActionDialog.dart';
-import '../../userProfile/UserProfile.dart';
+import '../../kindergartens/kindergartenScreen.dart';
+import '../../login/LoginPageViewModel.dart';
+
 class ParentScreen extends ConsumerStatefulWidget {
   ParentScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  ConsumerState<ParentScreen> createState() =>
-      _NavigationScreenParentState();
+  ConsumerState<ParentScreen> createState() => _NavigationScreenParentState();
 }
 
-class _NavigationScreenParentState
-    extends ConsumerState<ParentScreen> {
+class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
   late SubscriptionViewModel viewModel;
+  late LoginPageViewModel viewModelLogin;
 
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(subscriptionViewModelProvider(true));
+    viewModelLogin = ref.watch(LoginPageViewModelProvider);
+
     Future.delayed(Duration.zero, () async {
       checkParentSubscription();
     });
@@ -35,20 +40,34 @@ class _NavigationScreenParentState
           ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all(Colors.transparent),
+                      MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
-                ProviderContainer().read(userProvider).whenOrNull(data:(user){
+             var user=    await viewModelLogin.getUserChanges();
+                showDialogGeneric(
+                    context: context,
+                    dialog: ParentInfoDialog(
+                        user: user!,
+                        subscription:
+                            viewModel.userSubScribeApiResponse.data!));
+              },
+              child: const Icon(Icons.info_outline)),
+          ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  elevation: MaterialStateProperty.all(0)),
+              onPressed: () async {
+                ref.watch(userProvider).whenOrNull(data: (user) {
                   showAlertDialog(
                       context: context,
                       messageDialog: ActionDialog(
                           type: DialogType.qr,
                           qr: user!.id,
                           title: getTranslated("self_identity", context),
-                          message: getTranslated("scan_for_Operation", context)));
+                          message:
+                              getTranslated("scan_for_Operation", context)));
                 });
-
-
               },
               child: const Icon(Icons.qr_code)),
         ],
@@ -57,27 +76,38 @@ class _NavigationScreenParentState
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 elevation: MaterialStateProperty.all(0)),
             onPressed: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfile(self: true,
-                        userType: Role.Parents,
-                        userId: null,
-                      )));
+              Future.delayed(Duration.zero, () async {
+                await viewModelLogin.logOut();
+
+                // RestartWidget.restartApp(context);
+
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const KindergartenScreen()),
+                    (route) => false);
+              });
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => UserProfile(self: true,
+              //           userType: Role.Parents,
+              //           userId: null,
+              //         )));
             },
-            child: const Icon(Icons.person)),
+            child: const Icon(Icons.logout)),
         automaticallyImplyLeading: true,
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: Text(
           widget.title,
-          style: TextStyle(color: KidThem.textTitleColor),
+          style: const TextStyle(color: KidThem.textTitleColor),
         ),
       ),
-      body: Center(
+      body: const Center(
         child: ParentChildrenScreen(
-          fromProfile: true, isSubscriptionValid: true,
+          fromProfile: true,
+          isSubscriptionValid: true,
         ),
       ),
     );
@@ -104,9 +134,9 @@ class _NavigationScreenParentState
         break;
       case Status.ERROR:
         var errorMessage =
-        viewModel.userSubscriptionStatusResponse.message != null
-            ? viewModel.userSubscriptionStatusResponse.message!
-            : "corrupted";
+            viewModel.userSubscriptionStatusResponse.message != null
+                ? viewModel.userSubscriptionStatusResponse.message!
+                : "corrupted";
         await viewModel
             .setUserSubscriptionStatusResponse(ApiResponse.non())
             .then((value) async {
@@ -117,7 +147,7 @@ class _NavigationScreenParentState
             MaterialPageRoute(
                 builder: (context) =>
                     SubscriptionScreen(message: errorMessage)),
-                (Route<dynamic> route) => true,
+            (Route<dynamic> route) => true,
           );
         });
 
