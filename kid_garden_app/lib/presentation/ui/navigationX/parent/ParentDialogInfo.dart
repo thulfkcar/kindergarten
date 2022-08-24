@@ -16,7 +16,9 @@ import '../../../utile/language_constrants.dart';
 class ParentInfoDialog extends StatelessWidget {
   final Redeem subscription;
 
-  const ParentInfoDialog({Key? key, required this.user, required  this.subscription}) : super(key: key);
+  const ParentInfoDialog(
+      {Key? key, required this.user, required this.subscription})
+      : super(key: key);
   final UserModel user;
 
   @override
@@ -39,7 +41,7 @@ class ParentInfoDialog extends StatelessWidget {
         ));
   }
 
-  Widget profile( BuildContext context) {
+  Widget profile(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -49,48 +51,47 @@ class ParentInfoDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 imageRectangleWithoutShadow(domain + user.image!, 90),
-
                 Column(
                   children: [
-                ContactListCard(false,
-                    contact: Contact(
-                        name: user.name!,
-                        email: user.email,
-                        phone: user.phone!,
-                        userType: user.role.name.toString()))
+                    ContactListCard(false,
+                        contact: Contact(
+                            name: user.name!,
+                            email: user.email,
+                            phone: user.phone!,
+                            userType: user.role.name.toString()))
                   ],
                 ),
               ],
             ),
-            Row(children: [Text("remainingDays" + " : "+ subscription.remainingDays.toString())],),
+            SizedBox(height: 16,),
+
+            SizedBox(height: 16,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                InfoCard(
-                  homeData: Tuple2(getTranslated("total_actions", context),
-                      user.actionsCount != null
-                          ? (user.actionsCount.toString())
-                          : "0"),
-                  startColor: Color(0xFFA1B327),
-                  endColor: Color(0xFFF2A384),
-                  width: 100,
-                ),
-                MaterialButton(
-                  padding: EdgeInsets.all(0),
-                  minWidth: 0,
-                  onPressed: () {},
-                  child: InfoCard(
-                    homeData: Tuple2(
-                        getTranslated("children", context) ,
-                        user.childrenCount != null
-                            ? user.childrenCount.toString()
-                            : "0"),
-                    startColor: Color(0xff89C7E7),
-                    endColor: Color(0xFFF2A384),
-                    width: 100,
+                Flexible(
+                  child: Container(
+                    child: Text(
+                      getTranslated("scratchDate", context) +
+                          " : " +
+                          subscription.scratchDate.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontFamily: 'Lexend Deca',
+                          color: Color(0xFF57636C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis),
+                    ),
                   ),
-                )
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(getTranslated("remainingDays", context) +
+                    " : " +
+                    subscription.remainingDays.toString())
               ],
             ),
           ],

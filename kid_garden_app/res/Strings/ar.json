@@ -103,5 +103,7 @@
   "joining_request_sending": "جر ارسال طلب الانظمام..",
   "Subscription_Check_Des": "الرجاء الانتظار قليلا للتاكد من صلاحية الاشتراك...",
   "Subscription_Check": "التاكد من صلاحية الاشتراك",
-  "done": "انهاء"
+  "done": "انهاء",
+  "remainingDays": "الايام المتبقية",
+  "scratchDate": "تاريخ الاشتراك"
 }
