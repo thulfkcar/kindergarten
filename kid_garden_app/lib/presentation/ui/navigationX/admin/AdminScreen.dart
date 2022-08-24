@@ -8,6 +8,7 @@ import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
 import '../../../../them/DentalThem.dart';
 import '../../../styles/colors_style.dart';
+import '../../../utile/language_constrants.dart';
 import '../../Child/Childs.dart';
 import '../../Home/HomeUI.dart';
 import '../../Staff/StaffUI.dart';
@@ -31,7 +32,7 @@ class _NavigationScreen extends State<AdminScreen> {
     ),
     ParentsScreen(),
     StaffUI(),
-    UserProfile(self:true,userType: Role.admin, userId: null),
+    UserProfile(self: true, userType: Role.admin, userId: null),
   ];
 
   void _onItemTapped(int index) {
@@ -43,26 +44,26 @@ class _NavigationScreen extends State<AdminScreen> {
   Widget get bottomNavigationBar {
     return BottomNavigationBar(
       backgroundColor: ColorStyle.second,
-      items:  <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: const Icon(Icons.home_filled),
-          label:AppLocalizations.of(context)?.getText("home")?? 'Home',
+          label: getTranslated("home", context),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.sentiment_satisfied_alt_sharp),
-          label:AppLocalizations.of(context)?.getText("children")?? 'Children',
+          label: getTranslated("children", context),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.person),
-          label:AppLocalizations.of(context)?.getText("parents")?? 'Parents',
+          label: getTranslated("parents", context),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.supervised_user_circle),
-          label:AppLocalizations.of(context)?.getText("staff")?? 'Staff',
+          label: getTranslated("staff", context),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.account_circle),
-          label:AppLocalizations.of(context)?.getText("profile")?? 'Profile',
+          label: getTranslated("profile", context),
         ),
       ],
       currentIndex: _selectedIndex,
@@ -80,11 +81,11 @@ class _NavigationScreen extends State<AdminScreen> {
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Colors.transparent),
+                        MaterialStateProperty.all(Colors.transparent),
                     elevation: MaterialStateProperty.all(0)),
                 onPressed: () async {
                   var provide =
-                  ProviderContainer().read(LoginPageViewModelProvider);
+                      ProviderContainer().read(LoginPageViewModelProvider);
                   await provide.getUserChanges();
                   var user = provide.currentUser;
                   showAlertDialog(
@@ -92,8 +93,9 @@ class _NavigationScreen extends State<AdminScreen> {
                       messageDialog: ActionDialog(
                           type: DialogType.qr,
                           qr: user!.id,
-                          title: "your QR Identity",
-                          message: "Scan To Make Opration"));
+                          title: getTranslated("self_identity", context),
+                          message:
+                              getTranslated("scan_for_Operation", context)));
                 },
                 child: const Icon(Icons.qr_code))
           ],

@@ -55,7 +55,7 @@ class ChildRepository {
       if (await childes.isNotEmpty) {
         return Tuple2(await childes, isLastPage);
       } else {
-        throw "no Data Available";
+        return const Tuple2([], true);
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
@@ -180,6 +180,48 @@ class ChildRepository {
       if (e is ErrorResponse) {
         throw e.errorMsg.toString();
       }
+      rethrow;
+    }
+  }
+
+  Future<Tuple2<List<Child>, bool>> getStaffChildren(
+      {required int page, String? searchKey}) async {
+    try {
+      Map<String, String> jsonBody = Map();
+
+      var url = "Child/getAll/$page";
+      if (searchKey != null && searchKey.trim().isNotEmpty) {
+        jsonBody.addAll({"ChildName": searchKey});
+        // url+="?childName=$searchKey";
+      }
+
+      dynamic response = await _apiService.postResponse(url, jsonBody);
+
+      bool isLastPage = false;
+
+      var childes;
+      var mainResponse =
+      MultiResponse<List<Child>>.fromJson(await response, (jsonList) {
+        if (jsonList != null) {
+          childes = (jsonList as List).map((i) => Child.fromJson(i)).toList();
+          return childes;
+        } else {
+          throw "error parsing  children data getStaffChildren";
+        }
+      });
+      var nextPageTotal = (page) * 20;
+      if (nextPageTotal >= (mainResponse.count)) {
+        isLastPage = true;
+      }
+
+      if (await childes.isNotEmpty) {
+        return Tuple2(await childes, isLastPage);
+      } else {
+        return const Tuple2([], true);
+      }
+      // var jsonObject = json.decode(object!) as List;
+      // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
+    } catch (e) {
       rethrow;
     }
   }

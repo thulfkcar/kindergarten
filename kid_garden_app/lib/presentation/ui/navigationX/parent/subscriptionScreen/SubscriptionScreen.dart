@@ -96,7 +96,6 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                                     elevation: 0,
                                   ),
                                   body: ParentChildrenScreen(
-                                    fromProfile: true,
                                     isSubscriptionValid: false,
                                     subscriptionMessage:AppLocalizations.of(context)?.getText("subscription_des")??
                                         "your subscription invalid, please check your subscription status",

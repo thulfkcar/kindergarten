@@ -213,10 +213,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                           fromProfile: false,
                           subUserId: widget.userId,
                         )
-                      : (user.role == Role.Parents && widget.self == true)
-                          ? ParentChildrenScreen(
-                              isSubscriptionValid: true, fromProfile: false)
-                          : const AdminRequestsScreen(),
+                      :  const AdminRequestsScreen(),
             ),
           ],
         ));

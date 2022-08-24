@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/staff/staffChildren/StaffChildrenScreen.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
 import '../../../../di/Modules.dart';
 import '../../../../domain/UserModel.dart';
 import '../../../../them/DentalThem.dart';
 import '../../Child/Childs.dart';
 import '../../dialogs/ActionDialog.dart';
+import '../../kindergartens/kindergartenScreen.dart';
 import '../../userProfile/UserProfile.dart';
 
 
@@ -48,8 +51,8 @@ class _NavigationScreenParentState
                     messageDialog: ActionDialog(
                         type: DialogType.qr,
                         qr: user!.id,
-                        title: "your QR Identity",
-                        message: "Scan To Make Opration"));
+                        title: getTranslated("self_identity", context),
+                        message: getTranslated("scan_for_Operation", context)));
               },
               child: const Icon(Icons.qr_code)),
         ],
@@ -58,15 +61,25 @@ class _NavigationScreenParentState
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
                 elevation: MaterialStateProperty.all(0)),
             onPressed: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfile(self: true,
-                        userType: Role.Parents,
-                        userId: null,
-                      )));
+              Future.delayed(Duration.zero, () async {
+                await viewModelLogin.logOut();
+
+                // RestartWidget.restartApp(context);
+
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const KindergartenScreen()),
+                        (route) => false);
+              });
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => UserProfile(self: true,
+              //           userType: Role.Parents,
+              //           userId: null,
+              //         )));
             },
-            child: const Icon(Icons.person)),
+            child: const Icon(Icons.logout)),
         automaticallyImplyLeading: true,
         elevation: 0,
         centerTitle: true,
@@ -77,9 +90,7 @@ class _NavigationScreenParentState
         ),
       ),
       body: Center(
-        child: ChildrenExplorer(
-          fromProfile: true,
-        ),
+        child: StaffChildrenScreen()
       ),
       // body: Center(child: _widgetOptions.elementAt(_selectedIndex))
       // bottomNavigationBar: bottomNavigationBar

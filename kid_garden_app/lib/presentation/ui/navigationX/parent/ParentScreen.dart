@@ -106,7 +106,6 @@ class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
       ),
       body: const Center(
         child: ParentChildrenScreen(
-          fromProfile: true,
           isSubscriptionValid: true,
         ),
       ),

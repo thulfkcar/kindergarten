@@ -17,14 +17,12 @@ import '../../../../general_components/ParentChildCardGrid.dart';
 import 'ParentChildrenViewModel.dart';
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {
- final bool fromProfile;
  final bool isSubscriptionValid;
  final String? subscriptionMessage;
 
   const ParentChildrenScreen({Key? key,
     this.subscriptionMessage,
     required this.isSubscriptionValid,
-    required this.fromProfile,
   }) : super(key: key) ;
 
   @override
@@ -60,8 +58,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
           Expanded(child: body())
         ],
       ),
-      floatingActionButton: widget.fromProfile
-          ? floatingActionButtonAdd22(onClicked: () {
+      floatingActionButton: floatingActionButtonAdd22(onClicked: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -71,7 +68,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                             }
                           })));
             })
-          : null,
+      ,
     );
   }
 
@@ -105,13 +102,17 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         return childrenGrid();
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.collectionApiResponse.message ?? "Error");
+            msg: _viewModel.collectionApiResponse.message ?? "Error",onRefresh: (){
+          _viewModel.fetchChildren();
+        },);
 
       case Status.LOADING_NEXT_PAGE:
         return childrenGrid();
 
       case Status.Empty:
-        return EmptyWidget(msg: getTranslated("no_children", context));
+        return EmptyWidget(msg: getTranslated("no_children", context),onRefresh: (){
+          _viewModel.fetchChildren();
+        },);
       case Status.NON:
         return Container();
       default:

@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/staff/staffChildren/StaffChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/UserModel.dart';
@@ -23,7 +24,6 @@ final childViewModelProvider =
     ChangeNotifierProvider.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
 
-
 final userProvider = FutureProvider.autoDispose<UserModel?>((ref) async {
   final prefs = await SharedPreferences.getInstance();
   var userJson = await prefs.getString("User");
@@ -33,8 +33,15 @@ final userProvider = FutureProvider.autoDispose<UserModel?>((ref) async {
   }
 });
 final parentChildrenViewModelProvider =
-    ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>((ref) => ParentChildrenViewModel());
-final childProfileViewModelProvider=ChangeNotifierProvider((ref) => ChildProfileViewModel());
+    ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>(
+        (ref) => ParentChildrenViewModel());
+final staffChildrenViewModelProvider =
+    ChangeNotifierProvider.autoDispose<StaffChildrenViewModel>(
+        (ref) => StaffChildrenViewModel());
+
+final childProfileViewModelProvider =
+    ChangeNotifierProvider((ref) => ChildProfileViewModel());
+
 final parentViewModelProvider =
     ChangeNotifierProvider<ParentViewModel>((ref) => ParentViewModel());
 
@@ -47,7 +54,8 @@ final userProfileViewModelProvider = ChangeNotifierProvider.autoDispose
         (ref, userId) => UserProfileViewModel(userId: userId));
 
 final HomeViewModelProvider =
-    ChangeNotifierProvider.family<HomeViewModel,BuildContext>((ref,BuildContext context) => HomeViewModel(context));
+    ChangeNotifierProvider.family<HomeViewModel, BuildContext>(
+        (ref, BuildContext context) => HomeViewModel(context));
 final kindergartenViewModelProvider =
     ChangeNotifierProvider.autoDispose<KindergartenViewModel>(
         (ref) => KindergartenViewModel());
@@ -55,7 +63,8 @@ final kindergartenViewModelProvider =
 final staffViewModelProvider =
     ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
 final adminRequestsViewModelProvider =
-    ChangeNotifierProvider.autoDispose<AdminRequestsViewModel>((ref) => AdminRequestsViewModel());
+    ChangeNotifierProvider.autoDispose<AdminRequestsViewModel>(
+        (ref) => AdminRequestsViewModel());
 
 final subscriptionViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<SubscriptionViewModel, bool>(

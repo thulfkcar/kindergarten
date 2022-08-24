@@ -102,6 +102,7 @@
   "childId": "Child Identifier",
   "Parent": "Parent",
   "Admin": "Kindergarten Manager",
+  "admin": "Kindergarten Manager",
   "Contacts": "Contacts",
   "self_identity": "your QR Identity",
   "scan_for_Operation": "Scan QR CodeTo Make Operation",

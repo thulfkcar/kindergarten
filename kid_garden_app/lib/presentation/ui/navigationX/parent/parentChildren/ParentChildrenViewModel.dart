@@ -51,16 +51,6 @@ class ParentChildrenViewModel extends ViewModelCollection<Child> {
     notifyListeners();
   }
 
-  // Future<void> addChild({required ChildForm childForm}) async {
-  //   setAddingChildResponse(ApiResponse.loading());
-  //   _repository.addChild(childForm).then((value) {
-  //     collectionApiResponse.data ??= [];
-  //     setAddingChildResponse(ApiResponse.completed(value));
-  //   }).onError((error, stackTrace) {
-  //     setAddingChildResponse(ApiResponse.error(error.toString()));
-  //   });
-  // }
-
   Future<void> fetchChildren() async {
     setChildListResponse(ApiResponse.loading());
     _repository
