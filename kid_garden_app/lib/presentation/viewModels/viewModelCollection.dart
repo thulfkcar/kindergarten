@@ -8,17 +8,17 @@ class ViewModelCollection<T> extends ChangeNotifier {
 
   ApiResponse<List<T>> collectionApiResponse = ApiResponse.non();
 
-
   void setCollectionApiResponse(ApiResponse<List<T>> response) {
     collectionApiResponse = response;
-    if(response.data!=null ) {
-      if(response.data!.isEmpty) {
-        collectionApiResponse=ApiResponse.empty();
+    if (response.data != null) {
+      if (response.data!.isEmpty) {
+        collectionApiResponse = ApiResponse.empty();
       }
     }
 
     notifyListeners();
   }
+
   void incrementPageChildAction() {
     page += 1;
   }
@@ -28,12 +28,15 @@ class ViewModelCollection<T> extends ChangeNotifier {
     data?.addAll(value);
     return ApiResponse.completed(data);
   }
+
   void addNewItemToCollection(T value) {
-    var data = collectionApiResponse.data;
-    data?.add(value);
-    notifyListeners();
+    if (collectionApiResponse.data == null ||
+        collectionApiResponse.data!.isEmpty) {
+      setCollectionApiResponse(ApiResponse(Status.COMPLETED, [value], ""));
+    } else {
+      var data = collectionApiResponse.data;
+      data?.add(value);
+      notifyListeners();
+    }
   }
-
-
-
 }

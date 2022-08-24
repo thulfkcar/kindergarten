@@ -269,7 +269,6 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                 builder: (context) => KindergartenScreen(
                       childId: widget.child.id,
                       onKindergartenChoosed: (kindergartenId) async {
-
                         await _viewModel.joinRequest(
                             widget.child.id, kindergartenId);
                       },
@@ -330,9 +329,18 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
         showDialogGeneric(
             context: context,
             dialog: ActionDialog(
-                type: DialogType.completed,
-                title: getTranslated("joining_request", context),
-                message: getTranslated("joining_request_sending", context)));
+              type: DialogType.completed,
+              title: getTranslated("joining_request", context),
+              message: getTranslated("joining_request_sending", context),
+              onCompleted: (sd) {
+                setState(() {
+                  widget.child.assignRequest =
+                      _viewModel.joinKindergartenRequest.data!;
+                });
+
+                _viewModel.joinKindergartenRequest = ApiResponse.non();
+              },
+            ));
         break;
       case Status.ERROR:
         Navigator.pop(context);
