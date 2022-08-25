@@ -47,7 +47,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
           titleText(AppLocalizations.of(context)?.getText("app_dis")??"Phoenix Kindergarten Log System.", ColorStyle.text1),
           descriptionText(AppLocalizations.of(context)?.getText("app_dis_title")??"Welcome in Phoenix Kindergarten", ColorStyle.text1),
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           Row(
             children: [
@@ -113,7 +113,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
               )
             ],
           ),
-          SizedBox(height: 60,),
+          SizedBox(height: 20,),
           Row(
             children: [
               Expanded(
