@@ -127,15 +127,23 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                 ),
                                 widget.child.staffName != null
                                     ? Text(
-                                        "Taking care by: " +
-                                            widget.child.staffName.toString(),
-                                        style: const TextStyle(
+
+                                      getTranslated(
+                                              "taking_care_by", context) +
+                                          " " +
+                                          widget.child.staffName.toString(),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: true,
+                                      textScaleFactor: 0.8,
+                                      style: const TextStyle(
+
                                           fontFamily: 'Lexend Deca',
                                           color: Color(0xFF57636C),
                                           fontSize: 18,
                                           fontWeight: FontWeight.normal,
-                                        ),
-                                      )
+                                          overflow: TextOverflow.ellipsis),
+                                    )
                                     : Container(),
                               ],
                             ),

@@ -11,6 +11,7 @@ import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.d
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/presentation/utile/RestartApp.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../di/Modules.dart';
 import '../firebase_options.dart';
@@ -87,7 +88,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     // viewModel = ref.watch(LoginPageViewModelProvider);
 
     return MaterialApp(
@@ -151,34 +151,26 @@ class _MyAppState extends ConsumerState<MyApp> {
   //   };
   // }
 
-
   Widget home() {
-    AsyncValue<UserModel?>  user = ref.watch(userProvider);
+    AsyncValue<UserModel?> user = ref.watch(userProvider);
 
     late Widget screen;
     user.whenOrNull(
         data: (user) {
-
           user == null
-              ? screen =  KindergartenScreen()
-              : (user.role == Role.admin ||
-              user.role == Role.superAdmin)
-              ? screen = AdminScreen(
-            title: AppLocalizations.of(context)
-                ?.getText("app_name") ??
-                "Phoenix Hospital")     : (user.role == Role.Staff)
-              ? screen = StaffScreen(
-              title: user.name.toString())
-              : screen = ParentScreen(
-              title: user.name.toString());
+              ? screen = KindergartenScreen()
+              : (user.role == Role.admin || user.role == Role.superAdmin)
+                  ? screen =
+                      AdminScreen(title: getTranslated("app_name", context))
+                  : (user.role == Role.Staff)
+                      ? screen = StaffScreen(title: user.name.toString())
+                      : screen = ParentScreen(title: user.name.toString());
           user != null
-              ? FirebaseMessaging.instance
-              .subscribeToTopic("user.${user.id}")
+              ? FirebaseMessaging.instance.subscribeToTopic("user.${user.id}")
               : null;
         },
-        loading: ()  => screen= const CircularProgressIndicator(),
-        error: (err, stack)=> screen= Text('خطاء: $err'));
+        loading: () => screen = const CircularProgressIndicator(),
+        error: (err, stack) => screen = Text('خطاء: $err'));
     return screen;
   }
-
 }

@@ -38,17 +38,16 @@ class _EntrySharedScreenState extends ConsumerState<EntrySharedScreen> {
         ),
         SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
                 "res/images/logo_kindergarten.png",
                 height: (MediaQuery.of(context).size.width * 0.4),
               ),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                     left: 40,
-                    right: 40,
-                    top: (MediaQuery.of(context).size.height * 0.1),
-                    bottom: (MediaQuery.of(context).size.height * 0.3)),
+                    right: 40,bottom: 8),
                 decoration: BoxDecoration(
                     color: ColorStyle.white,
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
