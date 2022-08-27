@@ -23,7 +23,7 @@ class SignUpScreen extends ConsumerStatefulWidget {
     required this.signedUp,
     Key? key,
   }) : super(key: key);
-  Function(bool isSginedUp) signedUp;
+  Function(UserModel? userModel) signedUp;
 
   @override
   ConsumerState createState() => _SignUpScreenState();
@@ -160,7 +160,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         }
       case Status.COMPLETED:
         {
-          widget.signedUp(true);
+          widget.signedUp(viewModel.signUpApiResponse.data);
           viewModel.setSignUpApiResponse(ApiResponse.non());
         }
         break;

@@ -43,13 +43,15 @@ class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
                       MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
-             var user=    await viewModelLogin.getUserChanges();
-                showDialogGeneric(
-                    context: context,
-                    dialog: ParentInfoDialog(
-                        user: user!,
-                        subscription:
-                            viewModel.userSubScribeApiResponse.data!));
+                var user=ref.watch(hiveProvider).value!.getUser();
+
+               showDialogGeneric(
+                   context: context,
+                   dialog: ParentInfoDialog(
+                       user: user!,
+                       subscription:
+                       viewModel.userSubScribeApiResponse.data!));
+
               },
               child: const Icon(Icons.info_outline)),
           ElevatedButton(
@@ -58,7 +60,7 @@ class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
                       MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
-                ref.watch(userProvider).whenOrNull(data: (user) {
+                var user=ref.watch(hiveProvider).value!.getUser();
                   showAlertDialog(
                       context: context,
                       messageDialog: ActionDialog(
@@ -67,7 +69,7 @@ class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
                           title: getTranslated("self_identity", context),
                           message:
                               getTranslated("scan_for_Operation", context)));
-                });
+
               },
               child: const Icon(Icons.qr_code)),
         ],
@@ -77,7 +79,7 @@ class _NavigationScreenParentState extends ConsumerState<ParentScreen> {
                 elevation: MaterialStateProperty.all(0)),
             onPressed: () async {
               Future.delayed(Duration.zero, () async {
-                await viewModelLogin.logOut();
+               await ref.watch(hiveProvider).value!.storeUser(null);
 
                 // RestartWidget.restartApp(context);
 

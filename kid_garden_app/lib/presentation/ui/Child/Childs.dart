@@ -8,6 +8,7 @@ import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
 import 'package:kid_garden_app/presentation/ui/Child/ChildViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
@@ -33,30 +34,31 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   late ChildViewModel _viewModel;
   late LoginPageViewModel _viewModel_login;
   TextEditingController editingController = TextEditingController();
-  bool isParent=false;
+  bool isParent = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController = ScrollController()..addListener(getNext);
+    _scrollController = ScrollController()
+      ..addListener(getNext);
   }
 
   @override
   Widget build(BuildContext context) {
     _viewModel = ref.watch(childViewModelProvider(widget.subUserId));
     _viewModel_login = ref.watch(LoginPageViewModelProvider);
-    _viewModel_login.getUserChanges().then((value) {
-      setState(() {
-        value?.role==Role.Parents?isParent=true:isParent=false;
 
-      });
-    });
+    var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+        setState(() {
+          if(user!=null){
+          user.role == Role.Parents ? isParent = true : isParent = false;}
+        });
     return Scaffold(
       body: Column(
         children: [
-          isParent!=true?
+          isParent != true ?
           (widget.fromProfile ? head() :
-          Container()):
+          Container()) :
           Container(),
           Expanded(child: body())
         ],
@@ -79,9 +81,11 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         },
         controller: editingController,
         cursorColor: ColorStyle.female1,
-        decoration:  InputDecoration(
-            labelText: AppLocalizations.of(context)?.getText("search")??"Search",
-            hintText: AppLocalizations.of(context)?.getText("search")??"Search" "Typing to search",
+        decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)?.getText("search") ??
+                "Search",
+            hintText: AppLocalizations.of(context)?.getText("search") ??
+                "Search" "Typing to search",
             prefixIcon: const Icon(Icons.search),
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)))),
@@ -97,27 +101,13 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         return LoadingWidget();
 
       case Status.COMPLETED:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.childListResponse.data!,
-            loadNext: false,
-            itemBuilder: (BuildContext context, Child item) {
-              return ChildRow( child: item);
-            },
-            direction: Axis.vertical);
+        return children(false);
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.childListResponse.message ?? "Error");
 
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.childListResponse.data!,
-            loadNext: true,
-            itemBuilder: (BuildContext context, Child item) {
-              return ChildRow( child: item);
-            },
-            direction: Axis.vertical);
+        return children(true);
 
       case Status.NON:
         return Container();
@@ -125,6 +115,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
     }
     return Container();
   }
+
 
   void getNext() async {
     var state = _viewModel.childListResponse.status;
@@ -134,5 +125,20 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         await _viewModel.fetchNextChildren();
       }
     }
+  }
+
+  Widget children(bool loadNext) {
+    return CustomListView(
+        scrollController: _scrollController,
+        items: _viewModel.childListResponse.data!,
+        loadNext: loadNext,
+        itemBuilder: (BuildContext context, Child item) {
+          return ChildRow(onChildClicked: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                ChildProfileScreen(child: item, isSubscriptionValid: true)));
+          },
+              child: item);
+        },
+        direction: Axis.vertical);
   }
 }

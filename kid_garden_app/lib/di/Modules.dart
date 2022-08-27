@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
@@ -9,8 +8,7 @@ import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/staffChildren/StaffChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../domain/UserModel.dart';
+import '../data/Local/HiveDB.dart';
 import '../presentation/ui/Home/HomeViewModel.dart';
 import '../presentation/ui/SignUp/SignUpViewModel.dart';
 import '../presentation/ui/Staff/StaffViewModel.dart';
@@ -20,18 +18,17 @@ import '../presentation/ui/kindergartens/kindergartenViewModel.dart';
 import '../presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
 import '../presentation/ui/userProfile/UserProfileViewModel.dart';
 
+final LoginPageViewModelProvider =
+    ChangeNotifierProvider.autoDispose<LoginPageViewModel>((ref) {
+  var provider = LoginPageViewModel();
+  return provider;
+});
+
+final hiveProvider = FutureProvider<HiveDB>((_) => HiveDB.create());
 final childViewModelProvider =
     ChangeNotifierProvider.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
 
-final userProvider = FutureProvider.autoDispose<UserModel?>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  var userJson = await prefs.getString("User");
-  if (userJson != null && userJson != 'null') {
-    Map<String, dynamic> userMap = await jsonDecode(userJson);
-    return await UserModel.fromJson(userMap);
-  }
-});
 final parentChildrenViewModelProvider =
     ChangeNotifierProvider.autoDispose<ParentChildrenViewModel>(
         (ref) => ParentChildrenViewModel());
@@ -73,13 +70,6 @@ final subscriptionViewModelProvider = ChangeNotifierProvider.autoDispose
 final assignChildViewModelProvider = ChangeNotifierProvider.autoDispose
     .family<AssignChildViewModel, String>(
         (ref, childId) => AssignChildViewModel(childId: childId));
-
-final LoginPageViewModelProvider =
-    ChangeNotifierProvider.autoDispose<LoginPageViewModel>((ref) {
-  var provider = LoginPageViewModel();
-  provider.getUserChanges();
-  return provider;
-});
 
 final signUpViewModelProvider =
     ChangeNotifierProvider.autoDispose<SignUpViewModel>((ref) {

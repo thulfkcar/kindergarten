@@ -119,7 +119,7 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     Future.delayed(Duration.zero, () async {
-                      await loginViewModel.logOut();
+                  await ref.watch(hiveProvider).value!.storeUser(null);
 
                       // RestartWidget.restartApp(context);
 

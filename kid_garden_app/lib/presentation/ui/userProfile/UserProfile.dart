@@ -44,14 +44,15 @@ class UserProfile extends ConsumerStatefulWidget {
 class _UserProfileState extends ConsumerState<UserProfile> {
   late UserProfileViewModel viewModel;
   late LoginPageViewModel viewModelLogin;
-  String? id;
 
   @override
   Widget build(BuildContext context) {
-    viewModelLogin = ref.watch(LoginPageViewModelProvider);
-    id = viewModelLogin.currentUser!.id;
+    viewModelLogin=ref.watch(LoginPageViewModelProvider);
+    var user=ref.watch(hiveProvider).value!.getUser();
     viewModel = ref.watch(userProfileViewModelProvider(
-        widget.userId == null ? id! : widget.userId!));
+        widget.userId == null ? user!.id! : widget.userId!));
+
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -66,7 +67,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
         ),
         body: Padding(
           padding: const EdgeInsets.only(bottom: 32),
-          child: body(),
+          child: Container(),
         ),
         bottomSheet: (widget.userId != null)
             ? const Padding(
@@ -88,7 +89,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                       child: ElevatedButton(
                         onPressed: () {
                           Future.delayed(Duration.zero, () async {
-                            await viewModelLogin.logOut();
+                            var user=ref.watch(hiveProvider).value!.storeUser(null);
 
                             // RestartWidget.restartApp(context);
 
@@ -126,8 +127,10 @@ class _UserProfileState extends ConsumerState<UserProfile> {
         return MyErrorWidget(
             msg: "error on fetching staff profile",
             onRefresh: () {
-              viewModel.getUser(
-                  userId: widget.userId == null ? id! : widget.userId!);
+              var user=ref.watch(hiveProvider).value!.getUser();
+                viewModel.getUser(
+                    userId: widget.userId == null ? user!.id! : widget.userId!);
+
             });
       case Status.NON:
         return Container();

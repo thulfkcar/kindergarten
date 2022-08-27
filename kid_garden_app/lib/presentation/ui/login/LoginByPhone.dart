@@ -17,8 +17,8 @@ import 'PinCodeScreen.dart';
 class LoginByPhoneNumber extends ConsumerStatefulWidget {
   static String tag = 'login-by-phone';
 
-  Function(bool isLoggedIn) loggedIn;
-  LoginByPhoneNumber({Key? key, required this.loggedIn}) : super(key: key);
+  Function(UserModel? user) loggedIn;
+  LoginByPhoneNumber({Key? key,required this.loggedIn}) : super(key: key);
 
   @override
   ConsumerState createState() => _LoginPageState();
@@ -36,7 +36,7 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   @override
   Widget build(BuildContext context) {
     viewModel = ref.watch(LoginPageViewModelProvider);
-    user = viewModel.currentUser;
+    user = ref.watch(hiveProvider).value!.getUser();
 
     return Container(
       child: Center(
@@ -181,7 +181,7 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
         }
       case Status.COMPLETED:
         {
-          widget.loggedIn(true);
+          widget.loggedIn(viewModel.userApiResponse.data);
           viewModel.setUserApiResponse(ApiResponse.non());
         }
         break;

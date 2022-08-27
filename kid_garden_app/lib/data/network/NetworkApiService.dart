@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import '../../di/Modules.dart';
+import '../../domain/UserModel.dart';
 import 'AppException.dart';
 import 'BaseApiService.dart';
 
@@ -18,11 +19,14 @@ class NetworkApiService extends BaseApiService {
   Future getResponse(String url) async {
     dynamic responseJson;
     try {
-      var provide = ProviderContainer().read(LoginPageViewModelProvider);
-      await provide.getUserChanges();
-      var user = provide.currentUser;
-      if (user != null) {
-        jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
+      var user = ProviderContainer().read(hiveProvider).value!.getUser();
+
+
+
+
+        if (user != null) {
+          jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
+
       }
 
       final response =
@@ -38,19 +42,18 @@ class NetworkApiService extends BaseApiService {
   Future postResponse(String url, Map<String, dynamic> JsonBody) async {
     dynamic responseJson;
     try {
-      var provide = ProviderContainer().read(LoginPageViewModelProvider);
-      await provide.getUserChanges();
-      var user = provide.currentUser;
-      if (user != null) {
-        final response = await http.post(Uri.parse(baseUrl + url),
-            body: JsonBody,
-            headers: {
-              // 'Content-Type': 'multipart/form-data',
-              'Authorization': "Bearer ${user.token}"
-            },
-            encoding: Encoding.getByName("utf-8"));
-        responseJson = returnResponse(response);
-      }
+    var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+        if (user != null) {
+          final response = await http.post(Uri.parse(baseUrl + url),
+              body: JsonBody,
+              headers: {
+                // 'Content-Type': 'multipart/form-data',
+                'Authorization': "Bearer ${user.token}"
+              },
+              encoding: Encoding.getByName("utf-8"));
+          responseJson = returnResponse(response);
+        }
+
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -58,41 +61,38 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future multiPartPostResponse(String url, Map<String, String> jsonBody,
-      List<File>? assets) async {
+  Future multiPartPostResponse(
+      String url, Map<String, String> jsonBody, List<File>? assets) async {
     dynamic responseJson;
     try {
-      var provide = ProviderContainer().read(LoginPageViewModelProvider);
-      await provide.getUserChanges();
-      var user = provide.currentUser;
-      if (user != null) {
-        var headers = {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': "Bearer ${user.token}"
-        };
-        var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+      var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+        if (user != null) {
+          var headers = {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': "Bearer ${user.token}"
+          };
+          var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
 
-        if (assets != null) {
-          if (assets.length == 1) {
-
-            request.files.add(await http.MultipartFile.fromPath(
-                'file',
-               assets.first.path));
-          } else {
-            for (var element in assets) {
-              request.files.add(await http.MultipartFile.fromPath(
-                  'files',
-                   element.path));
+          if (assets != null) {
+            if (assets.length == 1) {
+              request.files.add(
+                  await http.MultipartFile.fromPath('file', assets.first.path));
+            } else {
+              for (var element in assets) {
+                request.files.add(
+                    await http.MultipartFile.fromPath('files', element.path));
+              }
             }
           }
+
+          request.fields.addAll(jsonBody);
+          request.headers.addAll(headers);
+          http.StreamedResponse response = await request.send();
+
+          responseJson =
+              returnResponse(await http.Response.fromStream(response));
         }
 
-        request.fields.addAll(jsonBody);
-        request.headers.addAll(headers);
-        http.StreamedResponse response = await request.send();
-
-        responseJson = returnResponse(await http.Response.fromStream(response));
-      }
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -104,21 +104,22 @@ class NetworkApiService extends BaseApiService {
       String url, Map<String, String> jsonBody) async {
     dynamic responseJson;
     try {
-      var provide = ProviderContainer().read(LoginPageViewModelProvider);
-      await provide.getUserChanges();
-      var user = provide.currentUser;
-      if (user != null) {
-        var headers = {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': "Bearer ${user.token}"
-        };
-        var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
-        request.fields.addAll(jsonBody);
-        request.headers.addAll(headers);
-        http.StreamedResponse response = await request.send();
+      var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+        if (user != null) {
+          var headers = {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': "Bearer ${user.token}"
+          };
 
-        responseJson = returnResponse(await http.Response.fromStream(response));
-      }
+          var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+          request.fields.addAll(jsonBody);
+          request.headers.addAll(headers);
+          http.StreamedResponse response = await request.send();
+
+          responseJson =
+              returnResponse(await http.Response.fromStream(response));
+        }
+
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -130,13 +131,11 @@ class NetworkApiService extends BaseApiService {
     dynamic responseJson;
 
     try {
-      var provide = ProviderContainer().read(LoginPageViewModelProvider);
-      await provide.getUserChanges();
-      var user = provide.currentUser;
+      var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+        if (user != null) {
+          jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
+        }
 
-      if (user != null) {
-        jsonHeaders.addAll({'Authorization': "Bearer ${user.token}"});
-      }
 
       final response = await http.post(Uri.parse(baseUrl + url),
           body: JsonBody, headers: jsonHeaders);
@@ -165,11 +164,8 @@ class NetworkApiService extends BaseApiService {
         throw ErrorDuringCommunication(response.body.toString());
       case 500:
       default:
-        throw FetchDataException(
-            'Error occured while communication with server' +
-                ' with status code : ${response.statusCode}     ${response.body}');
+        throw FetchDataException('Error occured while communication with server' +
+            ' with status code : ${response.statusCode}     ${response.body}');
     }
   }
-
-
 }

@@ -15,15 +15,15 @@ import '../../Staff/StaffUI.dart';
 import '../../dialogs/ActionDialog.dart';
 import '../../parentsScreen/parentsScreen.dart';
 
-class AdminScreen extends StatefulWidget {
+class AdminScreen extends ConsumerStatefulWidget {
   const AdminScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<AdminScreen> createState() => _NavigationScreen();
+  ConsumerState<AdminScreen> createState() => _NavigationScreen();
 }
 
-class _NavigationScreen extends State<AdminScreen> {
+class _NavigationScreen extends ConsumerState<AdminScreen> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     Home(),
@@ -86,16 +86,17 @@ class _NavigationScreen extends State<AdminScreen> {
                 onPressed: () async {
                   var provide =
                       ProviderContainer().read(LoginPageViewModelProvider);
-                  await provide.getUserChanges();
-                  var user = provide.currentUser;
-                  showAlertDialog(
-                      context: context,
-                      messageDialog: ActionDialog(
-                          type: DialogType.qr,
-                          qr: user!.id,
-                          title: getTranslated("self_identity", context),
-                          message:
-                              getTranslated("scan_for_Operation", context)));
+
+                 var user=ref.watch(hiveProvider).value!.getUser();
+                    showAlertDialog(
+                        context: context,
+                        messageDialog: ActionDialog(
+                            type: DialogType.qr,
+                            qr: user!.id,
+                            title: getTranslated("self_identity", context),
+                            message:
+                                getTranslated("scan_for_Operation", context)));
+
                 },
                 child: const Icon(Icons.qr_code))
           ],

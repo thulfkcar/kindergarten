@@ -44,15 +44,16 @@ class _NavigationScreenParentState
               onPressed: () async {
                 var provide =
                 ProviderContainer().read(LoginPageViewModelProvider);
-                await provide.getUserChanges();
-                var user = provide.currentUser;
-                showAlertDialog(
-                    context: context,
-                    messageDialog: ActionDialog(
-                        type: DialogType.qr,
-                        qr: user!.id,
-                        title: getTranslated("self_identity", context),
-                        message: getTranslated("scan_for_Operation", context)));
+                var user=ref.watch(hiveProvider).value!.getUser();
+
+                  showAlertDialog(
+                      context: context,
+                      messageDialog: ActionDialog(
+                          type: DialogType.qr,
+                          qr: user!.id,
+                          title: getTranslated("self_identity", context),
+                          message: getTranslated("scan_for_Operation", context)));
+
               },
               child: const Icon(Icons.qr_code)),
         ],
@@ -62,7 +63,7 @@ class _NavigationScreenParentState
                 elevation: MaterialStateProperty.all(0)),
             onPressed: () async {
               Future.delayed(Duration.zero, () async {
-                await viewModelLogin.logOut();
+                await ref.watch(hiveProvider).value!.storeUser(null);
 
                 // RestartWidget.restartApp(context);
 

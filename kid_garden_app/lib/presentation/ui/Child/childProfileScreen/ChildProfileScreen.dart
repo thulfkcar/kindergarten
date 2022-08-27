@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
@@ -39,12 +40,11 @@ class ChildProfileScreen extends ConsumerStatefulWidget {
 
 class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
   late ChildProfileViewModel _viewModel;
-  late AsyncValue<UserModel?> user;
+  late UserModel? user;
 
   @override
   Widget build(BuildContext context) {
-    user = ref.watch(userProvider);
-
+    user = ref.watch(hiveProvider).value!.getUser();
     _viewModel = ref.watch(childProfileViewModelProvider);
     Future.delayed(Duration.zero, () {
       kindergratenRequestViewResponse();
@@ -127,23 +127,21 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                 ),
                                 widget.child.staffName != null
                                     ? Text(
-
-                                      getTranslated(
-                                              "taking_care_by", context) +
-                                          " " +
-                                          widget.child.staffName.toString(),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.fade,
-                                      softWrap: true,
-                                      textScaleFactor: 0.8,
-                                      style: const TextStyle(
-
-                                          fontFamily: 'Lexend Deca',
-                                          color: Color(0xFF57636C),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                          overflow: TextOverflow.ellipsis),
-                                    )
+                                        getTranslated(
+                                                "taking_care_by", context) +
+                                            " " +
+                                            widget.child.staffName.toString(),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.fade,
+                                        softWrap: true,
+                                        textScaleFactor: 0.8,
+                                        style: const TextStyle(
+                                            fontFamily: 'Lexend Deca',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal,
+                                            overflow: TextOverflow.ellipsis),
+                                      )
                                     : Container(),
                               ],
                             ),
@@ -182,20 +180,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                     )
                   ],
                 ),
-                widget.child.assignRequest != null
-                    ? widget.child.assignRequest!.requestStatus ==
-                            RequestStatus.Pending
-                        ? RequestedToKindergartenCard(
-                            widget.child.assignRequest!, (kindergarten) {
-                            //todo: request kindergarten
-                          })
-                        : (KindergartenButton(
-                            name: widget.child.assignRequest!.kindergartenName!,
-                            image:
-                                widget.child.assignRequest!.kindergartenImage!,
-                            id: widget.child.assignRequest!.kindergartenId,
-                          ))
-                    : joinKindergartenCard(),
+                kindergartenView(),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -203,7 +188,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                       Row(
                         children: [
                           Text(getTranslated("childId", context) + " : ",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18,
                                   color: Colors.black87,
                                   fontWeight: FontWeight.bold)),
@@ -251,8 +236,8 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
 
                     return ContactListCard(
                       item.userType == "Parent" &&
-                              (user.value != null &&
-                                  user.value!.role == Role.Parents)
+                              (user != null &&
+                                  user!.role == Role.Parents)
                           ? false
                           : true,
                       contact: item,
@@ -362,5 +347,28 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
         break;
       default:
     }
+  }
+
+  Widget kindergartenView() {
+   UserModel? user = ref.watch(hiveProvider).value!.getUser();
+   if(user!=null) {
+     return user.role == Role.Parents
+          ? widget.child.assignRequest != null
+              ? widget.child.assignRequest!.requestStatus ==
+                      RequestStatus.Pending
+                  ? RequestedToKindergartenCard(widget.child.assignRequest!,
+                      (kindergarten) {
+                      //todo: request kindergarten
+                    })
+                  : (KindergartenButton(
+                      name: widget.child.assignRequest!.kindergartenName!,
+                      image: widget.child.assignRequest!.kindergartenImage!,
+                      id: widget.child.assignRequest!.kindergartenId,
+                    ))
+              : joinKindergartenCard()
+          : Container();
+   }
+   return Container();
+
   }
 }

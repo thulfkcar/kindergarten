@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +46,14 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
     return EntrySharedScreen(
       body: Column(
         children: [
-          titleText(AppLocalizations.of(context)?.getText("app_dis")??"Phoenix Kindergarten Log System.", ColorStyle.text1),
-          descriptionText(AppLocalizations.of(context)?.getText("app_dis_title")??"Welcome in Phoenix Kindergarten", ColorStyle.text1),
+          titleText(
+              AppLocalizations.of(context)?.getText("app_dis") ??
+                  "Phoenix Kindergarten Log System.",
+              ColorStyle.text1),
+          descriptionText(
+              AppLocalizations.of(context)?.getText("app_dis_title") ??
+                  "Welcome in Phoenix Kindergarten",
+              ColorStyle.text1),
           const SizedBox(
             height: 20,
           ),
@@ -59,11 +67,14 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       MaterialPageRoute(
                         builder: (context) => EntrySharedScreen(
                           body: LoginByPhoneNumber(
-                            loggedIn: (isLoggedIn) {
+                            loggedIn: (user) async {
                               // widget.loggedIn(value);
-                              if (isLoggedIn) {
-                                Future.delayed(Duration.zero, () async {
-                                  navigateToDest();
+                              if (user != null) {
+                                ref.watch(hiveProvider).value!.storeUser(user)
+                                    .then((value) {
+                                  Future.delayed(Duration.zero, () async {
+                                    navigateToDest();
+                                  });
                                 });
                               }
                             },
@@ -72,7 +83,10 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       ),
                     );
                   },
-                  child: titleText(AppLocalizations.of(context)?.getText("sign_in")??"Sign In", ColorStyle.white),
+                  child: titleText(
+                      AppLocalizations.of(context)?.getText("sign_in") ??
+                          "Sign In",
+                      ColorStyle.white),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.male1),
@@ -90,11 +104,13 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => SignUpScreen(
-                          signedUp: (isLoggedIn) {
+                          signedUp: (user) async {
                             // widget.loggedIn(value);
-                            if (isLoggedIn) {
-                              Future.delayed(Duration.zero, () async {
-                                navigateToDest();
+                            if (user != null) {
+                              ref.watch(hiveProvider).value!.storeUser(user).then((value) {
+                                Future.delayed(Duration.zero, () async {
+                                  navigateToDest();
+                                });
                               });
                             }
                           },
@@ -102,7 +118,10 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       ),
                     );
                   },
-                  child: titleText(AppLocalizations.of(context)?.getText("sign_up")??"Sign Up", ColorStyle.male1),
+                  child: titleText(
+                      AppLocalizations.of(context)?.getText("sign_up") ??
+                          "Sign Up",
+                      ColorStyle.male1),
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(ColorStyle.white),
@@ -113,7 +132,9 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
               )
             ],
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Row(
             children: [
               Expanded(
@@ -126,12 +147,16 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       ),
                     );
                   },
-                  child: descriptionText(AppLocalizations.of(context)?.getText("register_new_kindergarten")??"register new kindergarten", ColorStyle.female1),
+                  child: descriptionText(
+                      AppLocalizations.of(context)
+                              ?.getText("register_new_kindergarten") ??
+                          "register new kindergarten",
+                      ColorStyle.female1),
                   style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(ColorStyle.white),
-                      side: MaterialStateProperty.all(
-                          const BorderSide(width: 0, color: Colors.transparent)),
+                          MaterialStateProperty.all(ColorStyle.white),
+                      side: MaterialStateProperty.all(const BorderSide(
+                          width: 0, color: Colors.transparent)),
                       elevation: MaterialStateProperty.all(0)),
                 ),
               )
@@ -158,11 +183,10 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
         break;
       case Status.COMPLETED:
         Navigator.pop(context);
-        await   Navigator.pushAndRemoveUntil(
+        await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ParentScreen(title: 'Parent App')),
+              builder: (context) => ParentScreen(title: 'Parent App')),
           (Route<dynamic> route) => false,
         );
 
@@ -171,7 +195,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
         break;
       case Status.ERROR:
         Navigator.pop(context);
-        await   Navigator.pushAndRemoveUntil(
+        await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => SubscriptionScreen(
@@ -190,24 +214,26 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
       default:
     }
   }
-
   void navigateToDest() async {
 
-    var user = await login_viewModel.getUserChanges();
-    user != null ? FirebaseMessaging.instance
-        .subscribeToTopic("user_${user.id}"):null;
-    (user!.role == Role.admin || user.role == Role.superAdmin)
-        ?await Navigator.pushAndRemoveUntil(
+    var user = ref.watch(hiveProvider).value!.getUser();
+    user != null
+        ? FirebaseMessaging.instance.subscribeToTopic("user_${user.id}")
+        : null;
+    (user!.role == Role.admin || user!.role == Role.superAdmin)
+        ? await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                     AdminScreen(title: AppLocalizations.of(context)?.getText('app_name')??"Phoenix kindergarten")),
+                builder: (context) => AdminScreen(
+                    title: AppLocalizations.of(context)?.getText('app_name') ??
+                        "Phoenix kindergarten")),
             (Route<dynamic> route) => false,
           )
         : (user.role == Role.Staff)
             ? await Navigator.push(
-                context, MaterialPageRoute(builder: (context) => StaffScreen(title: user.name!)))
+                context,
+                MaterialPageRoute(
+                    builder: (context) => StaffScreen(title: user.name!)))
             : await viewModel.checkParentSubscription();
-
   }
 }

@@ -11,8 +11,10 @@ class ChildRow extends StatelessWidget {
  final double roundBy;
 
   final bool boarder;
+  final Function() onChildClicked;
   const ChildRow({Key? key,
     required this. child,
+    required this.onChildClicked,
     this. roundBy = 10,
     this. boarder = true}) : super(key: key);
 
@@ -27,13 +29,7 @@ class ChildRow extends StatelessWidget {
         // height: 100,
         child: InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChildActions(
-                      childId: child.id,
-                    )));
-            // Navigator.pushNamed(context, "/ChildActions",arguments: {'id':child.id});
+            onChildClicked();
           },
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),

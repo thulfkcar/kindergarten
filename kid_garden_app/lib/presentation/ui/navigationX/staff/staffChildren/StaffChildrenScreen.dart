@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/staffChildren/StaffChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
@@ -44,7 +45,6 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(staffChildrenViewModelProvider);
     _viewModel_login = ref.watch(LoginPageViewModelProvider);
-    _viewModel_login.getUserChanges().then((value) {});
     return Scaffold(
       body:body());
   }
@@ -76,14 +76,7 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
         return LoadingWidget();
 
       case Status.COMPLETED:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.collectionApiResponse.data!,
-            loadNext: false,
-            itemBuilder: (BuildContext context, Child item) {
-              return ChildRow( child: item);
-            },
-            direction: Axis.vertical);
+       return children(false);
       case Status.ERROR:
         return MyErrorWidget(
             msg: _viewModel.collectionApiResponse.message ?? "Error",onRefresh: (){
@@ -91,14 +84,8 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
         },);
 
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-            scrollController: _scrollController,
-            items: _viewModel.collectionApiResponse.data!,
-            loadNext: true,
-            itemBuilder: (BuildContext context, Child item) {
-              return ChildRow( child: item);
-            },
-            direction: Axis.vertical);
+        return children(true);
+
       case Status.Empty:
         return EmptyWidget(
           msg: getTranslated("no_children", context),
@@ -121,5 +108,17 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
         await _viewModel.fetchNextChildren();
       }
     }
+  }
+
+  Widget children(bool loadNext ) {
+     return CustomListView(
+        scrollController: _scrollController,
+        items: _viewModel.collectionApiResponse.data!,
+        loadNext: loadNext,
+        itemBuilder: (BuildContext context, Child item) {
+          return ChildRow( onChildClicked: () { Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildProfileScreen(child: item, isSubscriptionValid: true))); },
+              child: item);
+        },
+        direction: Axis.vertical);
   }
 }

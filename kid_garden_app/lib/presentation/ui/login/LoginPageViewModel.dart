@@ -1,21 +1,17 @@
 import 'dart:convert';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:kid_garden_app/domain/Redeem.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/di/Modules.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
-import 'package:kid_garden_app/repos/ChildRepository.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
-import '../../../di/Modules.dart';
+import '../../main.dart';
 
 class LoginPageViewModel extends ChangeNotifier {
   var userRepo = UserRepository();
 
   ApiResponse<UserModel> userApiResponse = ApiResponse.non();
-
 
   void setUserApiResponse(ApiResponse<UserModel> apiResponse) async {
     userApiResponse = apiResponse;
@@ -24,76 +20,27 @@ class LoginPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
-  UserModel? currentUser = null;
-
-  Future<UserModel?> getUserChanges() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      var userJson = prefs.getString("User");
-      if (userJson != null && userJson != 'null') {
-        Map<String, dynamic> userMap = jsonDecode(userJson);
-        currentUser = UserModel.fromJson(userMap);
-        notifyListeners();
-        return currentUser;
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<void> auth({required LoginFormData loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
     await userRepo
         .auth(
-        userName: loginRequestData.email,
-        password: loginRequestData.password)
+            userName: loginRequestData.email,
+            password: loginRequestData.password)
         .then((value) async {
-      await setUser(value);
+      ProviderContainer().read(hiveProvider).value!.storeUser(value);
       setUserApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
-      setUserApiResponse(  ApiResponse.error(error.toString()));
-
-
+      setUserApiResponse(ApiResponse.error(error.toString()));
     }).whenComplete(() => {});
-  }
-
-
-  Future<void> logOut() async {
-    await setUser(null);
-    currentUser = null;
-    notifyListeners();
-  }
-
-  setUser(UserModel? user) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      if (user == null) {
-        prefs.setString("User", 'null');
-      } else {
-        prefs.setString("User", user.toString());
-        print(prefs.getString("User"));
-      }
-    } catch (e) {
-      rethrow;
-    }
   }
 
   authByPhone({required LoginForm loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
-    await userRepo
-        .authByPhone(loginForm: loginRequestData)
-        .then((value) async {
-      await setUser(value);
+    await userRepo.authByPhone(loginForm: loginRequestData).then((value) async {
+      ProviderContainer().read(hiveProvider).value!.storeUser(value);
       setUserApiResponse(ApiResponse.completed(value));
-
     }).onError((error, stackTrace) {
       setUserApiResponse(ApiResponse.error(error.toString()));
     });
   }
-
-
-
-
 }
