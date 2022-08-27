@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:kid_garden_app/domain/UserModel.dart';
+import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
@@ -24,9 +27,11 @@ const Login_Page = '/';
 const StaffUI_Route = '/Staff';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-   Hive.init("");
+  var path = Directory.current.path;
+  await Hive
+    ..init(path)
+    ..registerAdapter(UserModelAdapter());
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -66,15 +71,7 @@ Future<void> main() async {
     print("Handling a background message: ${message.messageId}");
   }
 
-  void main() {
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    runApp(MyApp());
-  }
-
-  runApp(ProviderScope(
-    child: RestartWidget(child: MyApp()),
-  ));
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -85,7 +82,6 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-
   // late LoginPageViewModel viewModel;
 
   // This widget is the root of your application.
@@ -110,21 +106,28 @@ class _MyAppState extends ConsumerState<MyApp> {
       // darkTheme: KidThem.darkTheme,
     );
   }
-  Widget home() {
-    var user=ref.watch(hiveProvider).value!.getUser();
 
+  Widget home() {
     late Widget screen;
+
+    ref.watch(hiveProvider).when(data: (value) {
+      var user = value.getUser();
       user == null
           ? screen = KindergartenScreen()
           : (user.role == Role.admin || user.role == Role.superAdmin)
-          ? screen =
-          AdminScreen(title: getTranslated("app_name", context))
-          : (user.role == Role.Staff)
-          ? screen = StaffScreen(title: user.name.toString())
-          : screen = ParentScreen(title: user.name.toString());
+              ? screen =
+                  AdminScreen(title: getTranslated("app_name", context))
+              : (user.role == Role.Staff)
+                  ? screen = StaffScreen(title: user.name.toString())
+                  : screen = ParentScreen(title: user.name.toString());
       user != null
           ? FirebaseMessaging.instance.subscribeToTopic("user.${user.id}")
           : null;
+    }, error: (Object error, StackTrace? stackTrace) {
+      MyErrorWidget(msg: error.toString());
+    }, loading: () {
+      screen = CircularProgressIndicator();
+    });
 
     return screen;
   }

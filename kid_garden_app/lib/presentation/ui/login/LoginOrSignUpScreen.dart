@@ -220,7 +220,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
     user != null
         ? FirebaseMessaging.instance.subscribeToTopic("user_${user.id}")
         : null;
-    (user!.role == Role.admin || user!.role == Role.superAdmin)
+    (user!.role == Role.admin || user.role == Role.superAdmin)
         ? await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

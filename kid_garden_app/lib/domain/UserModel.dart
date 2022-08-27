@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'UserModel.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.none)
-@HiveType(typeId: 1,adapterName: "UserModelAdapter")
+@HiveType(typeId: 1)
 
 class UserModel {
   @HiveField(0)
@@ -54,15 +54,15 @@ class UserModel {
 
 enum Role {
   @JsonValue(-1)
-  @HiveField(-1)
+  @HiveField(0)
   superAdmin,
   @JsonValue(0)
-  @HiveField(0)
+  @HiveField(1)
   admin,
   @JsonValue(1)
-  @HiveField(1)
+  @HiveField(2)
   Staff,
   @JsonValue(2)
-  @HiveField(2)
+  @HiveField(3)
   Parents,
 }
