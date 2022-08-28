@@ -12,7 +12,6 @@ import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminScreen.dar
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/ParentScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
-import 'package:kid_garden_app/presentation/utile/RestartApp.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import '../di/Modules.dart';
@@ -25,13 +24,11 @@ const ChildActionsGroupsRoute = '/ChildActionsGroups';
 const ChildActionsRoute = '/ChildActions';
 const Login_Page = '/';
 const StaffUI_Route = '/Staff';
+final providerContainerRef = ProviderContainer();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var path = Directory.current.path;
-  await Hive
-    ..init(path)
-    ..registerAdapter(UserModelAdapter());
+
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -71,6 +68,10 @@ Future<void> main() async {
     print("Handling a background message: ${message.messageId}");
   }
 
+  runApp(UncontrolledProviderScope(
+    container: providerContainerRef,
+    child: MyApp(),
+  ));
 
 }
 
@@ -108,7 +109,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Widget home() {
-    late Widget screen;
+    late Widget screen=Container();
 
     ref.watch(hiveProvider).when(data: (value) {
       var user = value.getUser();

@@ -70,11 +70,9 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                             loggedIn: (user) async {
                               // widget.loggedIn(value);
                               if (user != null) {
-                                ref.watch(hiveProvider).value!.storeUser(user)
-                                    .then((value) {
+
                                   Future.delayed(Duration.zero, () async {
                                     navigateToDest();
-                                  });
                                 });
                               }
                             },
@@ -107,10 +105,8 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                           signedUp: (user) async {
                             // widget.loggedIn(value);
                             if (user != null) {
-                              ref.watch(hiveProvider).value!.storeUser(user).then((value) {
                                 Future.delayed(Duration.zero, () async {
                                   navigateToDest();
-                                });
                               });
                             }
                           },

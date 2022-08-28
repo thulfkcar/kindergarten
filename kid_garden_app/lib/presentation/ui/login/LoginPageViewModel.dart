@@ -27,7 +27,7 @@ class LoginPageViewModel extends ChangeNotifier {
             userName: loginRequestData.email,
             password: loginRequestData.password)
         .then((value) async {
-      ProviderContainer().read(hiveProvider).value!.storeUser(value);
+      providerContainerRef.read(hiveProvider).value!.storeUser(value);
       setUserApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       setUserApiResponse(ApiResponse.error(error.toString()));
@@ -36,9 +36,13 @@ class LoginPageViewModel extends ChangeNotifier {
 
   authByPhone({required LoginForm loginRequestData}) async {
     setUserApiResponse(ApiResponse.loading());
-    await userRepo.authByPhone(loginForm: loginRequestData).then((value) async {
-      ProviderContainer().read(hiveProvider).value!.storeUser(value);
-      setUserApiResponse(ApiResponse.completed(value));
+    await userRepo.authByPhone(loginForm: loginRequestData).then((user) async {
+      providerContainerRef.read(hiveProvider).whenData((value) {
+        if (value != null) {
+          value.storeUser(user);
+        }
+      });
+      setUserApiResponse(ApiResponse.completed(user));
     }).onError((error, stackTrace) {
       setUserApiResponse(ApiResponse.error(error.toString()));
     });
