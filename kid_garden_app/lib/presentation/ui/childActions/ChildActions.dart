@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/general_components/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
-import 'package:kid_garden_app/presentation/ui/childActions/AssignChildViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
@@ -18,17 +16,17 @@ import '../../../domain/ChildAction.dart';
 import '../AssingScreen/AssginScreen.dart';
 import '../dialogs/ActionDialog.dart';
 
-import 'AddChildActionDialog.dart';
+import 'ChildActionAddScreen.dart';
 
 class ChildActions extends ConsumerStatefulWidget {
-  String? childId;
+  String childId;
 
   //  ChildActions(
   //    this.childId,
   //   Key? key,
   // ) : super(key: key);
 
-  ChildActions({this.childId, Key? key}) : super(key: key);
+  ChildActions({required this.childId, Key? key}) : super(key: key);
 
   @override
   ConsumerState createState() => _ChildActionsState();
@@ -58,50 +56,25 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
 
   @override
   Widget build(BuildContext context) {
-    _viewModel = ref.watch(ChildActionViewModelProvider(widget.childId!));
+    _viewModel = ref.watch(ChildActionViewModelProvider(widget.childId));
     Future.delayed(Duration.zero, () async {
       postingChildActionResponse();
     });
     return Scaffold(
-      floatingActionButton: selectedActionGroup != null
-          ? FloatingActionButton(
+      floatingActionButton:
+      // selectedActionGroup != null
+      //     ?
+      FloatingActionButton(
               child: const Icon(Icons.add),
               backgroundColor: Colors.white,
               onPressed: () {
-                setState(() {
-                  isAddingAction = true;
-                });
-              })
-          : null,
-      body: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              bodyHead(),
-              Expanded(child: body()),
-            ],
-          ),
-          isAddingAction
-              ? AddChildActionDialog(
-                  selectedActionGroup: selectedActionGroup!,
-                  childId: widget.childId!,
-                  addChild: (value, assets) {
-                    setState(() {
-                      _viewModel.addChildAction(
-                          childAction: value, assets: assets);
-                    });
-                  },
-                  onDismiss: (value) {
-                    setState(() {
-                      isAddingAction = value;
-                    });
-                  },
-                )
-              : Container(),
-          //postProgress()
-        ],
-      ),
+                Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildActionAddScreen(childId: widget.childId,)));
+                // setState(() {
+                //   isAddingAction = true;
+                // });
+              }),
+          // : null,
+      body: body(),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -138,39 +111,6 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         await _viewModel.fetchNextChildActions();
       }
     }
-  }
-
-  Widget bodyHead() {
-    var status = _viewModel.actionGroupResponse.status;
-    switch (status) {
-      case Status.LOADING:
-        return LoadingWidget();
-      case Status.COMPLETED:
-        return SizedBox(
-            height: 90,
-            child: ActionGroups(
-                actionGroups: _viewModel.actionGroupResponse.data!,
-                selectedItem: (value) {
-                  setState(() {
-                    selectedActionGroup = value;
-                  });
-                }));
-      case Status.ERROR:
-        return MyErrorWidget(msg: _viewModel.actionGroupResponse.message!);
-      case Status.Empty:
-        return EmptyWidget(
-          msg: "not action group added by super admin",
-          onRefresh: () {
-            _viewModel.fetchActionGroups();
-          },
-        );
-      case Status.NON:
-        break;
-      default:
-    }
-    return Container(
-      height: 1,
-    );
   }
 
   Widget body() {
