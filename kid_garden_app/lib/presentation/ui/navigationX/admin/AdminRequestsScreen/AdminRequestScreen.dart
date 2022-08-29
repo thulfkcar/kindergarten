@@ -12,6 +12,7 @@ import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../di/Modules.dart';
+import '../../../../utile/language_constrants.dart';
 
 class AdminRequestsScreen extends ConsumerStatefulWidget {
   const AdminRequestsScreen({
@@ -42,7 +43,8 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
       await acceptState();
     });
 
-    return Scaffold(body: body());
+    return Scaffold(      appBar: AppBar(title: Text(getTranslated("join_requests", context)),backgroundColor: Colors.transparent,elevation: 0,),
+        body: body());
   }
 
   Widget body() {

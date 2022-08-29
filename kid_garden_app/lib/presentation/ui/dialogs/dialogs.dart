@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/styles/colors_style.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
 import '../../utile/FormValidator.dart';
 
@@ -45,12 +46,12 @@ class ConfirmationDialog extends StatelessWidget {
                   await confirmed();
                   Navigator.pop(context);
                 },
-                child: const Text("Confirm")),
+                child:  Text(getTranslated("confirm_request", context))),
             TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text("Cancel"))
+                child:  Text(getTranslated("cancel", context)))
           ],
         ));
   }

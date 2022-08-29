@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/general_components/AdminControlCard.dart';
 import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminRequestsScreen/AdminRequestScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/admin/Staff/StaffUI.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/admin/parentsScreen/parentsScreen.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
@@ -139,7 +140,8 @@ class _AdminProfileScreenState extends ConsumerState<AdminProfileScreen> {
    List<Tuple2<String,String>> listControls=[
       Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}", getTranslated("staff", context)),
       Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}",getTranslated("parents", context)),
-      Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}", getTranslated("children", context))
+      Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}", getTranslated("children", context)),
+      Tuple2("${getTranslated("accept", context)}, ${getTranslated("reject", context)} ${getTranslated("explore", context)}", getTranslated("join_requests", context))
    ];
     return ListView.builder(
       shrinkWrap: true,
@@ -151,6 +153,7 @@ class _AdminProfileScreenState extends ConsumerState<AdminProfileScreen> {
           case 0:Navigator.push(context, MaterialPageRoute(builder: (builder)=>StaffUI())); break;
           case 1:Navigator.push(context, MaterialPageRoute(builder: (builder)=>ParentsScreen())); break;
           case 2:Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildrenExplorer())); break;
+          case 3:Navigator.push(context, MaterialPageRoute(builder: (builder)=>AdminRequestsScreen())); break;
         }
       },);
     },
