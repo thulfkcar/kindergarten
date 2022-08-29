@@ -116,5 +116,7 @@
   "done": "Done",
   "remainingDays": "Remaining Days",
   "scratchDate": "Subscription StartDate",
-  "noActionsForChild": "No Actions Found."
+  "noActionsForChild": "No Actions Found.",
+  "add": "add",
+  "explore": "explore"
 }

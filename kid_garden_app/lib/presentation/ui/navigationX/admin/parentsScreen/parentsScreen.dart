@@ -5,11 +5,15 @@ import 'package:kid_garden_app/presentation/general_components/CustomListView.da
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
-import 'package:kid_garden_app/presentation/ui/parentsScreen/parentViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/parentsScreen/parentViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../di/Modules.dart';
-import '../../utile/LangUtiles.dart';
+
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../di/Modules.dart';
+import '../../../../utile/LangUtiles.dart';
+import '../../../../utile/language_constrants.dart';
+
+
 
 class ParentsScreen extends ConsumerStatefulWidget {
   const ParentsScreen({
@@ -36,6 +40,8 @@ class _ParentsScreenState extends ConsumerState<ParentsScreen> {
     _viewModel = ref.watch(parentViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(title: Text(getTranslated("parents", context)),backgroundColor: Colors.transparent,elevation: 0,),
+
       body: Column(
         children: [head(), Expanded(child: body())],
       ),

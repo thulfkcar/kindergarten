@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
 
-import '../../../data/network/ApiResponse.dart';
-import '../../../repos/UserRepo.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../repos/UserRepo.dart';
 
 class AdminRequestsViewModel extends ChangeNotifier {
   var staffLastPage = false;

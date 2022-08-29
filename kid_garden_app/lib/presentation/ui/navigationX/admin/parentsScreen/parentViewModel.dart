@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
-import '../../../domain/UserModel.dart';
-import '../../../repos/UserRepo.dart';
+
+import '../../../../../domain/UserModel.dart';
+import '../../../../../repos/UserRepo.dart';
+
 
 class ParentViewModel extends ChangeNotifier{
   ApiResponse<List<UserModel>> parentListResponse=ApiResponse.non();

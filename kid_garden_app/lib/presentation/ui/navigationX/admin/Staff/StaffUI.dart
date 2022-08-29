@@ -7,14 +7,15 @@ import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/general_components/units/floating_action_button.dart';
-import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/Staff/StaffViewModel.dart';
 
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfile.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:tuple/tuple.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../di/Modules.dart';
-import '../../../domain/UserModel.dart';
-import '../../utile/LangUtiles.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../di/Modules.dart';
+import '../../../../../domain/UserModel.dart';
+import '../../../../utile/LangUtiles.dart';
 
 import 'addStaff.dart';
 
@@ -42,6 +43,7 @@ class _StaffUIState extends ConsumerState<StaffUI> {
     _viewModel = ref.watch(staffViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(title: Text(getTranslated("staff", context)),backgroundColor: Colors.transparent,elevation: 0,),
       body: Column(
         children: [
           // InfoCard(

@@ -10,11 +10,11 @@
   "verification": "التأكيد",
   "total_actions": "الاحداث الكلية",
   "staff_count": "عدد الكادر الكلي",
-  "parents_count": "عدد الاباء الكلي",
+  "parents_count": "عدد اولياء الامور الكلي",
   "children_count": "عدد الاطفال الكلي",
   "home": "الرئيسية",
   "children": "الاطفال",
-  "parents": "الاباء",
+  "parents": "اولياء الامور",
   "staff": "الكادر",
   "profile": "الملف الشخصي",
   "reject_title": "تأكيد الرفض",
@@ -43,7 +43,7 @@
   "cancel": "أالغاء",
   "save": "حفظ",
   "Staff": "الكادر",
-  "Parents": "الآباء",
+  "Parents": "اولياء الامور",
   "OnlyMe": "انا فقط",
   "All": "الجميع",
   "done_by": "تم تحت مراقبة",
@@ -108,5 +108,7 @@
   "done": "انهاء",
   "remainingDays": "الايام المتبقية",
   "scratchDate": "تاريخ الاشتراك",
-  "noActionsForChild": "لايوجد احداث مضافة"
+  "noActionsForChild": "لايوجد احداث مضافة",
+  "add": "اضافة",
+  "explore": "تصفح"
 }

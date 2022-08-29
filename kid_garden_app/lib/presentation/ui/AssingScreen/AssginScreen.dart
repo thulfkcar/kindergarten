@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/AssingScreen/QRReader.dart';
-import 'package:kid_garden_app/presentation/ui/Staff/StaffViewModel.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/AssingChildForm.dart';
 import '../../../di/Modules.dart';

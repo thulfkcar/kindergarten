@@ -7,12 +7,12 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/presentation/general_components/ContactList.dart';
 import 'package:kid_garden_app/presentation/general_components/units/images.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
-import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestScreen.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/InfoCard.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/kindergartens/kindergartenScreen.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminRequestsScreen/AdminRequestScreen.dart';
 import 'package:kid_garden_app/presentation/ui/userProfile/UserProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:tuple/tuple.dart';
@@ -208,12 +208,10 @@ class _UserProfileState extends ConsumerState<UserProfile> {
             Expanded(
               child: (user.role == Role.Staff)
                   ? ChildrenExplorer(
-                      fromProfile: false,
                       subUserId: widget.userId,
                     )
                   : (user.role == Role.Parents && widget.self == false)
                       ? ChildrenExplorer(
-                          fromProfile: false,
                           subUserId: widget.userId,
                         )
                       :  const AdminRequestsScreen(),

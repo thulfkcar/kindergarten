@@ -14,13 +14,12 @@ import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/Child.dart';
+import '../../utile/language_constrants.dart';
 
 class ChildrenExplorer extends ConsumerStatefulWidget {
-  bool fromProfile;
   String? subUserId;
 
   ChildrenExplorer({
-    required this.fromProfile,
     this.subUserId,
     Key? key,
   }) : super(key: key);
@@ -54,12 +53,11 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
           user.role == Role.Parents ? isParent = true : isParent = false;}
         });
     return Scaffold(
+      appBar: AppBar(title: Text(getTranslated("children", context)),backgroundColor: Colors.transparent,elevation: 0,),
+
       body: Column(
         children: [
-          isParent != true ?
-          (widget.fromProfile ? head() :
-          Container()) :
-          Container(),
+         head(),
           Expanded(child: body())
         ],
       ),

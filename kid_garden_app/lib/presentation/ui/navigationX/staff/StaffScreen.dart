@@ -13,21 +13,16 @@ import '../../dialogs/ActionDialog.dart';
 import '../../kindergartens/kindergartenScreen.dart';
 import '../../userProfile/UserProfile.dart';
 
-
 class StaffScreen extends ConsumerStatefulWidget {
   StaffScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  ConsumerState<StaffScreen> createState() =>
-      _NavigationScreenParentState();
+  ConsumerState<StaffScreen> createState() => _NavigationScreenParentState();
 }
 
-class _NavigationScreenParentState
-    extends ConsumerState<StaffScreen> {
+class _NavigationScreenParentState extends ConsumerState<StaffScreen> {
   late LoginPageViewModel viewModelLogin;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +34,20 @@ class _NavigationScreenParentState
           ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all(Colors.transparent),
+                      MaterialStateProperty.all(Colors.transparent),
                   elevation: MaterialStateProperty.all(0)),
               onPressed: () async {
                 var provide =
-                ProviderContainer().read(LoginPageViewModelProvider);
-                var user=ref.watch(hiveProvider).value!.getUser();
+                    ProviderContainer().read(LoginPageViewModelProvider);
+                var user = ref.watch(hiveProvider).value!.getUser();
 
-                  showAlertDialog(
-                      context: context,
-                      messageDialog: ActionDialog(
-                          type: DialogType.qr,
-                          qr: user!.id,
-                          title: getTranslated("self_identity", context),
-                          message: getTranslated("scan_for_Operation", context)));
-
+                showAlertDialog(
+                    context: context,
+                    messageDialog: ActionDialog(
+                        type: DialogType.qr,
+                        qr: user!.id,
+                        title: getTranslated("self_identity", context),
+                        message: getTranslated("scan_for_Operation", context)));
               },
               child: const Icon(Icons.qr_code)),
         ],
@@ -70,7 +64,7 @@ class _NavigationScreenParentState
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => const KindergartenScreen()),
-                        (route) => false);
+                    (route) => false);
               });
               // Navigator.push(
               //     context,
@@ -90,12 +84,9 @@ class _NavigationScreenParentState
           style: TextStyle(color: KidThem.textTitleColor),
         ),
       ),
-      body: Center(
-        child: StaffChildrenScreen()
-      ),
+      body: Center(child: StaffChildrenScreen()),
       // body: Center(child: _widgetOptions.elementAt(_selectedIndex))
       // bottomNavigationBar: bottomNavigationBar
     );
   }
-
 }

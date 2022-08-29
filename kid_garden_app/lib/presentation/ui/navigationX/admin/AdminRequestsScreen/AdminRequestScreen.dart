@@ -5,13 +5,13 @@ import 'package:kid_garden_app/presentation/general_components/CustomListView.da
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/RequestCard.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
-import 'package:kid_garden_app/presentation/ui/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminRequestsScreen/AdminRequestsViewModel.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 
-import '../../../data/network/ApiResponse.dart';
-import '../../../di/Modules.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../di/Modules.dart';
 
 class AdminRequestsScreen extends ConsumerStatefulWidget {
   const AdminRequestsScreen({

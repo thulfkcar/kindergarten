@@ -4,7 +4,7 @@ import 'package:kid_garden_app/data/network/ApiResponse.dart';
 import 'package:kid_garden_app/data/network/FromData/AssingChildForm.dart';
 import 'package:kid_garden_app/data/network/FromData/StaffAddingForm.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
-import '../../../domain/UserModel.dart';
+import '../../../../../domain/UserModel.dart';
 
 class StaffViewModel extends ChangeNotifier {
   var staffLastPage = false;

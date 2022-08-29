@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_garden_app/presentation/general_components/AdminControlCard.dart';
+import 'package:kid_garden_app/presentation/ui/Child/Childs.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/Staff/StaffUI.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/parentsScreen/parentsScreen.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
+import 'package:tuple/tuple.dart';
 import '../../../../../data/network/BaseApiService.dart';
 import '../../../../../di/Modules.dart';
 import '../../../../../domain/Contact.dart';
@@ -122,7 +129,35 @@ class _AdminProfileScreenState extends ConsumerState<AdminProfileScreen> {
                 imageRectangleWithoutShadow(domain + user.image!, 90),
               ],
             ),
+            listControlsView()
           ],
         ));
+
   }
+
+  Widget listControlsView(){
+   List<Tuple2<String,String>> listControls=[
+      Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}", getTranslated("staff", context)),
+      Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}",getTranslated("parents", context)),
+      Tuple2("${getTranslated("add", context)}, ${getTranslated("explore", context)}", getTranslated("children", context))
+   ];
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: listControls.length,
+
+      itemBuilder: (BuildContext context, int index) {
+      return AdminControlCard(listControl: listControls[index], onClicked: () {
+        switch(index){
+          case 0:Navigator.push(context, MaterialPageRoute(builder: (builder)=>StaffUI())); break;
+          case 1:Navigator.push(context, MaterialPageRoute(builder: (builder)=>ParentsScreen())); break;
+          case 2:Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildrenExplorer())); break;
+        }
+      },);
+    },
+
+    );
+  }
+
+
+
 }
