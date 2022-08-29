@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:kid_garden_app/data/network/models/ErrorResponse.dart';
 import '../../di/Modules.dart';
 import '../../domain/UserModel.dart';
 import '../../presentation/main.dart';

@@ -156,6 +156,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         onPressed: () async {
                           if (!widget.isSubscriptionValid) {
                             Navigator.pop(context);
+                            Navigator.pop(context);
                           } else {
                             await Navigator.push(
                                 context,
@@ -221,7 +222,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
                         getTranslated("Contacts", context),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                     ),

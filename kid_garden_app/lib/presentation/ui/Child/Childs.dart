@@ -48,7 +48,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
     _viewModel = ref.watch(childViewModelProvider(widget.subUserId));
     _viewModel_login = ref.watch(LoginPageViewModelProvider);
 
-    var user=  ProviderContainer().read(hiveProvider).value!.getUser();
+    var user=  ref.read(hiveProvider).value!.getUser();
         setState(() {
           if(user!=null){
           user.role == Role.Parents ? isParent = true : isParent = false;}
