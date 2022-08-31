@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,7 +42,11 @@ class _StaffUIState extends ConsumerState<StaffUI> {
     _viewModel = ref.watch(staffViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(getTranslated("staff", context)),backgroundColor: Colors.transparent,elevation: 0,),
+      appBar: AppBar(
+        title: Text(getTranslated("staff", context)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Column(
         children: [
           // InfoCard(
@@ -61,51 +64,30 @@ class _StaffUIState extends ConsumerState<StaffUI> {
   }
 
   Widget body() {
-    var status = _viewModel.childListResponse.status;
+    var status = _viewModel.collectionApiResponse.status;
     switch (status) {
       case Status.LOADING:
         return LoadingWidget();
 
       case Status.COMPLETED:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.childListResponse.data!,
-          loadNext: false,
-          itemBuilder: (BuildContext context, UserModel item) {
-            return staffCard(item, (user) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfile(self: false,
-                            userType: item.role,
-                            userId: item.id!,
-                          )));
-            });
-          },
-          direction: Axis.vertical,
-        );
+        return staffList(loadNext: false);
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.childListResponse.message ?? "Error");
+          msg: _viewModel.collectionApiResponse.message ?? "Error",
+          onRefresh: () async {
+            await _viewModel.fetchStaff();
+          },
+        );
+      case Status.Empty:
+        return EmptyWidget(
+          msg: getTranslated("no_staff", context),
+          onRefresh: () async {
+            await _viewModel.fetchStaff();
+          },
+        );
 
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.childListResponse.data!,
-          loadNext: true,
-          itemBuilder: (BuildContext context, UserModel item) {
-            return staffCard(item, (user) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfile(self: false,
-                            userType: item.role,
-                            userId: item.id!,
-                          )));
-            });
-          },
-          direction: Axis.vertical,
-        );
+        return staffList(loadNext: true);
 
       case Status.NON:
         return Container();
@@ -115,12 +97,33 @@ class _StaffUIState extends ConsumerState<StaffUI> {
   }
 
   void getNext() async {
-    var state = _viewModel.childListResponse.status;
+    var state = _viewModel.collectionApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
         _scrollController.position.pixels) {
       if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
         await _viewModel.fetchNextStaff();
       }
     }
+  }
+
+  Widget staffList({required bool loadNext}) {
+    return CustomListView(
+      scrollController: _scrollController,
+      items: _viewModel.collectionApiResponse.data!,
+      loadNext: loadNext,
+      itemBuilder: (BuildContext context, UserModel item) {
+        return staffCard(item, (user) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserProfile(
+                        self: false,
+                        userType: item.role,
+                        userId: item.id!,
+                      )));
+        });
+      },
+      direction: Axis.vertical,
+    );
   }
 }

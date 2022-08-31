@@ -58,7 +58,7 @@ final kindergartenViewModelProvider =
         (ref) => KindergartenViewModel());
 
 final staffViewModelProvider =
-    ChangeNotifierProvider<StaffViewModel>((ref) => StaffViewModel());
+    ChangeNotifierProvider.autoDispose<StaffViewModel>((ref) => StaffViewModel());
 final adminRequestsViewModelProvider =
     ChangeNotifierProvider.autoDispose<AdminRequestsViewModel>(
         (ref) => AdminRequestsViewModel());

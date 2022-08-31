@@ -117,8 +117,9 @@
   "remainingDays": "Remaining Days",
   "scratchDate": "Subscription StartDate",
   "noActionsForChild": "No Actions Found.",
-  "add": "add",
   "explore": "explore",
-  "join_requests": "طلبات الانظمام"
+  "join_requests": "join requests",
+  "no_staff": "no staff."
+
 
 }

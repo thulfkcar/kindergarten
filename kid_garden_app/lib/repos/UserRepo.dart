@@ -59,7 +59,7 @@ class UserRepository {
               (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
           return staffs;
         } else {
-          throw "no Data Available";
+          return [];
         }
       });
       var nextPageTotal = (page) * 20;
@@ -70,7 +70,8 @@ class UserRepository {
       if (await staffs.isNotEmpty) {
         return Tuple2(await staffs, isLastPage);
       } else {
-        throw "no Data Available";
+        return Tuple2([], true);
+
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
@@ -93,7 +94,7 @@ class UserRepository {
               (jsonList as List).map((i) => UserModel.fromJson(i)).toList();
           return staffs;
         } else {
-          throw "no Data Available";
+          return [];
         }
       });
       var nextPageTotal = (page) * 20;
@@ -104,7 +105,8 @@ class UserRepository {
       if (await staffs.isNotEmpty) {
         return Tuple2(await staffs, isLastPage);
       } else {
-        throw "no Data Available";
+        return Tuple2([], true);
+        ;
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
@@ -253,7 +255,7 @@ class UserRepository {
               (jsonList as List).map((i) => AssignRequest.fromJson(i)).toList();
           return request;
         } else {
-          throw "no Data Available";
+          return [];
         }
       });
       var nextPageTotal = (page) * 20;
@@ -264,7 +266,8 @@ class UserRepository {
       if (await request.isNotEmpty) {
         return Tuple2(await request, isLastPage);
       } else {
-        throw "no Data Available";
+        return Tuple2([], true);
+        ;
       }
       // var jsonObject = json.decode(object!) as List;
       // childes = (jsonObject).map((i) => Child.fromJson(i)).toList();
