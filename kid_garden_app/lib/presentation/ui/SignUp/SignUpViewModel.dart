@@ -6,6 +6,7 @@ import 'package:kid_garden_app/domain/UserModel.dart';
 import 'package:kid_garden_app/repos/UserRepo.dart';
 
 import '../../../di/Modules.dart';
+import '../../main.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   var repository = UserRepository();
@@ -19,7 +20,7 @@ class SignUpViewModel extends ChangeNotifier {
   Future<void> signUp(SignUpForm form) async {
     setSignUpApiResponse(ApiResponse.loading());
     await repository.signUp(form).then((value) {
-      var user=ProviderContainer().read(hiveProvider).value!.storeUser(value);
+      providerContainerRef.read(hiveProvider).value!.storeUser(value);
 
       setSignUpApiResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {

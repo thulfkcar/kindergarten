@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
-
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ActionGroup.dart';
@@ -13,9 +10,7 @@ import '../../../domain/ChildAction.dart';
 import '../../general_components/ActionGroup.dart';
 import '../../general_components/Error.dart';
 import '../../general_components/loading.dart';
-import '../../styles/colors_style.dart';
 import 'ChildActionViewModel.dart';
-
 class ChildActionAddScreen extends ConsumerStatefulWidget {
   final String childId;
 
@@ -27,7 +22,6 @@ class ChildActionAddScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState createState() => _ChildActionAddScreenState();
 }
-
 class _ChildActionAddScreenState extends ConsumerState<ChildActionAddScreen> {
   late ChildActionViewModel _viewModel;
   ActionGroup? selectedActionGroup;

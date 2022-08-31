@@ -7,6 +7,7 @@ import 'package:kid_garden_app/presentation/general_components/units/buttons.dar
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/SignUp/SignUpViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
@@ -160,19 +161,26 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         }
       case Status.COMPLETED:
         {
-          widget.signedUp(viewModel.signUpApiResponse.data);
-          viewModel.setSignUpApiResponse(ApiResponse.non());
+          Future.delayed(Duration.zero,(){
+            widget.signedUp(viewModel.signUpApiResponse.data);
+            viewModel.setSignUpApiResponse(ApiResponse.non());
+          });
+
         }
         break;
       case Status.ERROR:
-        showAlertDialog(
-            context: context,
-            messageDialog: ActionDialog(
-                type: DialogType.warning,
-                title: AppLocalizations.of(context)?.getText("warning") ??
-                    "Warning",
-                message: viewModel.signUpApiResponse.message! + ""));
-        viewModel.setSignUpApiResponse(ApiResponse.non());
+        Future.delayed(Duration.zero,(){
+          showAlertDialog(
+              context: context,
+              messageDialog: ActionDialog(
+                  type: DialogType.warning,
+                  title: getTranslated("warning", context),
+                  message: viewModel.signUpApiResponse.message! + "")).then((value){
+            viewModel.setSignUpApiResponse(ApiResponse.non());
+
+          });
+        });
+
 
         return login;
       case Status.NON:
