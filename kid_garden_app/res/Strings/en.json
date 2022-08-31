@@ -119,7 +119,10 @@
   "noActionsForChild": "No Actions Found.",
   "explore": "explore",
   "join_requests": "join requests",
-  "no_staff": "no staff."
+  "no_staff": "no staff.",
+  "no_parents": "no parents where found.",
+  "no_assign_requests": "no assign requests where found."
+
 
 
 }

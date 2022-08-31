@@ -1,72 +1,54 @@
-import 'package:flutter/material.dart';
 import 'package:kid_garden_app/data/network/ApiResponse.dart';
+import 'package:kid_garden_app/presentation/viewModels/viewModelCollection.dart';
 
 import '../../../../../domain/UserModel.dart';
 import '../../../../../repos/UserRepo.dart';
 
-
-class ParentViewModel extends ChangeNotifier{
-  ApiResponse<List<UserModel>> parentListResponse=ApiResponse.non();
-
-
-
-
-
+class ParentViewModel extends ViewModelCollection<UserModel> {
   final _repository = UserRepository();
-  var parentsLastPage = false;
-  int pageParents = 1;
 
   String? searchKey;
 
   ParentViewModel() : super() {
     fetchParents();
-
-
-  }
-
- void setParentsListResponse(ApiResponse<List<UserModel>> response){
-    parentListResponse=response;
-    notifyListeners();
   }
 
   Future<void> fetchParents() async {
-    setParentsListResponse(ApiResponse.loading());
-    _repository.getMyParentsList(page: pageParents,searchKey:searchKey).then((value) {
-      parentsLastPage = value.item2;
-      setParentsListResponse(ApiResponse.completed(value.item1));
+    setCollectionApiResponse(ApiResponse.loading());
+    _repository
+        .getMyParentsList(page: page, searchKey: searchKey)
+        .then((value) {
+      lastPage = value.item2;
+      if (value.item1.isEmpty) {
+        setCollectionApiResponse(ApiResponse.empty());
+      } else {
+        setCollectionApiResponse(ApiResponse.completed(value.item1));
+      }
     }).onError((error, stackTrace) {
-      setParentsListResponse(ApiResponse.error(error.toString()));
+      setCollectionApiResponse(ApiResponse.error(error.toString()));
     });
   }
 
   Future<void> fetchNextParents() async {
-    if (parentsLastPage == false) {
+    if (lastPage == false) {
       incrementPage();
-      parentListResponse.status = Status.LOADING_NEXT_PAGE;
+      collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getMyParentsList(page: pageParents,searchKey: searchKey).then((value) {
-        parentsLastPage = value.item2;
-        setParentsListResponse(appendNewItems(value.item1));
+      _repository
+          .getMyParentsList(page: page, searchKey: searchKey)
+          .then((value) {
+        lastPage = value.item2;
+        setCollectionApiResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
-        setParentsListResponse(ApiResponse.error(error.toString()));
+        setCollectionApiResponse(ApiResponse.error(error.toString()));
       });
       notifyListeners();
     }
   }
-  void incrementPage() {
-    pageParents += 1;
-  }
-
-  ApiResponse<List<UserModel>> appendNewItems(List<UserModel> value) {
-    var data = parentListResponse.data;
-    data?.addAll(value);
-    return ApiResponse.completed(data);
-  }
 
   void search(String? value) {
-    searchKey=value;
+    searchKey = value;
     fetchParents();
   }
-
 }

@@ -111,5 +111,8 @@
   "noActionsForChild": "لايوجد احداث مضافة",
   "explore": "تصفح",
   "join_requests": "طلبات انظمام",
-  "no_staff": "لايوجد كادر"
+  "no_staff": "لايوجد كادر",
+  "no_parents": "لايوجد آباء",
+  "no_assign_requests": "لا يوجد طلبات انظمام."
+
 }

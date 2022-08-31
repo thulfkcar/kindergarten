@@ -1,24 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/AssignRequest.dart';
+import 'package:kid_garden_app/presentation/viewModels/viewModelCollection.dart';
 
 import '../../../../../data/network/ApiResponse.dart';
 import '../../../../../repos/UserRepo.dart';
 
-class AdminRequestsViewModel extends ChangeNotifier {
-  var staffLastPage = false;
-  int pageStaff = 1;
+class AdminRequestsViewModel extends ViewModelCollection<AssignRequest> {
+
 
   final UserRepository _repository = UserRepository();
-  ApiResponse<List<AssignRequest>> adminRequestsResponse =
-      ApiResponse.loading();
+
   ApiResponse<AssignRequest> acceptResponse = ApiResponse.non();
   ApiResponse<AssignRequest> rejectResponse = ApiResponse.non();
 
-  void setAdminRequestsResponse(ApiResponse<List<AssignRequest>> response) {
-    adminRequestsResponse = response;
-
-    notifyListeners();
-  }
 
   Future<void> setAcceptResponse(ApiResponse<AssignRequest> response) async {
     acceptResponse = response;
@@ -38,40 +32,39 @@ class AdminRequestsViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchRequests() async {
-    setAdminRequestsResponse(ApiResponse.loading());
-    _repository.getAdminRequests(page: pageStaff).then((value) {
-      staffLastPage = value.item2;
-      setAdminRequestsResponse(ApiResponse.completed(value.item1));
+    setCollectionApiResponse(ApiResponse.loading());
+    _repository.getAdminRequests(page: page).then((value) {
+      lastPage = value.item2;
+      if(value.item1.isEmpty){
+        setCollectionApiResponse(ApiResponse.empty());
+      }
+      else {
+        setCollectionApiResponse(ApiResponse.completed(value.item1));
+      }
     }).onError((error, stackTrace) {
-      setAdminRequestsResponse(ApiResponse.error(error.toString()));
+      setCollectionApiResponse(ApiResponse.error(error.toString()));
     });
   }
 
   Future<void> fetchNextRequests() async {
-    if (staffLastPage == false) {
-      incrementPageChildAction();
-      adminRequestsResponse.status = Status.LOADING_NEXT_PAGE;
+    if (lastPage == false) {
+      incrementPage();
+      collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getAdminRequests(page: pageStaff).then((value) {
-        staffLastPage = value.item2;
-        setAdminRequestsResponse(appendNewItems(value.item1));
+      _repository.getAdminRequests(page: page).then((value) {
+        lastPage = value.item2;
+        setCollectionApiResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
-        setAdminRequestsResponse(ApiResponse.error(error.toString()));
+        setCollectionApiResponse(ApiResponse.error(error.toString()));
       });
       notifyListeners();
     }
   }
 
-  void incrementPageChildAction() {
-    pageStaff += 1;
-  }
 
-  ApiResponse<List<AssignRequest>> appendNewItems(List<AssignRequest> value) {
-    var data = adminRequestsResponse.data;
-    data?.addAll(value);
-    return ApiResponse.completed(data);
-  }
+
+
 
   Future<void> reject(String id, String message) async {
     await setRejectResponse(ApiResponse.loading());
@@ -92,12 +85,12 @@ class AdminRequestsViewModel extends ChangeNotifier {
   }
 
   Future<void> updateList(AssignRequest request) async {
-    if (adminRequestsResponse.data != null) {
-      int index = adminRequestsResponse.data!
+    if (collectionApiResponse.data != null) {
+      int index = collectionApiResponse.data!
           .indexWhere((element) => element.id == request.id);
       if (index >= 0) {
-        adminRequestsResponse.data!.removeAt(index);
-        adminRequestsResponse.data!.insert(index, request);
+        collectionApiResponse.data!.removeAt(index);
+        collectionApiResponse.data!.insert(index, request);
       }
     }
     notifyListeners();

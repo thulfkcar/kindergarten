@@ -73,7 +73,7 @@ class ParentChildrenViewModel extends ViewModelCollection<Child> {
   Future<void> fetchNextChildren() async {
     if (childLastPage == false) {
 
-      incrementPageChildAction();
+      incrementPage();
       collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 

@@ -9,8 +9,6 @@ import '../../../../../domain/UserModel.dart';
 import '../../../../viewModels/viewModelCollection.dart';
 
 class StaffViewModel extends ViewModelCollection<UserModel> {
-  var staffLastPage = false;
-  int pageStaff = 1;
 
   final UserRepository _repository = UserRepository();
   ApiResponse addingStaffResponse = ApiResponse.non();
@@ -43,8 +41,8 @@ class StaffViewModel extends ViewModelCollection<UserModel> {
 
   Future<void> fetchStaff() async {
     setCollectionApiResponse(ApiResponse.loading());
-    _repository.getMyStaffList(page: pageStaff).then((value) {
-      staffLastPage = value.item2;
+    _repository.getMyStaffList(page: page).then((value) {
+      lastPage = value.item2;
       if(value.item1.isEmpty){
         setCollectionApiResponse(ApiResponse.empty());
       }else {
@@ -57,13 +55,13 @@ class StaffViewModel extends ViewModelCollection<UserModel> {
   }
 
   Future<void> fetchNextStaff() async {
-    if (staffLastPage == false) {
-      incrementPageChildAction();
+    if (page == false) {
+      incrementPage();
       collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getMyStaffList(page: pageStaff).then((value) {
-        staffLastPage = value.item2;
+      _repository.getMyStaffList(page: page).then((value) {
+        lastPage = value.item2;
         setCollectionApiResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
         setCollectionApiResponse(ApiResponse.error(error.toString()));

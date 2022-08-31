@@ -19,7 +19,7 @@ class ViewModelCollection<T> extends ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementPageChildAction() {
+  void incrementPage() {
     page += 1;
   }
 

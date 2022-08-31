@@ -43,39 +43,39 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
       await acceptState();
     });
 
-    return Scaffold(      appBar: AppBar(title: Text(getTranslated("join_requests", context)),backgroundColor: Colors.transparent,elevation: 0,),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(getTranslated("join_requests", context)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         body: body());
   }
 
   Widget body() {
-    var status = _viewModel.adminRequestsResponse.status;
+    var status = _viewModel.collectionApiResponse.status;
     switch (status) {
       case Status.LOADING:
         return LoadingWidget();
 
       case Status.COMPLETED:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.adminRequestsResponse.data!,
-          loadNext: false,
-          itemBuilder: (BuildContext context, AssignRequest item) {
-            return adminRequestCard(item);
-          },
-          direction: Axis.vertical,
-        );
+        return assignRequestsList(loadingNext: false);
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.adminRequestsResponse.message ?? "Error");
+          msg: _viewModel.collectionApiResponse.message ?? "Error",
+          onRefresh: () async {
+            await _viewModel.fetchRequests();
+          },
+        );
 
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.adminRequestsResponse.data!,
-          loadNext: true,
-          itemBuilder: (BuildContext context, AssignRequest item) {
-            return adminRequestCard(item);
+        return assignRequestsList(loadingNext: true);
+      case Status.Empty:
+        return EmptyWidget(
+          msg:getTranslated("no_assign_requests", context),
+          onRefresh: () async {
+            await _viewModel.fetchRequests();
           },
-          direction: Axis.vertical,
         );
 
       case Status.NON:
@@ -86,7 +86,7 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
   }
 
   void getNext() async {
-    var state = _viewModel.adminRequestsResponse.status;
+    var state = _viewModel.collectionApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
         _scrollController.position.pixels) {
       if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
@@ -117,15 +117,20 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                           // request api
                         }));
               },
-              title:AppLocalizations.of(context)?.getText("reject_reason")?? 'Reject Reason',
+              title: AppLocalizations.of(context)?.getText("reject_reason") ??
+                  'Reject Reason',
             ));
       },
       onConfirmClicked: () {
         showDialogGeneric(
             context: context,
             dialog: ConfirmationDialog(
-                title:AppLocalizations.of(context)?.getText("confirm_request")?? 'Confirm Request',
-                message:AppLocalizations.of(context)?.getText("confirm_request_des")?? "do you want to Confirm this Request",
+                title:
+                    AppLocalizations.of(context)?.getText("confirm_request") ??
+                        'Confirm Request',
+                message: AppLocalizations.of(context)
+                        ?.getText("confirm_request_des") ??
+                    "do you want to Confirm this Request",
                 confirmed: () async {
                   await _viewModel.accept(item.id);
 
@@ -143,8 +148,12 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title:AppLocalizations.of(context)?.getText("accepting_request")?? 'accepting request',
-                message:AppLocalizations.of(context)?.getText("accepting_request_des")?? "Request Pending Please waite"));
+                title: AppLocalizations.of(context)
+                        ?.getText("accepting_request") ??
+                    'accepting request',
+                message: AppLocalizations.of(context)
+                        ?.getText("accepting_request_des") ??
+                    "Request Pending Please waite"));
         _viewModel.setAcceptResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
@@ -154,8 +163,12 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                 context: context,
                 messageDialog: ActionDialog(
                     type: DialogType.completed,
-                    title:AppLocalizations.of(context)?.getText("accepting_request")?? 'accepting request',
-                    message: AppLocalizations.of(context)?.getText("request_accepted")??"Request Accepted")));
+                    title: AppLocalizations.of(context)
+                            ?.getText("accepting_request") ??
+                        'accepting request',
+                    message: AppLocalizations.of(context)
+                            ?.getText("request_accepted") ??
+                        "Request Accepted")));
 
         break;
       case Status.ERROR:
@@ -182,8 +195,12 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title: AppLocalizations.of(context)?.getText("rejecting_request")?? 'rejecting request',
-                message:AppLocalizations.of(context)?.getText("rejecting_request_des")?? "Request Pending Please waite"));
+                title: AppLocalizations.of(context)
+                        ?.getText("rejecting_request") ??
+                    'rejecting request',
+                message: AppLocalizations.of(context)
+                        ?.getText("rejecting_request_des") ??
+                    "Request Pending Please waite"));
         _viewModel.setRejectResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
@@ -193,8 +210,12 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
                 context: context,
                 messageDialog: ActionDialog(
                     type: DialogType.completed,
-                    title: AppLocalizations.of(context)?.getText("rejecting_request")?? 'rejecting request',
-                    message:AppLocalizations.of(context)?.getText("request_rejected")??  "Request rejected")));
+                    title: AppLocalizations.of(context)
+                            ?.getText("rejecting_request") ??
+                        'rejecting request',
+                    message: AppLocalizations.of(context)
+                            ?.getText("request_rejected") ??
+                        "Request rejected")));
 
         break;
       case Status.ERROR:
@@ -211,5 +232,17 @@ class _AdminRequestsScreenState extends ConsumerState<AdminRequestsScreen> {
 
       default:
     }
+  }
+
+  Widget assignRequestsList({required bool loadingNext}) {
+    return CustomListView(
+      scrollController: _scrollController,
+      items: _viewModel.collectionApiResponse.data!,
+      loadNext: loadingNext,
+      itemBuilder: (BuildContext context, AssignRequest item) {
+        return adminRequestCard(item);
+      },
+      direction: Axis.vertical,
+    );
   }
 }

@@ -31,7 +31,7 @@ class StaffChildrenViewModel extends ViewModelCollection<Child>{
 
   Future<void> fetchNextChildren() async {
     if (lastPage == false) {
-      incrementPageChildAction();
+      incrementPage();
       collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
