@@ -92,7 +92,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   }
 
   Widget body() {
-    var status = _viewModel.childListResponse.status;
+    var status = _viewModel.collectionApiResponse.status;
 
     switch (status) {
       case Status.LOADING:
@@ -102,10 +102,16 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         return children(false);
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.childListResponse.message ?? "Error");
+            msg: _viewModel.collectionApiResponse.message ?? "Error",onRefresh: ()async {
+          await _viewModel.fetchChildren();
+        });
 
       case Status.LOADING_NEXT_PAGE:
         return children(true);
+      case Status.Empty:
+        return EmptyWidget(msg: getTranslated("no_children", context),onRefresh: ()async {
+          await _viewModel.fetchChildren();
+        },);
 
       case Status.NON:
         return Container();
@@ -116,7 +122,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
 
 
   void getNext() async {
-    var state = _viewModel.childListResponse.status;
+    var state = _viewModel.collectionApiResponse.status;
     if (_scrollController.position.maxScrollExtent ==
         _scrollController.position.pixels) {
       if (state == Status.COMPLETED && state != Status.LOADING_NEXT_PAGE) {
@@ -128,7 +134,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
   Widget children(bool loadNext) {
     return CustomListView(
         scrollController: _scrollController,
-        items: _viewModel.childListResponse.data!,
+        items: _viewModel.collectionApiResponse.data!,
         loadNext: loadNext,
         itemBuilder: (BuildContext context, Child item) {
           return ChildRow(onChildClicked: () {

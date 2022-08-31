@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kid_garden_app/domain/Child.dart';
+import 'package:kid_garden_app/presentation/viewModels/viewModelCollection.dart';
 import 'package:kid_garden_app/repos/ChildRepository.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/ChildForm.dart';
 
-class ChildViewModel extends ChangeNotifier {
+class ChildViewModel extends ViewModelCollection<Child> {
   final _repository = ChildRepository();
-  var childLastPage = false;
-  int pageChild = 1;
   String? subUserId;
 
   String? searchKey;
@@ -16,27 +15,20 @@ class ChildViewModel extends ChangeNotifier {
     fetchChildren();
   }
 
-  ApiResponse<List<Child>> childListResponse = ApiResponse.loading();
 
-  void setChildListResponse(ApiResponse<List<Child>> response) {
-    childListResponse = response;
 
-    notifyListeners();
-  }
   ApiResponse<Child> addingChildResponse = ApiResponse.non();
 
   void setAddingChildResponse(ApiResponse<Child> apiResponse) {
     addingChildResponse = apiResponse;
-    if (apiResponse.data != null ) {
-      setChildListResponse(appendNewItems([apiResponse.data!]));
-    }
+
 
       notifyListeners();
   }
   Future<void> addChild({required ChildForm childForm}) async {
     setAddingChildResponse(ApiResponse.loading());
     _repository.addChild( childForm).then((value) {
-      childListResponse.data ??= [];
+      addNewItemToCollection(value);
       setAddingChildResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       setAddingChildResponse(ApiResponse.error(error.toString()));
@@ -44,40 +36,37 @@ class ChildViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchChildren() async {
-    setChildListResponse(ApiResponse.loading());
-    _repository.getMyChildList(page: pageChild,searchKey:searchKey,subUserId: subUserId).then((value) {
-      childLastPage = value.item2;
-      setChildListResponse(ApiResponse.completed(value.item1));
+    setCollectionApiResponse(ApiResponse.loading());
+    _repository.getMyChildList(page: page,searchKey:searchKey,subUserId: subUserId).then((value) {
+      lastPage = value.item2;
+      if(value.item1.isEmpty){
+        setCollectionApiResponse(ApiResponse.empty());
+      }
+      setCollectionApiResponse(ApiResponse.completed(value.item1));
     }).onError((error, stackTrace) {
-      setChildListResponse(ApiResponse.error(error.toString()));
+      setCollectionApiResponse(ApiResponse.error(error.toString()));
     });
   }
 
   Future<void> fetchNextChildren() async {
-    if (childLastPage == false) {
-      incrementPageChildAction();
-      childListResponse.status = Status.LOADING_NEXT_PAGE;
+    if (lastPage == false) {
+      incrementPage();
+      collectionApiResponse.status = Status.LOADING_NEXT_PAGE;
       notifyListeners();
 
-      _repository.getMyChildList(page: pageChild,searchKey: searchKey,subUserId: subUserId).then((value) {
-        childLastPage = value.item2;
-        setChildListResponse(appendNewItems(value.item1));
+      _repository.getMyChildList(page: page,searchKey: searchKey,subUserId: subUserId).then((value) {
+        lastPage = value.item2;
+        setCollectionApiResponse(appendNewItems(value.item1));
       }).onError((error, stackTrace) {
-        setChildListResponse(ApiResponse.error(error.toString()));
+        setCollectionApiResponse(ApiResponse.error(error.toString()));
       });
       notifyListeners();
     }
   }
 
-  void incrementPageChildAction() {
-    pageChild += 1;
-  }
 
-  ApiResponse<List<Child>> appendNewItems(List<Child> value) {
-    var data = childListResponse.data;
-    data?.addAll(value);
-    return ApiResponse.completed(data);
-  }
+
+
 
   void search(String? value) {
     this.searchKey=value;
