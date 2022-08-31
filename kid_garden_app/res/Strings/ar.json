@@ -114,7 +114,11 @@
   "no_staff": "لايوجد كادر",
   "no_parents": "لايوجد آباء",
   "no_assign_requests": "لا يوجد طلبات انظمام.",
-  "click_to_join_another_kindergarten": "أضغط لارسال طلب الى حضانة اخرى."
+  "click_to_join_another_kindergarten": "أضغط لارسال طلب الى حضانة اخرى.",
+  "cancel_joining_request": "الغاء طلب الانظمام",
+  "cancel_joining_request_sending": "جار الغاء طلب الانظمام...",
+  "cancel_join_request_des": "هل تريد بالفعل الغاء طلب الانظمام؟..",
+  "process_finished": "تمت العملية بنجاح"
 
 
 }

@@ -307,4 +307,17 @@ class UserRepository {
       rethrow;
     }
   }
+
+Future<bool>  cancelJoinRequest(String id) async {
+
+
+    try {
+      dynamic response =
+          await _apiService.postResponse("User/cancelJoinRequest/$id", Map());
+
+      return await response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

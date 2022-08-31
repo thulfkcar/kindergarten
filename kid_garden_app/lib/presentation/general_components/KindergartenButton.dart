@@ -7,7 +7,7 @@ class KindergartenButton extends StatelessWidget {
   String image;
   String name;
   KindergartenButton(
-      {Key? key, this.id, required this.image, required this.name})
+      {Key? key, this.id, required this.image, required this.name,})
       : super(key: key);
 
   @override

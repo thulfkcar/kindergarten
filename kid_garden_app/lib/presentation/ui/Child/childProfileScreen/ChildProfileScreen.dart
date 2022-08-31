@@ -48,6 +48,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
     _viewModel = ref.watch(childProfileViewModelProvider);
     Future.delayed(Duration.zero, () {
       kindergratenRequestViewResponse();
+      cancelRequestResponse();
     });
     return Scaffold(
         appBar: AppBar(
@@ -324,7 +325,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
             dialog: ActionDialog(
               type: DialogType.completed,
               title: getTranslated("joining_request", context),
-              message: getTranslated("joining_request_sending", context),
+              message: getTranslated("process_finished", context),
               onCompleted: (sd) {
                 setState(() {
                   widget.child.assignRequest =
@@ -339,11 +340,13 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
         Navigator.pop(context);
 
         showDialogGeneric(
-            context: context,
-            dialog: ActionDialog(
-                type: DialogType.error,
-                title: getTranslated("joining_request", context),
-                message: _viewModel.joinKindergartenRequest.message!)).then((value) => _viewModel.setJoinKindergartenRequest(ApiResponse.non()));
+                context: context,
+                dialog: ActionDialog(
+                    type: DialogType.error,
+                    title: getTranslated("joining_request", context),
+                    message: _viewModel.joinKindergartenRequest.message!))
+            .then((value) =>
+                _viewModel.setJoinKindergartenRequest(ApiResponse.non()));
         break;
       default:
     }
@@ -356,10 +359,24 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
           ? widget.child.assignRequest != null
               ? widget.child.assignRequest!.requestStatus ==
                       RequestStatus.Pending
-                  ? RequestedToKindergartenCard(widget.child.assignRequest!,
+                  ? RequestedToKindergartenCard(
+                      widget.child.assignRequest!,
                       (kindergarten) {
-                      //todo: request kindergarten
-                    })
+                        //todo: request kindergarten
+                      },
+                      onCancelRequestClicked: () async {
+                        showDialogGeneric(
+                            context: context,
+                            dialog: ConfirmationDialog(
+                                title: getTranslated("cancel_joining_request", context),
+                                message: getTranslated(
+                                    "cancel_join_request_des", context),
+                                confirmed: () async {
+                                  await _viewModel.cancelJoinRequest(
+                                      widget.child.assignRequest!.id);
+                                }));
+                      },
+                    )
                   : widget.child.assignRequest!.requestStatus ==
                           RequestStatus.Rejected
                       ? rejectKindergartenCard()
@@ -374,9 +391,8 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
     return Container();
   }
 
- Widget rejectKindergartenCard() {
-
-         return ElevatedButton(
+  Widget rejectKindergartenCard() {
+    return ElevatedButton(
       onPressed: () {
         //toDo:onclick kindergartenProfile...
       },
@@ -387,8 +403,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-               Text(widget.child.assignRequest!.kindergartenName!+" : "),
-
+                Text(widget.child.assignRequest!.kindergartenName! + " : "),
                 Expanded(
                   child: Text(
                     widget.child.assignRequest!.message!,
@@ -396,58 +411,102 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                 ),
               ],
             ),
-        ElevatedButton(
-          onPressed: () async {
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => KindergartenScreen(
-                      childId: widget.child.id,
-                      onKindergartenChoosed: (kindergartenId) async {
-                        await _viewModel.joinRequest(
-                            widget.child.id, kindergartenId);
-                      },
-                    )));
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-
-                Text(
-                  getTranslated("click_to_join_another_kindergarten", context),
-                  style: const TextStyle(color: Colors.black87, fontSize: 18),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+            ElevatedButton(
+              onPressed: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => KindergartenScreen(
+                              childId: widget.child.id,
+                              onKindergartenChoosed: (kindergartenId) async {
+                                await _viewModel.joinRequest(
+                                    widget.child.id, kindergartenId);
+                              },
+                            )));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Icon(
-                      Icons.warning_amber_outlined,
-                      color: Colors.yellow.shade800,
-                      size: 30,
+                    Text(
+                      getTranslated(
+                          "click_to_join_another_kindergarten", context),
+                      style:
+                          const TextStyle(color: Colors.black87, fontSize: 18),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_outlined,
+                          color: Colors.yellow.shade800,
+                          size: 30,
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(KidThem.white),
-              side: MaterialStateProperty.all(
-                  BorderSide(width: 1, color: KidThem.male1)),
-              elevation: MaterialStateProperty.all(0)),
-        )
+                ),
+              ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(KidThem.white),
+                  side: MaterialStateProperty.all(
+                      BorderSide(width: 1, color: KidThem.male1)),
+                  elevation: MaterialStateProperty.all(0)),
+            )
           ],
         ),
       ),
       style: ButtonStyle(
-          backgroundColor:
-          MaterialStateProperty.all(KidThem.white),
+          backgroundColor: MaterialStateProperty.all(KidThem.white),
           side: MaterialStateProperty.all(
               BorderSide(width: 1, color: Colors.redAccent)),
           elevation: MaterialStateProperty.all(0)),
     );
+  }
 
- }
+  cancelRequestResponse() {
+    var status = _viewModel.cancelJoinRequestResponse.status;
+    switch (status) {
+      case Status.LOADING:
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.loading,
+                title: getTranslated("cancel_joining_request", context),
+                message:
+                    getTranslated("cancel_joining_request_sending", context)));
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+              type: DialogType.completed,
+              title: getTranslated("cancel_joining_request", context),
+              message: getTranslated("process_finished", context),
+              onCompleted: (sd) {
+                setState(() {
+                  widget.child.assignRequest = null;
+                });
+
+                _viewModel.cancelJoinRequestResponse = ApiResponse.non();
+              },
+            ));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+
+        showDialogGeneric(
+                context: context,
+                dialog: ActionDialog(
+                    type: DialogType.error,
+                    title: getTranslated("joining_request", context),
+                    message: _viewModel.cancelJoinRequestResponse.message!))
+            .then((value) =>
+                _viewModel.setCancelJoinRequestResponse(ApiResponse.non()));
+        break;
+      default:
+    }
+  }
 }

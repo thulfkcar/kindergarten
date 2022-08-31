@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 
 import '../../domain/AssignRequest.dart';
@@ -9,9 +10,10 @@ import 'KindergartenButton.dart';
 class RequestedToKindergartenCard extends StatelessWidget {
   Function(String) onKindergartenClicked;
   AssignRequest assignRequest;
+  Function() onCancelRequestClicked;
 
   RequestedToKindergartenCard(this.assignRequest, this.onKindergartenClicked,
-      {Key? key})
+      {Key? key, required this.onCancelRequestClicked})
       : super(key: key);
 
   @override
@@ -43,10 +45,29 @@ class RequestedToKindergartenCard extends StatelessWidget {
           ],
         ),
         assignRequest.kindergartenId != null
-            ? KindergartenButton(
-                name: assignRequest.kindergartenName!,
-                image: assignRequest.kindergartenImage!,
-                id: assignRequest.kindergartenId)
+            ? Row(
+                children: [
+                  Expanded(
+                    child: KindergartenButton(
+                        name: assignRequest.kindergartenName!,
+                        image: assignRequest.kindergartenImage!,
+                        id: assignRequest.kindergartenId),
+                  ),
+                  MaterialButton(
+                      onPressed: () {
+                        onCancelRequestClicked();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(28),
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          color: Colors.white,size: 30,
+                        ),
+                      ),
+                      color: Colors.redAccent,
+                      elevation: 0)
+                ],
+              )
             : Container()
       ],
     );
