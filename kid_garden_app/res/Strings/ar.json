@@ -113,6 +113,8 @@
   "join_requests": "طلبات انظمام",
   "no_staff": "لايوجد كادر",
   "no_parents": "لايوجد آباء",
-  "no_assign_requests": "لا يوجد طلبات انظمام."
+  "no_assign_requests": "لا يوجد طلبات انظمام.",
+  "click_to_join_another_kindergarten": "أضغط لارسال طلب الى حضانة اخرى."
+
 
 }

@@ -237,8 +237,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
 
                     return ContactListCard(
                       item.userType == "Parent" &&
-                              (user != null &&
-                                  user!.role == Role.Parents)
+                              (user != null && user!.role == Role.Parents)
                           ? false
                           : true,
                       contact: item,
@@ -344,16 +343,16 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
             dialog: ActionDialog(
                 type: DialogType.error,
                 title: getTranslated("joining_request", context),
-                message: "دز كي من الapi حته ع اساسه تظهرله الرسالة"));
+                message: _viewModel.joinKindergartenRequest.message!)).then((value) => _viewModel.setJoinKindergartenRequest(ApiResponse.non()));
         break;
       default:
     }
   }
 
   Widget kindergartenView() {
-   UserModel? user = ref.watch(hiveProvider).value!.getUser();
-   if(user!=null) {
-     return user.role == Role.Parents
+    UserModel? user = ref.watch(hiveProvider).value!.getUser();
+    if (user != null) {
+      return user.role == Role.Parents
           ? widget.child.assignRequest != null
               ? widget.child.assignRequest!.requestStatus ==
                       RequestStatus.Pending
@@ -361,15 +360,94 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                       (kindergarten) {
                       //todo: request kindergarten
                     })
-                  : (KindergartenButton(
-                      name: widget.child.assignRequest!.kindergartenName!,
-                      image: widget.child.assignRequest!.kindergartenImage!,
-                      id: widget.child.assignRequest!.kindergartenId,
-                    ))
+                  : widget.child.assignRequest!.requestStatus ==
+                          RequestStatus.Rejected
+                      ? rejectKindergartenCard()
+                      : (KindergartenButton(
+                          name: widget.child.assignRequest!.kindergartenName!,
+                          image: widget.child.assignRequest!.kindergartenImage!,
+                          id: widget.child.assignRequest!.kindergartenId,
+                        ))
               : joinKindergartenCard()
           : Container();
-   }
-   return Container();
-
+    }
+    return Container();
   }
+
+ Widget rejectKindergartenCard() {
+
+         return ElevatedButton(
+      onPressed: () {
+        //toDo:onclick kindergartenProfile...
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+               Text(widget.child.assignRequest!.kindergartenName!+" : "),
+
+                Expanded(
+                  child: Text(
+                    widget.child.assignRequest!.message!,
+                  ),
+                ),
+              ],
+            ),
+        ElevatedButton(
+          onPressed: () async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => KindergartenScreen(
+                      childId: widget.child.id,
+                      onKindergartenChoosed: (kindergartenId) async {
+                        await _viewModel.joinRequest(
+                            widget.child.id, kindergartenId);
+                      },
+                    )));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+
+                Text(
+                  getTranslated("click_to_join_another_kindergarten", context),
+                  style: const TextStyle(color: Colors.black87, fontSize: 18),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.warning_amber_outlined,
+                      color: Colors.yellow.shade800,
+                      size: 30,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(KidThem.white),
+              side: MaterialStateProperty.all(
+                  BorderSide(width: 1, color: KidThem.male1)),
+              elevation: MaterialStateProperty.all(0)),
+        )
+          ],
+        ),
+      ),
+      style: ButtonStyle(
+          backgroundColor:
+          MaterialStateProperty.all(KidThem.white),
+          side: MaterialStateProperty.all(
+              BorderSide(width: 1, color: Colors.redAccent)),
+          elevation: MaterialStateProperty.all(0)),
+    );
+
+ }
 }
