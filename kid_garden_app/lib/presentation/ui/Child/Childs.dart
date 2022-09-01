@@ -139,7 +139,7 @@ class _ChildrenExplorerState extends ConsumerState<ChildrenExplorer> {
         itemBuilder: (BuildContext context, Child item) {
           return ChildRow(onChildClicked: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                ChildProfileScreen(child: item, isSubscriptionValid: true)));
+                ChildProfileScreen(child: item, isSubscriptionValid: true, onChildRemoved: () {  _viewModel.removeItemFromCollection(item); },)));
           },
               child: item);
         },

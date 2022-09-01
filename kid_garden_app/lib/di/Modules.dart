@@ -26,7 +26,7 @@ final LoginPageViewModelProvider =
 
 final hiveProvider = FutureProvider<HiveDB>((_) => HiveDB.create());
 final childViewModelProvider =
-    ChangeNotifierProvider.family<ChildViewModel, String?>(
+    ChangeNotifierProvider.autoDispose.family<ChildViewModel, String?>(
         (ref, subUserId) => ChildViewModel(subUserId: subUserId));
 
 final parentChildrenViewModelProvider =

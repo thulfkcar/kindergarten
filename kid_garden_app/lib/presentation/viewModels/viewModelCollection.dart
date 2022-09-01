@@ -39,4 +39,16 @@ class ViewModelCollection<T> extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void removeItemFromCollection(T value) {
+    if(collectionApiResponse.data!=null && collectionApiResponse.data!.isNotEmpty){
+      collectionApiResponse.data!.remove(value);
+      if(collectionApiResponse.data!.isEmpty){
+        setCollectionApiResponse(ApiResponse.empty());
+      }else{
+        notifyListeners();
+
+      }
+
+    }
+  }
 }

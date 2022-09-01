@@ -1,18 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kid_garden_app/them/DentalThem.dart';
-
-import '../../../data/network/BaseApiService.dart';
-import '../../../domain/Child.dart';
-import '../../styles/colors_style.dart';
-
-
-// FloatingActionButton floatingActionButtonAdd(void Function()? f) {
-//   return FloatingActionButton(
-//     onPressed: (){},
-//     backgroundColor: ColorStyle.main,
-//     child: const Icon(Icons.add),
-//   );
-// }
 
 Widget customButton  ({ double size=20,double paddingEdges=20,required String text, required IconData icon,
     required Color mainColor, required Color backgroundColor, void Function()? onPressed}) {

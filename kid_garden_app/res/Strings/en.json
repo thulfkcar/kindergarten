@@ -126,7 +126,11 @@
   "cancel_joining_request": "canceling join request",
   "cancel_joining_request_sending": "join request canceling...",
   "cancel_join_request_des": "do you want to cancel Join request?..",
-  "process_finished": "Process finished successfully.."
+  "process_finished": "Process finished successfully..",
+  "remove": "Remove",
+  "remove_child": "Remove Child",
+  "child_removing": "Removing Child please waite...",
+  "remove_child_des": "do you want remove this child for real?.."
 
 
 

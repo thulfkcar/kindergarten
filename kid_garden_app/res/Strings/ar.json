@@ -118,7 +118,9 @@
   "cancel_joining_request": "الغاء طلب الانظمام",
   "cancel_joining_request_sending": "جار الغاء طلب الانظمام...",
   "cancel_join_request_des": "هل تريد بالفعل الغاء طلب الانظمام؟..",
-  "process_finished": "تمت العملية بنجاح"
-
-
+  "process_finished": "تمت العملية بنجاح",
+  "remove": "ازالة",
+  "remove_child": "ازالة الطفل",
+  "remove_child_des": "هل تريد بالفعل ازالة هذا الطفل؟",
+  "child_removing": "جار ازالة الطفل انظر قليلا...."
 }

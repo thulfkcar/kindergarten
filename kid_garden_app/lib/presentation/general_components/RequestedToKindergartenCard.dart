@@ -57,14 +57,11 @@ class RequestedToKindergartenCard extends StatelessWidget {
                       onPressed: () {
                         onCancelRequestClicked();
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.all(28),
-                        child: Icon(
-                          Icons.cancel_outlined,
-                          color: Colors.white,size: 30,
-                        ),
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.redAccent,size: 40,
                       ),
-                      color: Colors.redAccent,
+                      color: Colors.transparent,
                       elevation: 0)
                 ],
               )

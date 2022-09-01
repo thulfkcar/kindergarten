@@ -208,6 +208,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                           builder: (builder) => ChildProfileScreen(
                                 isSubscriptionValid: widget.isSubscriptionValid,
                                 subscriptionMessage: widget.subscriptionMessage,
+                                onChildRemoved: () { _viewModel.removeItemFromCollection( _viewModel.collectionApiResponse.data![index]); },
                                 child: child,
                               )));
                 },

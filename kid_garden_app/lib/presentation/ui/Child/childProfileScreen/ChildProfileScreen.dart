@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
@@ -17,18 +18,21 @@ import '../../../../domain/UserModel.dart';
 import '../../../general_components/ContactList.dart';
 import '../../../general_components/KindergartenButton.dart';
 import '../../../general_components/RequestedToKindergartenCard.dart';
+import '../../../general_components/units/buttons.dart';
 import '../../../general_components/units/texts.dart';
 import '../../../styles/colors_style.dart';
 import '../../childActions/ChildActions.dart';
 import '../../kindergartens/kindergartenScreen.dart';
 
 class ChildProfileScreen extends ConsumerStatefulWidget {
-  Child child;
-  bool isSubscriptionValid;
-  String? subscriptionMessage;
+  final Child child;
+  final bool isSubscriptionValid;
+  final String? subscriptionMessage;
+  final Function() onChildRemoved;
 
-  ChildProfileScreen(
+  const ChildProfileScreen(
       {Key? key,
+      required this.onChildRemoved,
       required this.child,
       required this.isSubscriptionValid,
       this.subscriptionMessage})
@@ -49,6 +53,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
     Future.delayed(Duration.zero, () {
       kindergratenRequestViewResponse();
       cancelRequestResponse();
+      removeChildViewResponse();
     });
     return Scaffold(
         appBar: AppBar(
@@ -56,6 +61,41 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
           elevation: 0,
           title: Text(
               getTranslated("profile", context) + ": " + widget.child.name),
+          actions: [
+            user!.role != Role.Staff
+                ? customButton(
+                    icon: Icons.delete_forever_outlined,
+                    backgroundColor: Colors.transparent,
+                    mainColor: Colors.redAccent,
+                    text: "",
+                    size: 30,
+                    onPressed: () async {
+                      showDialogGeneric(
+                          context: context,
+                          dialog: ConfirmationDialog(
+                              title: getTranslated("remove_child", context),
+                              message:
+                                  getTranslated("remove_child_des", context),
+                              confirmed: () async {
+
+                                switch (user!.role) {
+                                  case Role.admin:
+                                    await _viewModel
+                                        .removeChildFromKindergarten(
+                                            widget.child.id);
+                                    break;
+                                  case Role.Parents:
+
+                                    await _viewModel
+                                        .removeChildEntirely(widget.child.id);
+                                    break;
+                                  default:
+                                }
+                              }));
+                    },
+                  )
+                : Container()
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -282,7 +322,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         textAlign: TextAlign.center)),
                 Text(
                   getTranslated("click_to_join", context),
-                  style: TextStyle(color: Colors.black87, fontSize: 18),
+                  style: const TextStyle(color: Colors.black87, fontSize: 18),
                 )
               ],
             ),
@@ -368,7 +408,8 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                         showDialogGeneric(
                             context: context,
                             dialog: ConfirmationDialog(
-                                title: getTranslated("cancel_joining_request", context),
+                                title: getTranslated(
+                                    "cancel_joining_request", context),
                                 message: getTranslated(
                                     "cancel_join_request_des", context),
                                 confirmed: () async {
@@ -460,7 +501,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(KidThem.white),
           side: MaterialStateProperty.all(
-              BorderSide(width: 1, color: Colors.redAccent)),
+              const BorderSide(width: 1, color: Colors.redAccent)),
           elevation: MaterialStateProperty.all(0)),
     );
   }
@@ -505,6 +546,49 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                     message: _viewModel.cancelJoinRequestResponse.message!))
             .then((value) =>
                 _viewModel.setCancelJoinRequestResponse(ApiResponse.non()));
+        break;
+      default:
+    }
+  }
+
+  removeChildViewResponse() {
+    var status = _viewModel.removeChildResponse.status;
+    switch (status) {
+      case Status.LOADING:
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.loading,
+                title: getTranslated("remove_child", context),
+                message:
+                    getTranslated("cancel_joining_request_sending", context)));
+        break;
+      case Status.COMPLETED:
+        Navigator.pop(context);
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+              type: DialogType.completed,
+              title: getTranslated("remove_child", context),
+              message: getTranslated("process_finished", context),
+              onCompleted: (sd) {
+                _viewModel.removeChildResponse = ApiResponse.non();
+                widget.onChildRemoved();
+                Navigator.pop(context);
+              },
+            ));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+
+        showDialogGeneric(
+                context: context,
+                dialog: ActionDialog(
+                    type: DialogType.error,
+                    title: getTranslated("remove_child", context),
+                    message: _viewModel.removeChildResponse.message!))
+            .then((value) =>
+                _viewModel.setRemoveChildResponse(ApiResponse.non()));
         break;
       default:
     }

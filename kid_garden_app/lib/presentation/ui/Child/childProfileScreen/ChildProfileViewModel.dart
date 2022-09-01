@@ -7,6 +7,7 @@ class ChildProfileViewModel extends ChangeNotifier {
   final _userRepository = UserRepository();
   ApiResponse<AssignRequest> joinKindergartenRequest = ApiResponse.non();
   ApiResponse<bool> cancelJoinRequestResponse = ApiResponse.non();
+  ApiResponse<bool> removeChildResponse = ApiResponse.non();
 
   Future<void> joinRequest(String childId, String kindergartenId) async {
     //after request done
@@ -26,9 +27,13 @@ class ChildProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setCancelJoinRequestResponse(
-      ApiResponse<bool> response) async {
+  Future<void> setCancelJoinRequestResponse(ApiResponse<bool> response) async {
     cancelJoinRequestResponse = response;
+    notifyListeners();
+  }
+
+  Future<void> setRemoveChildResponse(ApiResponse<bool> response) async {
+    removeChildResponse = response;
     notifyListeners();
   }
 
@@ -36,12 +41,30 @@ class ChildProfileViewModel extends ChangeNotifier {
     await setCancelJoinRequestResponse(ApiResponse.loading());
     await _userRepository.cancelJoinRequest(joinRequestId).then((value) {
       setCancelJoinRequestResponse(ApiResponse.completed(value)).then((value) {
-        joinKindergartenRequest.data=null;
+        joinKindergartenRequest.data = null;
         notifyListeners();
       });
-
     }).onError((error, stackTrace) {
       setCancelJoinRequestResponse(ApiResponse.error(error.toString()));
+    });
+  }
+
+  Future<void> removeChildFromKindergarten(String id) async {
+    await setRemoveChildResponse(ApiResponse.loading());
+
+    await _userRepository.removeChildFromKindergarten(id).then((value) {
+      setRemoveChildResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setRemoveChildResponse(ApiResponse.error(error.toString()));
+    });
+  }
+
+  Future<void> removeChildEntirely(String id) async {
+    await setRemoveChildResponse(ApiResponse.loading());
+    await _userRepository.removeChildEntirely(id).then((value) {
+      setRemoveChildResponse(ApiResponse.completed(value));
+    }).onError((error, stackTrace) {
+      setRemoveChildResponse(ApiResponse.error(error.toString()));
     });
   }
 }

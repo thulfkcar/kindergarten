@@ -45,8 +45,7 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(staffChildrenViewModelProvider);
     _viewModel_login = ref.watch(LoginPageViewModelProvider);
-    return Scaffold(
-      body:body());
+    return Scaffold(body: body());
   }
 
   Widget head() {
@@ -76,12 +75,14 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
         return LoadingWidget();
 
       case Status.COMPLETED:
-       return children(false);
+        return children(false);
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.collectionApiResponse.message ?? "Error",onRefresh: (){
-          _viewModel.fetchChildren();
-        },);
+          msg: _viewModel.collectionApiResponse.message ?? "Error",
+          onRefresh: () {
+            _viewModel.fetchChildren();
+          },
+        );
 
       case Status.LOADING_NEXT_PAGE:
         return children(true);
@@ -110,13 +111,23 @@ class _StaffChildrenScreenState extends ConsumerState<StaffChildrenScreen> {
     }
   }
 
-  Widget children(bool loadNext ) {
-     return CustomListView(
+  Widget children(bool loadNext) {
+    return CustomListView(
         scrollController: _scrollController,
         items: _viewModel.collectionApiResponse.data!,
         loadNext: loadNext,
         itemBuilder: (BuildContext context, Child item) {
-          return ChildRow( onChildClicked: () { Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildProfileScreen(child: item, isSubscriptionValid: true))); },
+          return ChildRow(
+              onChildClicked: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => ChildProfileScreen(
+                              child: item,
+                              isSubscriptionValid: true,
+                              onChildRemoved: () {_viewModel.removeItemFromCollection(item);},
+                            )));
+              },
               child: item);
         },
         direction: Axis.vertical);

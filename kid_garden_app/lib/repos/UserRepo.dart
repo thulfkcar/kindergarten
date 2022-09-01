@@ -320,4 +320,29 @@ Future<bool>  cancelJoinRequest(String id) async {
       rethrow;
     }
   }
+
+ Future<bool> removeChildFromKindergarten(String id) async {
+
+   try {
+     dynamic response =
+         await _apiService.postResponse("User/removeChildFromKindergarten/$id", Map());
+
+     return await response;
+   } catch (e) {
+     rethrow;
+   }
+
+ }
+
+ Future<bool> removeChildEntirely(String id) async {
+
+   try {
+     dynamic response =
+         await _apiService.postResponse("User/removeChildEntirely/$id", Map());
+
+     return await response;
+   } catch (e) {
+     rethrow;
+   }
+ }
 }
