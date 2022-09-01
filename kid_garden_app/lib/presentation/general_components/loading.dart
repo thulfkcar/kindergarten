@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
 class LoadingWidget extends StatelessWidget {
   @override
@@ -6,13 +8,15 @@ class LoadingWidget extends StatelessWidget {
     return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            CircularProgressIndicator(),
-            SizedBox(
+          children:  [
+            // const CircularProgressIndicator(),
+            Image.asset("res/images/loading.gif",width: 60,height: 60,),
+            const SizedBox(
+
               height: 8,
             ),
             Text(
-              'Loading...',
+              getTranslated("loading", context),
             )
           ],
         ));

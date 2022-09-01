@@ -130,7 +130,8 @@
   "remove": "Remove",
   "remove_child": "Remove Child",
   "child_removing": "Removing Child please waite...",
-  "remove_child_des": "do you want remove this child for real?.."
+  "remove_child_des": "do you want remove this child for real?..",
+  "loading": "Loading Please waite..."
 
 
 

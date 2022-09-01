@@ -23,11 +23,13 @@ class MyErrorWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const FaIcon(
-                  FontAwesomeIcons.exclamationCircle,
-                  size: 200,
-                  color: Colors.redAccent,
-                ),
+                // const FaIcon(
+                //   FontAwesomeIcons.exclamationCircle,
+                //   size: 200,
+                //   color: Colors.redAccent,
+                // ),
+                Image.asset("res/images/error.png",width: 200,height: 200,),
+
                 Text(
                   msg,
                 )
@@ -54,11 +56,12 @@ class EmptyWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const FaIcon(
-                  FontAwesomeIcons.exclamationCircle,
-                  size: 200,
-                  color: Colors.amber,
-                ),
+                Image.asset("res/images/no_data.png",width: 200,height: 200,),
+                // const FaIcon(
+                //   FontAwesomeIcons.exclamationCircle,
+                //   size: 200,
+                //   color: Colors.amber,
+                // ),
                 Text(
                   msg,
                 )
