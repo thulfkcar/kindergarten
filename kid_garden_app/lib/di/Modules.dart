@@ -8,7 +8,7 @@ import 'package:kid_garden_app/presentation/ui/navigationX/admin/AdminRequestsSc
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/parentChildren/ParentChildrenViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/staffChildren/StaffChildrenViewModel.dart';
 import '../data/Local/HiveDB.dart';
-import '../presentation/ui/Home/HomeViewModel.dart';
+import '../presentation/ui/navigationX/admin/Dashboard/HomeViewModel.dart';
 import '../presentation/ui/SignUp/SignUpViewModel.dart';
 import '../presentation/ui/navigationX/admin/Staff/StaffViewModel.dart';
 import '../presentation/ui/childActions/AssignChildViewModel.dart';

@@ -52,7 +52,12 @@ class ChildActionViewModel extends ChangeNotifier {
         .getChildActions(childId: childId!, page: pageChildAction)
         .then((value) {
       childActionsLastPage = value.item2;
-      setChildActionsListResponse(ApiResponse.completed(value.item1));
+      if(value.item1.isEmpty){
+        setChildActionsListResponse(ApiResponse.empty());
+      }
+      else {
+        setChildActionsListResponse(ApiResponse.completed(value.item1));
+      }
     }).onError((error, stackTrace) {
       setChildActionsListResponse(ApiResponse.error(error.toString()));
     });

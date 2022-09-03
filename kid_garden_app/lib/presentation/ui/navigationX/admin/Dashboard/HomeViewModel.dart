@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:kid_garden_app/repos/KindergartenRepository.dart';
 import 'package:tuple/tuple.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../domain/ChildAction.dart';
-import '../../../repos/ActionRepository.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../domain/ChildAction.dart';
+import '../../../../../repos/ActionRepository.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final _repository = ActionRepository();
@@ -59,7 +59,11 @@ class HomeViewModel extends ChangeNotifier {
         .getAllChildActions( page: pageChildAction)
         .then((value) {
       childActionsLastPage = value.item2;
-      setChildActionsListResponse(ApiResponse.completed(value.item1));
+      if(value.item1.isEmpty){
+        setChildActionsListResponse(ApiResponse.empty());
+      }else
+        {
+      setChildActionsListResponse(ApiResponse.completed(value.item1));}
     }).onError((error, stackTrace) {
       setChildActionsListResponse(ApiResponse.error(error.toString()));
     });

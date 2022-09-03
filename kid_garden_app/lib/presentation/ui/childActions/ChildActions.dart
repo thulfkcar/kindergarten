@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
-import 'package:kid_garden_app/presentation/general_components/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
@@ -13,7 +12,6 @@ import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../di/Modules.dart';
 import '../../../domain/ChildAction.dart';
-import '../AssingScreen/AssginScreen.dart';
 import '../dialogs/ActionDialog.dart';
 
 import 'ChildActionAddScreen.dart';
@@ -61,19 +59,17 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       postingChildActionResponse();
     });
     return Scaffold(
-      floatingActionButton:
-      // selectedActionGroup != null
-      //     ?
-      FloatingActionButton(
-              child: const Icon(Icons.add),
-              backgroundColor: Colors.white,
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (builder)=>ChildActionAddScreen(childId: widget.childId,)));
-                // setState(() {
-                //   isAddingAction = true;
-                // });
-              }),
-          // : null,
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.white,
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => ChildActionAddScreen(
+                          childId: widget.childId,
+                        )));
+          }),
       body: body(),
       appBar: AppBar(
         centerTitle: true,
@@ -84,21 +80,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           style: const TextStyle(color: Colors.black),
         ),
         elevation: 0,
-        actions: [
-          ElevatedButton(
-              onPressed: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AssignScreen(childId: widget.childId)));
-              },
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.transparent),
-                  elevation: MaterialStateProperty.all(0)),
-              child: const Icon(FontAwesomeIcons.link))
-        ],
+
       ),
     );
   }
@@ -119,19 +101,14 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       case Status.LOADING:
         return LoadingWidget();
       case Status.COMPLETED:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.childActionResponse.data!,
-          loadNext: false,
-          itemBuilder: (BuildContext context, ChildAction item) {
-            return action4ImgCard(ScrollController(), item);
-          },
-          direction: Axis.vertical,
-        );
+        return childAction(loadNext: false);
       case Status.Empty:
-        return EmptyWidget(msg: getTranslated("noActionsForChild", context),onRefresh: (){
-          _viewModel.fetchChildActions();
-        },);
+        return EmptyWidget(
+          msg: getTranslated("noActionsForChild", context),
+          onRefresh: () {
+            _viewModel.fetchChildActions();
+          },
+        );
       case Status.ERROR:
         return MyErrorWidget(
           msg: _viewModel.childActionResponse.message!,
@@ -140,15 +117,7 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           },
         );
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: _viewModel.childActionResponse.data!,
-          loadNext: true,
-          itemBuilder: (BuildContext context, ChildAction item) {
-            return action4ImgCard(ScrollController(), item);
-          },
-          direction: Axis.vertical,
-        );
+        return childAction(loadNext: true);
       case Status.NON:
         break;
       default:
@@ -205,5 +174,17 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
         break;
       default:
     }
+  }
+
+  Widget childAction({required bool loadNext}) {
+    return CustomListView(
+      scrollController: _scrollController,
+      items: _viewModel.childActionResponse.data!,
+      loadNext: loadNext,
+      itemBuilder: (BuildContext context, ChildAction item) {
+        return action4ImgCard(ScrollController(), item);
+      },
+      direction: Axis.vertical,
+    );
   }
 }

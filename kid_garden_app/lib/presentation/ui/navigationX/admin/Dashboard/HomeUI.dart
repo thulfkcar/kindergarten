@@ -6,8 +6,9 @@ import 'package:kid_garden_app/presentation/general_components/Error.dart';
 import 'package:kid_garden_app/presentation/general_components/InfoCard.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../di/Modules.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../di/Modules.dart';
 
 import 'HomeViewModel.dart';
 
@@ -77,7 +78,9 @@ class _HomeXXState extends ConsumerState<Home> {
         );
       case Status.ERROR:
         return MyErrorWidget(
-          msg: viewModel.childActionResponse.message!=null ?viewModel.childActionResponse.message!.toString():"",
+          msg: viewModel.childActionResponse.message != null
+              ? viewModel.childActionResponse.message!.toString()
+              : "",
           onRefresh: () {
             viewModel.fetchChildActions();
           },
@@ -94,15 +97,7 @@ class _HomeXXState extends ConsumerState<Home> {
         return LoadingWidget();
       case Status.COMPLETED:
         return Expanded(
-          child: CustomListView(
-            scrollController: _scrollController,
-            items: viewModel.childActionResponse.data!,
-            loadNext: false,
-            itemBuilder: (BuildContext context, ChildAction item) {
-              return action4ImgCard(ScrollController(), item);
-            },
-            direction: Axis.vertical,
-          ),
+          child: childActionList(loadNext: false),
         );
       case Status.ERROR:
         return Column(
@@ -117,16 +112,10 @@ class _HomeXXState extends ConsumerState<Home> {
             )
           ],
         );
+      case Status.Empty:
+        return EmptyWidget(msg: getTranslated("no_data", context),onRefresh: ()async{await viewModel.fetchChildActions();},);
       case Status.LOADING_NEXT_PAGE:
-        return CustomListView(
-          scrollController: _scrollController,
-          items: viewModel.childActionResponse.data!,
-          loadNext: true,
-          itemBuilder: (BuildContext context, ChildAction item) {
-            return action4ImgCard(ScrollController(), item);
-          },
-          direction: Axis.vertical,
-        );
+        return childActionList(loadNext: true);
       case Status.NON:
         break;
       default:
@@ -142,5 +131,17 @@ class _HomeXXState extends ConsumerState<Home> {
         await viewModel.fetchNextChildActions();
       }
     }
+  }
+
+  Widget childActionList({required bool loadNext}) {
+    return CustomListView(
+      scrollController: _scrollController,
+      items: viewModel.childActionResponse.data!,
+      loadNext: loadNext,
+      itemBuilder: (BuildContext context, ChildAction item) {
+        return action4ImgCard(ScrollController(), item);
+      },
+      direction: Axis.vertical,
+    );
   }
 }

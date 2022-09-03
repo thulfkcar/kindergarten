@@ -131,7 +131,10 @@
   "remove_child": "Remove Child",
   "child_removing": "Removing Child please waite...",
   "remove_child_des": "do you want remove this child for real?..",
-  "loading": "Loading Please waite..."
+  "loading": "Loading Please waite...",
+  "no_data": "no data",
+  "assign_to_staff": "assign ti staff"
+
 
 
 

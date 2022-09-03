@@ -2,9 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AssingScreen/AssginScreen.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:kid_garden_app/them/DentalThem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -62,6 +64,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
           title: Text(
               getTranslated("profile", context) + ": " + widget.child.name),
           actions: [
+
             user!.role != Role.Staff
                 ? customButton(
                     icon: Icons.delete_forever_outlined,
@@ -219,7 +222,31 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                 BorderSide(width: 1, color: KidThem.male1)),
                             elevation: MaterialStateProperty.all(0)),
                       ),
-                    )
+                    ),
+
+                  user!.role==Role.admin?  Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AssignScreen(childId: widget.child.id)));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: titleText(
+                              getTranslated("assign_to_staff", context), Colors.black),
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all(KidThem.white),
+                            side: MaterialStateProperty.all(
+                                BorderSide(width: 1, color: KidThem.male1)),
+                            elevation: MaterialStateProperty.all(0)),
+                      ),
+                    ):Container(),
                   ],
                 ),
                 kindergartenView(),

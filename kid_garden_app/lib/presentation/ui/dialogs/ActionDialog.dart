@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AssingScreen/QRReader.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../AssingScreen/QRReader.dart';
 
 class ActionDialog extends StatefulWidget {
   String message;

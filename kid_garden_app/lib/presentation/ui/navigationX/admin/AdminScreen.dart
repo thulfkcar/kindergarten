@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../di/Modules.dart';
 import '../../../../them/DentalThem.dart';
 import '../../../utile/language_constrants.dart';
-import '../../Home/HomeUI.dart';
 import '../../dialogs/ActionDialog.dart';
+import 'Dashboard/HomeUI.dart';
 import 'adminProfile/AdminProfileScreen.dart';
 
 class AdminScreen extends ConsumerStatefulWidget {

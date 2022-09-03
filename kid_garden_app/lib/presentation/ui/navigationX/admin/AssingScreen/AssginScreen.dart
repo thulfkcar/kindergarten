@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kid_garden_app/presentation/ui/AssingScreen/QRReader.dart';
-import '../../../data/network/ApiResponse.dart';
-import '../../../data/network/FromData/AssingChildForm.dart';
-import '../../../di/Modules.dart';
-import '../childActions/AssignChildViewModel.dart';
-import '../dialogs/ActionDialog.dart';
+import 'package:kid_garden_app/presentation/ui/navigationX/admin/AssingScreen/QRReader.dart';
+import '../../../../../data/network/ApiResponse.dart';
+import '../../../../../data/network/FromData/AssingChildForm.dart';
+import '../../../../../di/Modules.dart';
+import '../../../childActions/AssignChildViewModel.dart';
+import '../../../dialogs/ActionDialog.dart';
 
 class AssignScreen extends ConsumerStatefulWidget {
   String? childId;
