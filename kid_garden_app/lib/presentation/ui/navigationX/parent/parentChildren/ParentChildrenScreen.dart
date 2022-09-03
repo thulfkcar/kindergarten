@@ -17,13 +17,14 @@ import '../../../../general_components/ParentChildCardGrid.dart';
 import 'ParentChildrenViewModel.dart';
 
 class ParentChildrenScreen extends ConsumerStatefulWidget {
- final bool isSubscriptionValid;
- final String? subscriptionMessage;
+  final bool isSubscriptionValid;
+  final String? subscriptionMessage;
 
-  const ParentChildrenScreen({Key? key,
+  const ParentChildrenScreen({
+    Key? key,
     this.subscriptionMessage,
     required this.isSubscriptionValid,
-  }) : super(key: key) ;
+  }) : super(key: key);
 
   @override
   ConsumerState createState() => _ParentChildrenScreenState();
@@ -42,8 +43,6 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
   Widget build(BuildContext context) {
     _viewModel = ref.watch(parentChildrenViewModelProvider);
 
-
-
     Future.delayed(Duration.zero, () async {
       await addingRequestState();
     });
@@ -54,21 +53,18 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
     ));
     return Scaffold(
       body: Column(
-        children: [
-          Expanded(child: body())
-        ],
+        children: [Expanded(child: body())],
       ),
       floatingActionButton: floatingActionButtonAdd22(onClicked: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChildAddingScreen(onAdded: (child) {
-                            if (child != null) {
-                              _viewModel.addNewItemToCollection(child);
-                            }
-                          })));
-            })
-      ,
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChildAddingScreen(onAdded: (child) {
+                      if (child != null) {
+                        _viewModel.addNewItemToCollection(child);
+                      }
+                    })));
+      }),
     );
   }
 
@@ -102,17 +98,22 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         return childrenGrid();
       case Status.ERROR:
         return MyErrorWidget(
-            msg: _viewModel.collectionApiResponse.message ?? "Error",onRefresh: (){
-          _viewModel.fetchChildren();
-        },);
+          msg: _viewModel.collectionApiResponse.message ?? "Error",
+          onRefresh: () {
+            _viewModel.fetchChildren();
+          },
+        );
 
       case Status.LOADING_NEXT_PAGE:
         return childrenGrid();
 
       case Status.Empty:
-        return EmptyWidget(msg: getTranslated("no_children", context),onRefresh: (){
-          _viewModel.fetchChildren();
-        },);
+        return EmptyWidget(
+          msg: getTranslated("no_children", context),
+          onRefresh: () {
+            _viewModel.fetchChildren();
+          },
+        );
       case Status.NON:
         return Container();
       default:
@@ -200,7 +201,7 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
         return Padding(
             padding: const EdgeInsets.all(8),
             child: ParentChildCardGrid(
-              height: itemHeight,
+                height: itemHeight,
                 onClicked: () {
                   Navigator.push(
                       context,
@@ -208,8 +209,14 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                           builder: (builder) => ChildProfileScreen(
                                 isSubscriptionValid: widget.isSubscriptionValid,
                                 subscriptionMessage: widget.subscriptionMessage,
-                                onChildRemoved: () { _viewModel.removeItemFromCollection( _viewModel.collectionApiResponse.data![index]); },
+                                onChildRemoved: () {
+                                  _viewModel.removeItemFromCollection(_viewModel
+                                      .collectionApiResponse.data![index]);
+                                },
                                 child: child,
+                                onAssignCompleted: () async {
+                                  await _viewModel.fetchChildren();
+                                },
                               )));
                 },
                 child: child));

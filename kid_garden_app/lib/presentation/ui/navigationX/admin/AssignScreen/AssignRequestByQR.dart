@@ -7,16 +7,19 @@ import '../../../../../di/Modules.dart';
 import '../../../childActions/AssignChildViewModel.dart';
 import '../../../dialogs/ActionDialog.dart';
 
-  class AssignScreenByQR extends ConsumerStatefulWidget {
- final String? childId;
+class AssignScreenByQR extends ConsumerStatefulWidget {
+  final String? childId;
+  final Function() onAssignCompleted ;
 
- const AssignScreenByQR({
+  const AssignScreenByQR({
     required this.childId,
+    required this.onAssignCompleted,
     Key? key,
   }) : super(key: key);
 
   @override
   ConsumerState createState() => _AssignByQRScreenState();
+
 }
 
 class _AssignByQRScreenState extends ConsumerState<AssignScreenByQR> {
@@ -35,7 +38,7 @@ class _AssignByQRScreenState extends ConsumerState<AssignScreenByQR> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title:  Text(
+        title: Text(
           getTranslated("assign_to_staff", context),
           style: const TextStyle(color: Colors.black),
         ),
@@ -65,13 +68,14 @@ class _AssignByQRScreenState extends ConsumerState<AssignScreenByQR> {
             messageDialog: ActionDialog(
               type: DialogType.loading,
               title: getTranslated("assign_to_staff", context),
-              message:getTranslated("please_waite", context),
+              message: getTranslated("please_waite", context),
               onCompleted: (s) {},
             ));
         await _viewModelAssignChild
             .setAssigningChildResponse(ApiResponse.non());
         break;
       case Status.COMPLETED:
+        widget.onAssignCompleted();
         Navigator.pop(context);
         await _viewModelAssignChild
             .setAssigningChildResponse(ApiResponse.non())
@@ -85,7 +89,6 @@ class _AssignByQRScreenState extends ConsumerState<AssignScreenByQR> {
                 onCompleted: (s) {
                   Navigator.pop(context);
                   Navigator.pop(context);
-
                 },
               ));
         });

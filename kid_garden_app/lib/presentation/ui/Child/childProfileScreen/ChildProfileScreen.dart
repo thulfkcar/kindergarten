@@ -32,6 +32,7 @@ class ChildProfileScreen extends ConsumerStatefulWidget {
 
   const ChildProfileScreen(
       {Key? key,
+      this.onAssignCompleted,
       required this.onChildRemoved,
       required this.child,
       required this.isSubscriptionValid,
@@ -40,6 +41,8 @@ class ChildProfileScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState createState() => _ChildProfileScreenState();
+
+  final Function()? onAssignCompleted;
 }
 
 class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
@@ -230,9 +233,14 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                             builder: (context) => AssignScreen(
                                                   childId: widget.child.id,
                                                   onAssignCompleted: (user) {
-                                                    setState((){
-                                                      widget.child.contacts!.add(Contact(name: user.name!, phone: user.phone!, userType: "Staff"));
-
+                                                    setState(() {
+                                                      widget.child.contacts!
+                                                          .add(Contact(
+                                                              name: user.name!,
+                                                              phone:
+                                                                  user.phone!,
+                                                              userType:
+                                                                  "Staff"));
                                                     });
                                                   },
                                                 )))
@@ -242,8 +250,13 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AssignScreenByQR(
-                                                        childId:
-                                                            widget.child.id)))
+                                                      childId: widget.child.id,
+                                                      onAssignCompleted: () {
+                                                        if (widget.onAssignCompleted != null) {
+                                                          widget.onAssignCompleted!();
+                                                        }
+                                                      },
+                                                    )))
                                         : {
                                             Navigator.pop(context),
                                             Navigator.pop(context)
