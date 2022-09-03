@@ -29,6 +29,7 @@ class ChildProfileScreen extends ConsumerStatefulWidget {
   final bool isSubscriptionValid;
   final String? subscriptionMessage;
   final Function() onChildRemoved;
+  final Function()? onKindergartenLeft;
 
   const ChildProfileScreen(
       {Key? key,
@@ -36,7 +37,8 @@ class ChildProfileScreen extends ConsumerStatefulWidget {
       required this.onChildRemoved,
       required this.child,
       required this.isSubscriptionValid,
-      this.subscriptionMessage})
+      this.subscriptionMessage,
+      this.onKindergartenLeft})
       : super(key: key);
 
   @override
@@ -57,6 +59,7 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
       kindergratenRequestViewResponse();
       cancelRequestResponse();
       removeChildViewResponse();
+      leaveKindergartenResponse();
     });
     return Scaffold(
         appBar: AppBar(
@@ -252,8 +255,11 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                                                     AssignScreenByQR(
                                                       childId: widget.child.id,
                                                       onAssignCompleted: () {
-                                                        if (widget.onAssignCompleted != null) {
-                                                          widget.onAssignCompleted!();
+                                                        if (widget
+                                                                .onAssignCompleted !=
+                                                            null) {
+                                                          widget
+                                                              .onAssignCompleted!();
                                                         }
                                                       },
                                                     )))
@@ -478,11 +484,40 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                   : widget.child.assignRequest!.requestStatus ==
                           RequestStatus.Rejected
                       ? rejectKindergartenCard()
-                      : (KindergartenButton(
-                          name: widget.child.assignRequest!.kindergartenName!,
-                          image: widget.child.assignRequest!.kindergartenImage!,
-                          id: widget.child.assignRequest!.kindergartenId,
-                        ))
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: (KindergartenButton(
+                                name: widget
+                                    .child.assignRequest!.kindergartenName!,
+                                image: widget
+                                    .child.assignRequest!.kindergartenImage!,
+                                id: widget.child.assignRequest!.kindergartenId,
+                              )),
+                            ),
+                            MaterialButton(
+                                onPressed: () {
+                                  showDialogGeneric(
+                                      context: context,
+                                      dialog: ConfirmationDialog(
+                                          title:
+                                              getTranslated("leave", context),
+                                          message: getTranslated(
+                                              "leave_des", context),
+                                          confirmed: () async {
+                                            await _viewModel.leaveKindergarten(
+                                                widget.child.id);
+                                          }));
+                                },
+                                child: const Icon(
+                                  Icons.leave_bags_at_home_outlined,
+                                  color: Colors.redAccent,
+                                  size: 40,
+                                ),
+                                color: Colors.transparent,
+                                elevation: 0)
+                          ],
+                        )
               : joinKindergartenCard()
           : Container();
     }
@@ -646,6 +681,57 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                     message: _viewModel.removeChildResponse.message!))
             .then((value) =>
                 _viewModel.setRemoveChildResponse(ApiResponse.non()));
+        break;
+      default:
+    }
+  }
+
+  leaveKindergartenResponse() {
+    var status = _viewModel.leaveKindergartenResponse.status;
+    switch (status) {
+      case Status.LOADING:
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+                type: DialogType.loading,
+                title: getTranslated("leave", context),
+                message: getTranslated("loading", context)));
+        break;
+      case Status.COMPLETED:
+        if (widget.onKindergartenLeft != null) {
+          widget.onKindergartenLeft!();
+        }
+        Navigator.pop(context);
+        showDialogGeneric(
+            context: context,
+            dialog: ActionDialog(
+              type: DialogType.completed,
+              title: getTranslated("leave", context),
+              message: getTranslated("process_finished", context),
+              onCompleted: (sd) {
+                setState(() {
+                  widget.child.assignRequest = null;
+
+                  widget.child.contacts!.removeWhere((element) =>
+                      (element.userType == "Staff" ||
+                          element.userType == "Admin"));
+                });
+
+                _viewModel.leaveKindergartenResponse = ApiResponse.non();
+              },
+            ));
+        break;
+      case Status.ERROR:
+        Navigator.pop(context);
+
+        showDialogGeneric(
+                context: context,
+                dialog: ActionDialog(
+                    type: DialogType.error,
+                    title: getTranslated("leave", context),
+                    message: _viewModel.leaveKindergartenResponse.message!))
+            .then((value) =>
+                _viewModel.setLeaveKindergartenResponse(ApiResponse.non()));
         break;
       default:
     }

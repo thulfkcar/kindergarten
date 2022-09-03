@@ -136,7 +136,9 @@
   "assign_to_staff": "assign to staff",
   "assign_to_staff_by_QR": "assign to staff his QR Identity",
   "please_waite": "please wait until process complete..",
-  "assign_to_staff_des": "do you want assign this child to"
+  "assign_to_staff_des": "do you want assign this child to",
+  "leave_des": "do you your child to abandon this kindergarten?",
+  "leave": "abandon kindergarten"
 
 
 

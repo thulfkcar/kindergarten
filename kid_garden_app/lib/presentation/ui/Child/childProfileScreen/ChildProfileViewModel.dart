@@ -7,6 +7,7 @@ class ChildProfileViewModel extends ChangeNotifier {
   final _userRepository = UserRepository();
   ApiResponse<AssignRequest> joinKindergartenRequest = ApiResponse.non();
   ApiResponse<bool> cancelJoinRequestResponse = ApiResponse.non();
+  ApiResponse<bool> leaveKindergartenResponse = ApiResponse.non();
   ApiResponse<bool> removeChildResponse = ApiResponse.non();
 
   Future<void> joinRequest(String childId, String kindergartenId) async {
@@ -29,6 +30,11 @@ class ChildProfileViewModel extends ChangeNotifier {
 
   Future<void> setCancelJoinRequestResponse(ApiResponse<bool> response) async {
     cancelJoinRequestResponse = response;
+    notifyListeners();
+  }
+
+  Future<void> setLeaveKindergartenResponse(ApiResponse<bool> response) async {
+    leaveKindergartenResponse = response;
     notifyListeners();
   }
 
@@ -56,6 +62,18 @@ class ChildProfileViewModel extends ChangeNotifier {
       setRemoveChildResponse(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       setRemoveChildResponse(ApiResponse.error(error.toString()));
+    });
+  }
+
+  Future<void> leaveKindergarten(String id) async {
+    await setLeaveKindergartenResponse(ApiResponse.loading());
+    await _userRepository.leaveKindergarten(id).then((value) {
+      setLeaveKindergartenResponse(ApiResponse.completed(value)).then((value) {
+        joinKindergartenRequest.data = null;
+        notifyListeners();
+      });
+    }).onError((error, stackTrace) {
+      setLeaveKindergartenResponse(ApiResponse.error(error.toString()));
     });
   }
 

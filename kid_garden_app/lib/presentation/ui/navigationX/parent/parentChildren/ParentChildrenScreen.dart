@@ -207,17 +207,28 @@ class _ParentChildrenScreenState extends ConsumerState<ParentChildrenScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (builder) => ChildProfileScreen(
-                                isSubscriptionValid: widget.isSubscriptionValid,
-                                subscriptionMessage: widget.subscriptionMessage,
-                                onChildRemoved: () {
-                                  _viewModel.removeItemFromCollection(_viewModel
-                                      .collectionApiResponse.data![index]);
-                                },
-                                child: child,
-                                onAssignCompleted: () async {
-                                  await _viewModel.fetchChildren();
-                                },
-                              )));
+                              isSubscriptionValid: widget.isSubscriptionValid,
+                              subscriptionMessage: widget.subscriptionMessage,
+                              onChildRemoved: () {
+                                _viewModel.removeItemFromCollection(_viewModel
+                                    .collectionApiResponse.data![index]);
+                              },
+                              child: child,
+                              onAssignCompleted: () async {
+                                await _viewModel.fetchChildren();
+                              },
+                              onKindergartenLeft: () async {
+                                setState(() {
+                                  child.kindergartenName = null;
+                                  child.kindergartenId = null;
+
+                                  child.assignRequest = null;
+
+                                  child.contacts!.removeWhere((element) =>
+                                      (element.userType == "Staff" ||
+                                          element.userType == "Admin"));
+                                });
+                              })));
                 },
                 child: child));
       }, growable: false),

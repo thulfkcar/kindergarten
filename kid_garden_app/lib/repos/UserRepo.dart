@@ -334,6 +334,19 @@ Future<bool>  cancelJoinRequest(String id) async {
 
  }
 
+ Future<bool> leaveKindergarten(String id) async {
+
+   try {
+     dynamic response =
+         await _apiService.postResponse("User/leaveKindergarten/$id", Map());
+
+     return await response;
+   } catch (e) {
+     rethrow;
+   }
+
+ }
+
  Future<bool> removeChildEntirely(String id) async {
 
    try {
