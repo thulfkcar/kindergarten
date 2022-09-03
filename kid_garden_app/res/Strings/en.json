@@ -30,7 +30,7 @@
   "reject_des": "do you want to reject this request?",
   "verification_des": "please waite until verification process complete",
   "reject_reason": "Reject Reason",
-  "confirm_request": "Confirm Request",
+  "confirm_request": "Confirm",
   "confirm_request_des": "do you want to Confirm this Request",
   "accepting_request": "accepting request",
   "accepting_request_des": "Request Pending Please waite",
@@ -133,7 +133,10 @@
   "remove_child_des": "do you want remove this child for real?..",
   "loading": "Loading Please waite...",
   "no_data": "no data",
-  "assign_to_staff": "assign ti staff"
+  "assign_to_staff": "assign to staff",
+  "assign_to_staff_by_QR": "assign to staff his QR Identity",
+  "please_waite": "please wait until process complete..",
+  "assign_to_staff_des": "do you want assign this child to"
 
 
 

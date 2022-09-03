@@ -20,7 +20,7 @@
   "reject_title": "تأكيد الرفض",
   "reject_des": "هل تريد بالتأكيد رفض هذا الطلب؟",
   "reject_reason": "سبب الرفض",
-  "confirm_request": "تأكيد الطلب",
+  "confirm_request": "تأكيد",
   "confirm_request_des": "هل تريد بالتأكيد قبول هذا الطلب؟",
   "accepting_request": "قبول الطلب",
   "accepting_request_des": "جارٍ معالجة الطب الرجاء الانتظار لحين الارسال",
@@ -125,5 +125,8 @@
   "child_removing": "جار ازالة الطفل انظر قليلا....",
   "loading": "جار تحميل البيانات انظر قليلا...",
   "no_data": "لاتوجد بيانات..",
-  "assign_to_staff": "تعيين مراقب"
+  "assign_to_staff": "تعيين مراقب",
+  "please_waite": "الرجاء الانتظار لحين اكمال العملية",
+  "assign_to_staff_des": "هل تريد ان يتم مراقبة هذا الطفل بواسطة ",
+  "assign_to_staff_by_QR": "تعيين مراقب بواسطة معرّفه"
 }
