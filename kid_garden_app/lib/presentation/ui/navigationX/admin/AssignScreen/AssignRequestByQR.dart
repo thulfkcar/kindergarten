@@ -88,7 +88,6 @@ class _AssignByQRScreenState extends ConsumerState<AssignScreenByQR> {
                 message: getTranslated("process_finished", context),
                 onCompleted: (s) {
                   Navigator.pop(context);
-                  Navigator.pop(context);
                 },
               ));
         });
