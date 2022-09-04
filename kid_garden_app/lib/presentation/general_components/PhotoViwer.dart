@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kid_garden_app/data/network/BaseApiService.dart';
@@ -33,9 +34,9 @@ class _PhotoPreviewState extends State<PhotoPreview> {
         backgroundColor: Colors.black,
         elevation: 0,
         systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarBrightness: Brightness.dark),
+            const SystemUiOverlayStyle(statusBarBrightness: Brightness.dark),
         leading: roundedClickableWithIcon(
-            icon: Icon(Icons.cancel_outlined,color: Colors.white,size: 25,),
+            icon: const Icon(Icons.cancel_outlined,color: Colors.white,size: 25,),
             size: 40,
             onClicked: () {
               Navigator.pop(context);
@@ -45,8 +46,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
         scrollPhysics: const BouncingScrollPhysics(),
         builder: (BuildContext context, int index) {
           return PhotoViewGalleryPageOptions(
-            imageProvider:
-                NetworkImage(domain + widget.galleryItems[index].url),
+            imageProvider: CachedNetworkImageProvider(domain + widget.galleryItems[index].url),
+                // NetworkImage(domain + widget.galleryItems[index].url),
             initialScale: PhotoViewComputedScale.contained * 0.8,
             heroAttributes: PhotoViewHeroAttributes(
                 tag: widget.galleryItems[index].id,

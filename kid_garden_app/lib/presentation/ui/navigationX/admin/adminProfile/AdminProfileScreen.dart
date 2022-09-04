@@ -123,7 +123,7 @@ class _AdminProfileScreenState extends ConsumerState<AdminProfileScreen> {
                         contact: Contact(
                             name: user.name!,
                             email: user.email,
-                            phone: user.phone!,
+                            phone:user.phone!=null? user.phone!:"",
                             userType: user.role.name.toString()))
                   ],
                 )),
