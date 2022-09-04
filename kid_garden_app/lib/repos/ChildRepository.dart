@@ -151,10 +151,8 @@ class ChildRepository {
         "Gender": childForm.gender.toString(),
         "BirthDate": childForm.birthDate.toString()
       });
-      List<File>? assest = null;
-      assest = [childForm.imageFile!];
-      dynamic response = await _apiService.multiPartPostResponse(
-          "Child/add", jsonBody, assest);
+      dynamic response = await _apiService.multiPartPostResponseSingleFile(
+          "Child/add", jsonBody, childForm.imageFile);
 
       var child;
       SingleResponse<Child>.fromJson(await response, (json) {

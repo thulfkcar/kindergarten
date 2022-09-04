@@ -50,7 +50,9 @@ class ParentInfoDialog extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                imageRectangleWithoutShadow(domain + user.image!, 90),
+                imageRectangleWithoutShadow(domain + user.image!, 90,() {
+
+                }),
                 Column(
                   children: [
                     ContactListCard(false,

@@ -46,19 +46,18 @@ class NetworkApiService extends BaseApiService {
       providerContainerRef.read(hiveProvider).whenData((value) async {
         if (value != null) {
           user = value.getUser();
-        }});
-          if (user != null) {
-            final response = await http.post(Uri.parse(baseUrl + url),
-                body: JsonBody,
-                headers: {
-                  // 'Content-Type': 'multipart/form-data',
-                  'Authorization': "Bearer ${user!.token}"
-                },
-                encoding: Encoding.getByName("utf-8"));
-            responseJson =await returnResponse(response);
-          }
-
-
+        }
+      });
+      if (user != null) {
+        final response = await http.post(Uri.parse(baseUrl + url),
+            body: JsonBody,
+            headers: {
+              // 'Content-Type': 'multipart/form-data',
+              'Authorization': "Bearer ${user!.token}"
+            },
+            encoding: Encoding.getByName("utf-8"));
+        responseJson = await returnResponse(response);
+      }
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -66,7 +65,37 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future multiPartPostResponse(
+  Future multiPartPostResponseSingleFile(
+      String url, Map<String, String> jsonBody, File? assets) async {
+    dynamic responseJson;
+    try {
+      var user = providerContainerRef.read(hiveProvider).value!.getUser();
+      if (user != null) {
+        var headers = {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': "Bearer ${user.token}"
+        };
+        var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+
+        if (assets != null) {
+          request.files.add(
+              await http.MultipartFile.fromPath('file', assets.path));
+        }
+
+        request.fields.addAll(jsonBody);
+        request.headers.addAll(headers);
+        http.StreamedResponse response = await request.send();
+
+        responseJson = returnResponse(await http.Response.fromStream(response));
+      }
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  @override
+  Future multiPartPostResponseMultiFiles(
       String url, Map<String, String> jsonBody, List<File>? assets) async {
     dynamic responseJson;
     try {
@@ -79,14 +108,9 @@ class NetworkApiService extends BaseApiService {
         var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
 
         if (assets != null) {
-          if (assets.length == 1) {
-            request.files.add(
-                await http.MultipartFile.fromPath('file', assets.first.path));
-          } else {
-            for (var element in assets) {
-              request.files.add(
-                  await http.MultipartFile.fromPath('files', element.path));
-            }
+          for (var element in assets) {
+            request.files
+                .add(await http.MultipartFile.fromPath('files', element.path));
           }
         }
 

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/domain/ActionGroup.dart';
 import 'package:kid_garden_app/presentation/general_components/CustomListView.dart';
 import 'package:kid_garden_app/presentation/general_components/Error.dart';
+import 'package:kid_garden_app/presentation/general_components/PhotoViwer.dart';
 import 'package:kid_garden_app/presentation/general_components/loading.dart';
 import 'package:kid_garden_app/presentation/general_components/units/cards.dart';
 import 'package:kid_garden_app/presentation/ui/childActions/ChildActionViewModel.dart';
@@ -80,7 +81,6 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
           style: const TextStyle(color: Colors.black),
         ),
         elevation: 0,
-
       ),
     );
   }
@@ -182,7 +182,21 @@ class _ChildActionsState extends ConsumerState<ChildActions> {
       items: _viewModel.childActionResponse.data!,
       loadNext: loadNext,
       itemBuilder: (BuildContext context, ChildAction item) {
-        return action4ImgCard(ScrollController(), item);
+        return action4ImgCard(
+          ScrollController(),
+          item,
+          onImageClicked: (index) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (builder) => PhotoPreview(
+                        galleryItems: item.medias!,
+                        pageController: PageController(initialPage: index),
+                        onPageChanged: (index) {},
+                        backgroundDecoration:
+                            const BoxDecoration(color: Colors.black))));
+          },
+        );
       },
       direction: Axis.vertical,
     );

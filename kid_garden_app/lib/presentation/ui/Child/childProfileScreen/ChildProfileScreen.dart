@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_garden_app/presentation/ui/Child/childProfileScreen/ChildProfileViewModel.dart';
@@ -119,9 +120,15 @@ class _ChildProfileScreenState extends ConsumerState<ChildProfileScreen> {
                           ClipOval(
                             child: SizedBox.fromSize(
                                 size: const Size.fromRadius(50),
-                                child: Image.network(
-                                    '$domain${widget.child.image!}',
-                                    fit: BoxFit.cover)),
+                                child: CachedNetworkImage(fit: BoxFit.cover,
+                                  imageUrl: '$domain${widget.child.image!}',
+                                  placeholder: (context, url) => Image.asset("res/images/child.jpg",fit: BoxFit.cover,),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                ),
+                                // Image.network(
+                                //     '$domain${widget.child.image!}',
+                                //     fit: BoxFit.cover)
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(

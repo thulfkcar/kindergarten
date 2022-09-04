@@ -91,46 +91,93 @@ class _ChildActionAddScreenState extends ConsumerState<ChildActionAddScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(40),
-          child: ElevatedButton(
-            onPressed: () async {
-              if (selectedActionGroup != null &&textFieldController.text.isNotEmpty) {
-                var childAction = ChildAction(
-                    id: "",
-                    actionGroupId: selectedActionGroup!.id,
-                    audience: Audience.All,
-                    value: textFieldController.text,
-                    childId: widget.childId,
-                    userId: '',
-                    date: DateTime.now());
-
-                setState(() {
-                  _viewModel
-                      .addChildAction(childAction: childAction, assets: medias)
-                      .then((value) {
-                    Navigator.pop(context);
-                  });
-                });
-              }
-            },
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0.0),
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: const BorderSide(color: Colors.blue)
-                        // side: BorderSide()
-                        ))),
+      bottomSheet:  Row(
+        children: [
+          Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 10, 10, 8),
-              child: Text(
-                getTranslated("add", context),
-                style: TextStyle(fontSize: 20),
+              padding: const EdgeInsets.only(left: 8,right: 8,bottom: 16),
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (selectedActionGroup != null &&textFieldController.text.isNotEmpty) {
+                    var childAction = ChildAction(
+                        id: "",
+                        actionGroupId: selectedActionGroup!.id,
+                        audience: Audience.All,
+                        value: textFieldController.text,
+                        childId: widget.childId,
+                        userId: '',
+                        date: DateTime.now());
+
+                    setState(() {
+                      _viewModel
+                          .addChildAction(childAction: childAction, assets: medias)
+                          .then((value) {
+                        Navigator.pop(context);
+                      });
+                    });
+                  }
+                },
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0.0),
+                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: const BorderSide(color: Colors.blue)
+                          // side: BorderSide()
+                        ))),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 10, 10, 8),
+                  child: Text(
+                    getTranslated("add", context),
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
               ),
             ),
-          )),
+          ),
+        ],
+      ),
+      // bottomNavigationBar: Padding(
+      //     padding: const EdgeInsets.all(40),
+      //     child: ElevatedButton(
+      //       onPressed: () async {
+      //         if (selectedActionGroup != null &&textFieldController.text.isNotEmpty) {
+      //           var childAction = ChildAction(
+      //               id: "",
+      //               actionGroupId: selectedActionGroup!.id,
+      //               audience: Audience.All,
+      //               value: textFieldController.text,
+      //               childId: widget.childId,
+      //               userId: '',
+      //               date: DateTime.now());
+      //
+      //           setState(() {
+      //             _viewModel
+      //                 .addChildAction(childAction: childAction, assets: medias)
+      //                 .then((value) {
+      //               Navigator.pop(context);
+      //             });
+      //           });
+      //         }
+      //       },
+      //       style: ButtonStyle(
+      //           elevation: MaterialStateProperty.all(0.0),
+      //           backgroundColor: MaterialStateProperty.all(Colors.transparent),
+      //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      //               RoundedRectangleBorder(
+      //                   borderRadius: BorderRadius.circular(10.0),
+      //                   side: const BorderSide(color: Colors.blue)
+      //                   // side: BorderSide()
+      //                   ))),
+      //       child: Padding(
+      //         padding: const EdgeInsets.fromLTRB(8, 10, 10, 8),
+      //         child: Text(
+      //           getTranslated("add", context),
+      //           style: TextStyle(fontSize: 20),
+      //         ),
+      //       ),
+      //     )),
     );
   }
 

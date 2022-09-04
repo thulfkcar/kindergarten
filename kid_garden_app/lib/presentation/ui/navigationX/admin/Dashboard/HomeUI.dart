@@ -139,7 +139,9 @@ class _HomeXXState extends ConsumerState<Home> {
       items: viewModel.childActionResponse.data!,
       loadNext: loadNext,
       itemBuilder: (BuildContext context, ChildAction item) {
-        return action4ImgCard(ScrollController(), item);
+        return action4ImgCard(ScrollController(), item, onImageClicked: (int ) {
+          //todo:preview images..
+        },);
       },
       direction: Axis.vertical,
     );

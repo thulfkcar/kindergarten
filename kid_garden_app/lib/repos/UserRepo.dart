@@ -24,12 +24,8 @@ class UserRepository {
         "Role": '1',
         "Phone": staffAddingForm.phoneNumber!
       });
-      List<File>? assest;
-      if (staffAddingForm.image != null) {
-        assest = [staffAddingForm.image!];
-      }
       dynamic response =
-          await _apiService.multiPartPostResponse("user/add", jsonBody, assest);
+          await _apiService.multiPartPostResponseSingleFile("user/add", jsonBody, staffAddingForm.image);
 
       var user;
       SingleResponse<UserModel>.fromJson(await response, (json) {

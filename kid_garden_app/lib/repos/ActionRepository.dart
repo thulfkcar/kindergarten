@@ -114,7 +114,7 @@ class ActionRepository {
         "Audience": childAction.audience.index.toString()
       });
 
-      dynamic response = await _apiService.multiPartPostResponse(
+      dynamic response = await _apiService.multiPartPostResponseMultiFiles(
           "ChildAction/add", jsonBody, assets);
       var data;
 

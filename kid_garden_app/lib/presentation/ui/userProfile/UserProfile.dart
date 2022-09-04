@@ -47,11 +47,10 @@ class _UserProfileState extends ConsumerState<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    viewModelLogin=ref.watch(LoginPageViewModelProvider);
-    var user=ref.watch(hiveProvider).value!.getUser();
+    viewModelLogin = ref.watch(LoginPageViewModelProvider);
+    var user = ref.watch(hiveProvider).value!.getUser();
     viewModel = ref.watch(userProfileViewModelProvider(
         widget.userId == null ? user!.id! : widget.userId!));
-
 
     return Scaffold(
         appBar: AppBar(
@@ -89,7 +88,8 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                       child: ElevatedButton(
                         onPressed: () {
                           Future.delayed(Duration.zero, () async {
-                            var user=ref.watch(hiveProvider).value!.storeUser(null);
+                            var user =
+                                ref.watch(hiveProvider).value!.storeUser(null);
 
                             // RestartWidget.restartApp(context);
 
@@ -127,10 +127,9 @@ class _UserProfileState extends ConsumerState<UserProfile> {
         return MyErrorWidget(
             msg: "error on fetching staff profile",
             onRefresh: () {
-              var user=ref.watch(hiveProvider).value!.getUser();
-                viewModel.getUser(
-                    userId: widget.userId == null ? user!.id! : widget.userId!);
-
+              var user = ref.watch(hiveProvider).value!.getUser();
+              viewModel.getUser(
+                  userId: widget.userId == null ? user!.id! : widget.userId!);
             });
       case Status.NON:
         return Container();
@@ -166,7 +165,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                             userType: user.role.name.toString()))
                   ],
                 )),
-                imageRectangleWithoutShadow(domain + user.image!, 90),
+                imageRectangleWithoutShadow(domain + user.image!, 90, () {}),
               ],
             ),
             Row(
@@ -214,7 +213,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                       ? ChildrenExplorer(
                           subUserId: widget.userId,
                         )
-                      :  const AdminRequestsScreen(),
+                      : const AdminRequestsScreen(),
             ),
           ],
         ));

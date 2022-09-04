@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kid_garden_app/domain/Contact.dart';
@@ -64,8 +65,13 @@ class ParentChildCardGrid extends StatelessWidget {
                       height: height,
                       width: height,
                       child: ClipOval(
-                        child: Image.network('$domain${child.image!}',
-                            fit: BoxFit.cover),
+                        child: CachedNetworkImage(fit: BoxFit.cover,
+                          imageUrl: '$domain${child.image!}',
+                          placeholder: (context, url) => Image.asset("res/images/child.jpg",fit: BoxFit.cover,),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
+                      //   Image.network('$domain${child.image!}',
+                      //       fit: BoxFit.cover),
                       ),
                     ),
                     Padding(

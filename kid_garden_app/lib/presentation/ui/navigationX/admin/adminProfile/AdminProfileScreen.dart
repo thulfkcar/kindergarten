@@ -127,7 +127,9 @@ class _AdminProfileScreenState extends ConsumerState<AdminProfileScreen> {
                             userType: user.role.name.toString()))
                   ],
                 )),
-                imageRectangleWithoutShadow(domain + user.image!, 90),
+                imageRectangleWithoutShadow(domain + user.image!, 90,() {
+
+                }),
               ],
             ),
             listControlsView()
