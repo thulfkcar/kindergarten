@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/dialogs/ActionDialog.dart';
 import 'package:kid_garden_app/presentation/ui/login/LoginPageViewModel.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../../../data/network/FromData/User.dart';
 import '../../../di/Modules.dart';
@@ -12,13 +14,15 @@ import '../../../domain/UserModel.dart';
 import '../../styles/colors_style.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
+import '../dialogs/dialogs.dart';
 import 'PinCodeScreen.dart';
 
 class LoginByPhoneNumber extends ConsumerStatefulWidget {
   static String tag = 'login-by-phone';
 
   Function(UserModel? user) loggedIn;
-  LoginByPhoneNumber({Key? key,required this.loggedIn}) : super(key: key);
+
+  LoginByPhoneNumber({Key? key, required this.loggedIn}) : super(key: key);
 
   @override
   ConsumerState createState() => _LoginPageState();
@@ -61,7 +65,8 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
               size: 18,
               color: ColorStyle.male1,
             ),
-            hint: AppLocalizations.of(context)?.getText("phone")?? 'Phone Number',
+            hint: AppLocalizations.of(context)?.getText("phone") ??
+                'Phone Number',
             textType: TextInputType.phone,
             onChange: ((text) => form.phoneNumber = text),
             validator: FormValidator(context).validatePhone,
@@ -76,7 +81,6 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
   }
 
   Widget loginButton() {
-
     return Row(
       children: [
         Expanded(
@@ -84,27 +88,15 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
             onPressed: () async {
               await _sendToServer();
             },
-            child: titleText(AppLocalizations.of(context)?.getText("sign_in")??"Sign In", ColorStyle.white),
+            child: titleText(
+                AppLocalizations.of(context)?.getText("sign_in") ?? "Sign In",
+                ColorStyle.white),
             style: ButtonStyle(
-                backgroundColor:
-                MaterialStateProperty.all(ColorStyle.male1),
+                backgroundColor: MaterialStateProperty.all(ColorStyle.male1),
                 elevation: MaterialStateProperty.all(0)),
           ),
         )
       ],
-    );
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24.0),
-                  side: const BorderSide(color: Colors.lightBlueAccent)))),
-      onPressed: () async {
-        await _sendToServer();
-      },
-      child: Text(AppLocalizations.of(context)?.getText("login") ?? "Error",
-          style: TextStyle(color: Colors.white)),
     );
   }
 
@@ -112,49 +104,83 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     if (_key.currentState!.validate()) {
-      ///////////////firebase auth////////////////////
-      //       showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.loading, title: "sign in", message: "please wait"));
-      //       await auth.verifyPhoneNumber(
-      //         phoneNumber: '+964${form.phoneNumber}',
-      //         timeout: const Duration(seconds: 60),
-      //        // autoRetrievedSmsCodeForTesting:"123456",
-      //         verificationCompleted: (PhoneAuthCredential credential) async {
-      //           await signInWithUserCredential(auth, credential);
-      //         },
-      //         verificationFailed: (FirebaseAuthException e) {
-      //           if (e.code == 'invalid-phone-number') {
-      //             throw e;
-      //           }
-      //         },
-      //         codeSent: (String verificationId, int? resendToken) async {
-      //           // Update the UI - wait for the user to enter the SMS code
-      //
-      //           Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                   builder: (context) => PinCodeVerificationScreen(
-      //                         onVerify: (pin) async {
-      //                           String smsCode = pin;
-      //
-      //                           // Create a PhoneAuthCredential with the code
-      //                           PhoneAuthCredential credential =
-      //                               PhoneAuthProvider.credential(
-      //                                   verificationId: verificationId,
-      //                                   smsCode: smsCode);
-      //
-      //                           // Sign the user in (or link) with the credential
-      //
-      //                           await signInWithUserCredential(auth, credential);
-      //                         },
-      //                         onResendCode: () {},
-      //                         phoneNumber: '+964${form.phoneNumber}',
-      //                       )));
-      //         },
-      //         codeAutoRetrievalTimeout: (String verificationId) {},
-      //      );
-      //////////////////////////////
-             await viewModel.authByPhone(loginRequestData: form);
+      /////////////firebase auth////////////////////
+      showAlertDialog(
+          context: context,
+          messageDialog: ActionDialog(
+              type: DialogType.loading,
+              title: getTranslated("sign_in", context),
+              message: getTranslated("please_waite", context)));
 
+      await auth.verifyPhoneNumber(
+        phoneNumber: '+964${form.phoneNumber}',
+        timeout: const Duration(seconds: 60),
+        // autoRetrievedSmsCodeForTesting:"123456",
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await signInWithUserCredential(auth, credential);
+        },
+
+        verificationFailed: (FirebaseAuthException e) {
+          var title="";
+         var message="";
+          switch (e.code) {
+            case 'invalid-verification-code':
+              title=getTranslated("invalid_ver_code",context);
+              message=getTranslated("invalid_ver_code_des", context);
+              break;
+            case 'too-many-requests':
+              title=getTranslated("too_many_requests",context);
+              message=getTranslated("too_many_requests_des", context);
+              break;
+            default :
+            title=e.code;
+            message=e.message.toString();
+              break;
+          }
+
+          showDialogGeneric(
+              context: context,
+              dialog: ActionDialog(
+                type: DialogType.warning,
+                title: title,
+                message: message,
+                delay: 10000,
+              )).then((value) {
+            Navigator.pop(context);
+          });
+
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          // Update the UI - wait for the user to enter the SMS code
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PinCodeVerificationScreen(
+                        onVerify: (pin) async {
+                          Navigator.pop(context);
+                          String smsCode = pin;
+
+                          // Create a PhoneAuthCredential with the code
+                          PhoneAuthCredential credential =
+                              PhoneAuthProvider.credential(
+                                  verificationId: verificationId,
+                                  smsCode: smsCode);
+
+                          // Sign the user in (or link) with the credential
+
+                          await signInWithUserCredential(auth, credential);
+                        },
+                        onResendCode: () async {
+                          await _sendToServer();
+                        },
+                        phoneNumber: '${form.phoneNumber}',
+                      )));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      ////////////////////////////
+      //        await viewModel.authByPhone(loginRequestData: form);
 
       /// No any error in validation
       ///
@@ -175,9 +201,7 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
     switch (viewModel.userApiResponse.status) {
       case Status.LOADING:
         {
-
           return const CircularProgressIndicator();
-
         }
       case Status.COMPLETED:
         {
@@ -219,10 +243,9 @@ class _LoginPageState extends ConsumerState<LoginByPhoneNumber> {
         context: context,
         messageDialog: ActionDialog(
             type: DialogType.loading,
-            title: "Verification",
-            message: "please waite until verification process complete"));
+            title: getTranslated("verification", context),
+            message: getTranslated("please_waite", context)));
     await auth.signInWithCredential(credential).then((value) async {
-
       await viewModel.authByPhone(loginRequestData: form);
       Navigator.pop(context);
     }).onError((error, stackTrace) {

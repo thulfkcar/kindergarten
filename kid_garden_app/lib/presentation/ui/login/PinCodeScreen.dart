@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinCodeVerificationScreen extends StatefulWidget {
@@ -76,11 +77,11 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+               Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  'Phone Number Verification',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  getTranslated("phone_number_verification", context),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -89,7 +90,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
                 child: RichText(
                   text: TextSpan(
-                      text: "Enter the code sent to ",
+                      text: getTranslated("enter_pin", context),
                       children: [
                         TextSpan(
                             text: "${widget.phoneNumber}",
@@ -120,15 +121,15 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                       length: 6,
                       obscureText: true,
                       obscuringCharacter: '*',
-                      obscuringWidget: const FlutterLogo(
-                        size: 24,
-                      ),
+                      obscuringWidget: Icon(Icons.password),
                       blinkWhenObscuring: true,
                       animationType: AnimationType.fade,
                       validator: (v) {
                         if (v!.length < 3) {
-                          return "please enter complete pin";
+                          return getTranslated("enter_complete_pin", context);
                         } else {
+                          // textEditingController.text=v;
+
                           return null;
                         }
                       },
@@ -175,7 +176,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Text(
-                  hasError ? "*Please fill up all the cells properly" : "",
+                  hasError ? getTranslated("fill_all_cells", context) : "",
                   style: const TextStyle(
                       color: Colors.red,
                       fontSize: 12,
@@ -188,18 +189,18 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Didn't receive the code? ",
-                    style: TextStyle(color: Colors.black54, fontSize: 15),
+                   Text(getTranslated("code_not_sent", context)
+                    ,
+                    style: const TextStyle(color: Colors.black54, fontSize: 15),
                   ),
                   TextButton(
                       onPressed: () {
                         widget.onResendCode();
-                        snackBar("pincode will be resented");
+                        snackBar(getTranslated("pincode_resending", context));
                       },
-                      child: const Text(
-                        "RESEND",
-                        style: TextStyle(
+                      child:  Text(
+                        getTranslated("RESEND", context),
+                        style: const TextStyle(
                             color: Color(0xFF91D3B3),
                             fontWeight: FontWeight.bold,
                             fontSize: 16),
@@ -218,7 +219,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     onPressed: () {
                       formKey.currentState!.validate();
                       // conditions for validating
-                      if (currentText.length != 6 || currentText != "123456") {
+                      if (currentText.length != 6 ) {
                         errorController!.add(ErrorAnimationType
                             .shake); // Triggering error shake animation
                         setState(() => hasError = true);
@@ -226,7 +227,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                         setState(
                           () {
                             hasError = false;
-                            snackBar("verification code send, please wait");
+                            snackBar(getTranslated("code_sending_des", context));
                             widget.onVerify(currentText);
                           },
                         );
@@ -234,7 +235,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                     },
                     child: Center(
                         child: Text(
-                      "VERIFY".toUpperCase(),
+                      getTranslated("VERIFY", context).toUpperCase(),
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -264,21 +265,21 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                 children: <Widget>[
                   Flexible(
                       child: TextButton(
-                    child: const Text("Clear"),
+                    child:  Text(getTranslated("Clear", context)),
                     onPressed: () {
                       textEditingController.clear();
                     },
                   )),
-                  Flexible(
-                      child: TextButton(
-                    child: const Text("Set Text"),
-                    onPressed: () {
-                      setState(() {
-                        //testing ...
-                        textEditingController.text = "123456";
-                      });
-                    },
-                  )),
+                  // Flexible(
+                  //     child: TextButton(
+                  //   child: const Text("Set Text"),
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       //testing ...
+                  //       textEditingController.text = "123456";
+                  //     });
+                  //   },
+                  // )),
                 ],
               )
             ],

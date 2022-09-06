@@ -18,6 +18,7 @@ import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionSc
 import 'package:kid_garden_app/presentation/ui/navigationX/parent/subscriptionScreen/SubscriptionViewModel.dart';
 import 'package:kid_garden_app/presentation/ui/navigationX/staff/StaffScreen.dart';
 import 'package:kid_garden_app/presentation/utile/LangUtiles.dart';
+import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 import '../../../data/network/ApiResponse.dart';
 import '../AboutCompany/AboutCompany.dart';
 import 'LoginByPhone.dart';
@@ -103,6 +104,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
                       MaterialPageRoute(
                         builder: (context) => SignUpScreen(
                           signedUp: (user) async {
+                            Navigator.pop(context);
                             // widget.loggedIn(value);
                             if (user != null) {
                                 Future.delayed(Duration.zero, () async {
@@ -128,7 +130,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
@@ -172,8 +174,8 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
             context: context,
             messageDialog: ActionDialog(
                 type: DialogType.loading,
-                title: "Subscription Check",
-                message: "please wait until your Subscription Checked"));
+                title: getTranslated("Subscription_Check", context),
+                message: getTranslated("Subscription_Check_Des", context)));
         // viewModel.setUserSubscriptionStatusResponse(ApiResponse.non());
 
         break;
@@ -182,7 +184,7 @@ class _LoginOrSignUpScreenState extends ConsumerState<LoginOrSignUpScreen> {
         await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) => ParentScreen(title: 'Parent App')),
+              builder: (context) => ParentScreen(title: '')),
           (Route<dynamic> route) => false,
         );
 

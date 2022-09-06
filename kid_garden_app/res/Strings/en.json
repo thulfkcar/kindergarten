@@ -138,7 +138,24 @@
   "please_waite": "please wait until process complete..",
   "assign_to_staff_des": "do you want assign this child to",
   "leave_des": "do you your child to abandon this kindergarten?",
-  "leave": "abandon kindergarten"
+  "leave": "abandon kindergarten",
+  "phone_number_verification": "Phone Number Verification",
+  "enter_pin": "Enter the code sent to ",
+  "enter_complete_pin": "please enter complete pin",
+  "fill_all_cells":"*Please fill up all the cells properly",
+"code_not_sent": "Didn't receive the code? ",
+  "pincode_resending": "pincode will be resented",
+  "RESEND": "RESEND",
+  "code_sending_des": "verification code send, please wait",
+  "VERIFY": "VERIFY",
+  "Clear": "Clear",
+  "invalid_ver_code": "invalid verification code",
+  "invalid_ver_code_des": " Please resend the verification code sms and be sure use the verification code that provided",
+  "too_many_requests": "too many requests",
+  "too_many_requests_des": "too many requests "
+
+
+
 
 
 

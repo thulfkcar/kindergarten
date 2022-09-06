@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kid_garden_app/presentation/general_components/units/buttons.dart';
 import 'package:kid_garden_app/presentation/general_components/units/texts.dart';
 import 'package:kid_garden_app/presentation/ui/SignUp/SignUpViewModel.dart';
+import 'package:kid_garden_app/presentation/ui/dialogs/dialogs.dart';
 import 'package:kid_garden_app/presentation/ui/entrySharedScreen/EntrySharedScreen.dart';
 import 'package:kid_garden_app/presentation/utile/language_constrants.dart';
 
@@ -17,7 +18,7 @@ import '../../styles/colors_style.dart';
 import '../../utile/FormValidator.dart';
 import '../../utile/LangUtiles.dart';
 import '../dialogs/ActionDialog.dart';
-import '../login/LoginPageViewModel.dart';
+import '../login/PinCodeScreen.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   SignUpScreen({
@@ -71,7 +72,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             onSaved: (value) {
               form.fullName = value!;
             }),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         customTextForm(
@@ -99,49 +100,83 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     if (_key.currentState!.validate()) {
-      ///////////////firebase auth////////////////////
-      //       showAlertDialog(context: context, messageDialog: ActionDialog(type: DialogType.loading, title: "sign in", message: "please wait"));
-      //       await auth.verifyPhoneNumber(
-      //         phoneNumber: '+964${form.phoneNumber}',
-      //         timeout: const Duration(seconds: 60),
-      //         // autoRetrievedSmsCodeForTesting:"123456",
-      //         verificationCompleted: (PhoneAuthCredential credential) async {
-      //           await signInWithUserCredential(auth, credential);
-      //         },
-      //         verificationFailed: (FirebaseAuthException e) {
-      //           if (e.code == 'invalid-phone-number') {
-      //             throw e;
-      //           }
-      //         },
-      //         codeSent: (String verificationId, int? resendToken) async {
-      //           // Update the UI - wait for the user to enter the SMS code
-      //
-      //           Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                   builder: (context) => PinCodeVerificationScreen(
-      //                         onVerify: (pin) async {
-      //                           String smsCode = pin;
-      //
-      //                           // Create a PhoneAuthCredential with the code
-      //                           PhoneAuthCredential credential =
-      //                               PhoneAuthProvider.credential(
-      //                                   verificationId: verificationId,
-      //                                   smsCode: smsCode);
-      //
-      //                           // Sign the user in (or link) with the credential
-      //
-      //                           await signInWithUserCredential(auth, credential);
-      //                         },
-      //                         onResendCode: () {},
-      //                         phoneNumber: '+964${form.phoneNumber}',
-      //                       )));
-      //         },
-      //         codeAutoRetrievalTimeout: (String verificationId) {},
-      //       );
-      //////////////////////////////
+      /////////////firebase auth////////////////////
+      showAlertDialog(
+          context: context,
+          messageDialog: ActionDialog(
+              type: DialogType.loading,
+              title: getTranslated("sign_up", context),
+              message: getTranslated("please_waite", context)));
+      await auth.verifyPhoneNumber(
+        phoneNumber: '+964${form.phoneNumber}',
+        timeout: const Duration(seconds: 60),
+        // autoRetrievedSmsCodeForTesting:"123456",
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await signInWithUserCredential(auth, credential);
+        },
 
-      await viewModel.signUp(form);
+        verificationFailed: (FirebaseAuthException e) {
+          var title="";
+          var message="";
+          switch (e.code) {
+            case 'invalid-verification-code':
+              title=getTranslated("invalid_ver_code",context);
+              message=getTranslated("invalid_ver_code_des", context);
+              break;
+            case 'too-many-requests':
+              title=getTranslated("too_many_requests",context);
+              message=getTranslated("too_many_requests_des", context);
+              break;
+            default :
+              title=e.code;
+              message=e.message.toString();
+              break;
+          }
+
+          showDialogGeneric(
+              context: context,
+              dialog: ActionDialog(
+                type: DialogType.warning,
+                title: title,
+                message: message,
+                delay: 10000,
+              )).then((value) {
+            Navigator.pop(context);
+          });
+
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          // Update the UI - wait for the user to enter the SMS code
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PinCodeVerificationScreen(
+                        onVerify: (pin) async {
+                          Navigator.pop(context);
+                          String smsCode = pin;
+
+                          // Create a PhoneAuthCredential with the code
+                          PhoneAuthCredential credential =
+                              PhoneAuthProvider.credential(
+                                  verificationId: verificationId,
+                                  smsCode: smsCode);
+
+                          // Sign the user in (or link) with the credential
+
+                          await signInWithUserCredential(auth, credential);
+                        },
+                        onResendCode: () async {
+                        await  _sendToServer();
+                        },
+                        phoneNumber: '${form.phoneNumber}',
+                      )));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      ////////////////////////////
+
+      // await viewModel.signUp(form);
 
       _key.currentState!.save();
     } else {
@@ -161,26 +196,24 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         }
       case Status.COMPLETED:
         {
-          Future.delayed(Duration.zero,(){
+          Future.delayed(Duration.zero, () {
             widget.signedUp(viewModel.signUpApiResponse.data);
             viewModel.setSignUpApiResponse(ApiResponse.non());
           });
-
         }
         break;
       case Status.ERROR:
-        Future.delayed(Duration.zero,(){
+        Future.delayed(Duration.zero, () {
           showAlertDialog(
-              context: context,
-              messageDialog: ActionDialog(
-                  type: DialogType.warning,
-                  title: getTranslated("warning", context),
-                  message: viewModel.signUpApiResponse.message! + "")).then((value){
+                  context: context,
+                  messageDialog: ActionDialog(
+                      type: DialogType.warning,
+                      title: getTranslated("warning", context),
+                      message: viewModel.signUpApiResponse.message! + ""))
+              .then((value) {
             viewModel.setSignUpApiResponse(ApiResponse.non());
-
           });
         });
-
 
         return login;
       case Status.NON:
@@ -210,8 +243,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         context: context,
         messageDialog: ActionDialog(
             type: DialogType.loading,
-            title:AppLocalizations.of(context)?.getText("verification")?? "Verification",
-            message:AppLocalizations.of(context)?.getText("verification_des")?? "please waite until verification process complete"));
+            title: AppLocalizations.of(context)?.getText("verification") ??
+                "Verification",
+            message:
+                AppLocalizations.of(context)?.getText("verification_des") ??
+                    "please waite until verification process complete"));
     await auth.signInWithCredential(credential).then((value) async {
       await viewModel.signUp(form);
       Navigator.pop(context);
